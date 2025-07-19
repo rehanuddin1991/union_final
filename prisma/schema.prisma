@@ -1,0 +1,173 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum FiscalYear {
+  Y2022_2023
+  Y2023_2024
+  Y2024_2025
+  Y2025_2026
+  Y2026_2027
+  Y2027_2028
+  Y2028_2029
+  Y2029_2030
+  Y2031_2032
+  Y2032_2033
+  Y2033_2034
+  Y2034_2035
+}
+
+enum Designation {
+  OFFICER_IN_CHARGE
+  CHAIRMAN
+  ADMINISTRATIVE_OFFICER
+  ACCOUNTANT_COMPUTER_OPERATOR
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  name       String
+  email      String   @unique
+  password   String
+  role       Role     @default(USER)
+  is_deleted Boolean  @default(false) // ✅ added
+  createdAt  DateTime @default(now())
+  @@map("user")
+}
+
+model Holding_Information {
+  id               Int                 @id @default(autoincrement())
+  headName         String
+  ward             Int
+  holdingNo        String
+  father           String
+  mother           String
+  nid              String              @unique
+  mobile           String
+  dob              DateTime
+  gender           Gender              @default(MALE)
+  occupation       String
+  maleMembers      Int
+  femaleMembers    Int
+  othersMembers    Int
+  maleBaby         Int
+  femaleBaby       Int
+  othersBaby       Int
+  address          String
+  area             String
+  multiStoriedRoom Int
+  buildingRoom     Int
+  semiBuildingRoom Int
+  ownHouseRent     Int
+  othersRent       Int
+  imposedTax       Int
+  collections      HoldingCollection[]
+  is_deleted       Boolean             @default(false) // ✅ added
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+
+  @@unique([ward, holdingNo])
+
+  @@map("holding_information")
+}
+
+model HoldingCollection {
+  id                   Int        @id @default(autoincrement())
+  holdingInformationId Int
+  holdingNumber        String
+  fiscalYear           FiscalYear @default(Y2025_2026)
+  amount               Int
+  paymentDate          DateTime
+  is_deleted           Boolean    @default(false) // ✅ added
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
+
+  holdingInformation Holding_Information @relation(fields: [holdingInformationId], references: [id])
+
+  @@index([holdingInformationId]) 
+   @@map("holdingcollection") 
+}
+
+
+
+model Employees {
+  id          Int         @id @default(autoincrement())
+  name        String
+  mobile      String?
+  email       String?
+  notes       String?     @db.Text
+  order       Int         @default(1)
+  designation Designation @default(CHAIRMAN)
+  is_deleted  Boolean     @default(false) // ✅ added
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+   @@map("employees")
+}
+
+model OfficeSettings {
+  id           Int      @id @default(autoincrement())
+  union_name   String?
+  upazila      String?
+  district     String?
+  letter_count String?
+  notes        String?  @db.Text
+  sarok_no     String?
+  is_deleted   Boolean  @default(false) // ✅ added
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+   @@map("officesettings")
+}
+
+model Certificate {
+  id                Int        @id @default(autoincrement())
+  type              String // নাগরিক সনদ, জাতীয়তা সনদ, ইত্যাদি
+  applicantName     String
+  fatherName        String?
+  motherName        String?
+  spouse            String?
+  birth_no          String?
+  trade_name        String?
+  trade_address     String?
+  trade_fee         String?
+  trade_capital_tax String?
+  trade_due         String?
+  trade_vat         String?
+  trade_total_tax   String?
+  trade_type        String?
+  fiscalYear        FiscalYear @default(Y2025_2026)
+  fiscalYearEnd        FiscalYear @default(Y2025_2026)
+  birthDate         DateTime?
+  address           String?
+  nid               String?
+  ward              String?
+  mouza             String?
+  post_office       String?
+  holding_no        String?
+  letter_count      Int        @default(0)
+  issuedDate        DateTime   @default(now())
+  notes             String?    @db.Text
+  is_deleted        Boolean    @default(false) // ✅ added
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+  @@map("certificate")
+}
+
+//npx prisma migrate dev --name add_spouse_field
+//npx prisma generate
+
