@@ -139,7 +139,7 @@ export default function OfficeSettingsPage() {
         <div>
           <label className="font-semibold">চিঠির উপরের ফুল হেডিং লিখুন</label>
           <Editor
-            apiKey="fg6rfz4onq5dx0irorid2gyjdbh9xdpg01k2kdcqk7594hd2"
+            apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
             value={form.notes}
             init={{
               height: 200,
