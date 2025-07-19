@@ -4,12 +4,14 @@ import { useEffect, useState, useRef } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { commonPrintStyles, taxTableStyles  } from "@/utils_js/helpers/printStyles";
+ 
   
 
 import { preloadImage, openPrintWindow,generateSignatureHTML,generateApplicantInfoRows } from "@/utils_js/helpers/printHelpers";
 
 import dynamic from "next/dynamic";
 import {
+  enToBnNumber,
   convertToBanglaNumber,
   numberToBanglaWords,
   bnToEnNumber,
@@ -31,9 +33,11 @@ export default function CertificatesPage() {
     const data = await res.json();
     if (data.success) {
       setSettings(data.settings[0]);
-      console.log("dddddd" + settings);
+      //console.log("dddddd" + data.settings[0]);
     } else toast.error("অফিস সেটিংস লোড করতে ব্যর্থ হয়েছে");
   };
+
+  //console.log("dddddd" + settings?.sarok_no);
 
   const handleLoadDefaultNote = () => {
     const defaultNote = `
@@ -331,7 +335,7 @@ export default function CertificatesPage() {
             
 
             <div class="top-section">
-              <p>স্মারক নং: ${settings?.sarok_no}${settings?.letter_count}</p>
+              <p>স্মারক নং: ${settings?.sarok_no}${enToBnNumber( cert?.letter_count)}</p>
               <p>তারিখ: ${formatDate(cert.issuedDate || new Date())}</p>
             </div>
 
@@ -450,7 +454,7 @@ export default function CertificatesPage() {
             
 
             <div class="top-section">
-              <p>স্মারক নং: ${settings?.sarok_no}${settings?.letter_count}</p>
+              <p>স্মারক নং: ${settings?.sarok_no}${enToBnNumber(cert?.letter_count)}</p>
               <p>তারিখ: ${formatDate(cert.issuedDate || new Date())}</p>
             </div>
 
@@ -1072,7 +1076,7 @@ export default function CertificatesPage() {
           {certificates.length === 0 && (
             <div>
               <label className="font-semibold text-indigo-700">
-                সনদের নাম্বার (শুধু প্রথমটির জন্য)
+                সনদের নাম্বার (শুধু প্রথমটির জন্য অবশ্যই ইংরেজি নাম্বার)
               </label>
               <input
                 type="text"
@@ -1081,7 +1085,7 @@ export default function CertificatesPage() {
                   setForm({ ...form, letter_count: e.target.value })
                 }
                 className="border p-2 rounded w-full"
-                placeholder="Letter Count"
+                placeholder="example: 357"
                 required
               />
             </div>

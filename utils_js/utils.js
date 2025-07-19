@@ -19,6 +19,18 @@ export function bnToEnNumber(bnNumStr) {
     .join('');
 }
 
+
+export function enToBnNumber(enNum) {
+  const bnDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+  return enNum
+    .toString()
+    .split('')
+    .map(digit => (/\d/.test(digit) ? bnDigits[digit] : digit))
+    .join('');
+}
+
+
+
 export function numberToBanglaWords(num) {
   num = Number(num); // ✅ স্ট্রিং হলেও নাম্বারে কনভার্ট হবে
   if (isNaN(num)) return "";
@@ -148,6 +160,9 @@ export function numberToBanglaWords(num) {
 
   return "সংখ্যা সীমার বাইরে";
 }
+
+
+
 
  
 
