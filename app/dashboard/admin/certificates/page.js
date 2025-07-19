@@ -335,7 +335,7 @@ export default function CertificatesPage() {
             
 
             <div class="top-section">
-              <p>স্মারক নং: ${settings?.sarok_no}${enToBnNumber( cert?.letter_count)}</p>
+              <p>স্মারক নং: ${settings?.sarok_no}${enToBnNumber( cert?.letter_count)}-</p>
               <p>তারিখ: ${formatDate(cert.issuedDate || new Date())}</p>
             </div>
 
