@@ -53,10 +53,11 @@ export default function RootLayout({ children }) {
 
             {/* Center: Heading */}
             <div className="text-center flex-1">
-              <h1 className="text-4xl font-extrabold text-green-500 mb-1 tracking-wide drop-shadow-sm">
+              <h1 style={{ color: "#A52A2A" }} className="text-4xl font-extrabold text-green-500 mb-1 tracking-wide drop-shadow-sm">
                 ১নং রামগড় ইউনিয়ন পরিষদ
               </h1>
-              <p className="text-md text-green-600 italic">সকল সেবা এক জায়গায়</p>
+              <p className="text-md text-green-800 text-2xl font-extrabold italic">স্মার্ট সেবা </p>
+              <p className="text-md text-blue-800 font-bold"> সকল সেবা এক জায়গায়</p>
             </div>
 
             {/* Right: Buttons */}
