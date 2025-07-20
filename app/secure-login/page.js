@@ -31,7 +31,7 @@ try {
 }
 
 if (res.ok) {
-  const target = data.role === 'ADMIN' ? '/dashboard/admin' : '/dashboard/user'; 
+  const target = data.role === 'ADMIN' ? '/dsh_board/admin' : '/dsh_board/user'; 
    
     console.log("✅ Login Success. Redirecting to:", target);
  window.location.href = target; 
