@@ -124,7 +124,7 @@ export const commonPrintStyles = `
   .signature-box {
   margin-top:10px;
     text-align: center;
-    line-height: 1;
+    line-height: 0.7;
     font-size:12px;
     font-weight:bold;
      
