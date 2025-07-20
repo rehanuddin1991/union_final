@@ -17,12 +17,12 @@ export const commonPrintStyles = `
   .outer-border {
     margin: 15px;
     padding: 7px;
-    background: #000;
+    background: #000080;
   }
 
   .middle-border {
     padding: 12px;
-    background: #fff;
+    background:green;
   }
 
   .inner-border {
@@ -40,9 +40,9 @@ export const commonPrintStyles = `
   .watermark {
     background-image: url('__UNION_IMG__'); /* পরে রিপ্লেস হবে */
     background-repeat: no-repeat;
-    background-position: center;
+    background-position: right;
     background-size: 60%;
-    opacity: 0.04;
+    opacity: 0.1;
     position: absolute;
     inset: 0;
     z-index: 0;
@@ -61,6 +61,7 @@ export const commonPrintStyles = `
   }
 
   .header-logo {
+    
     width: 110px;
     height: auto;
   }
@@ -122,7 +123,8 @@ export const commonPrintStyles = `
   margin-top:10px;
     text-align: center;
     line-height: 1;
-    font-size:0.7rem;
+    font-size:12px;
+     
   }
 
   .qr-code {

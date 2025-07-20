@@ -137,7 +137,7 @@ export default function OfficeSettingsPage() {
 
         {/* টেক্সট এডিটর */}
         <div>
-          <label className="font-semibold">চিঠির উপরের ফুল হেডিং লিখুন</label>
+          <label className="font-semibold">ওয়েবসাইটের নাম:</label>
           <Editor
             apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
             value={form.notes}

@@ -291,7 +291,7 @@ export default function CertificatesPage() {
   const bnIssueDate = `${enToBnNumber(issue_day)}-${enToBnNumber(issue_month)}-${enToBnNumber(issue_year)}`;
 
     const govtImg = `${origin}/images/govt.png`;
-    const unionImg = `${origin}/images/union2.png`;
+    const unionImg = `${origin}/images/union.png`;
     const qrImg = `${origin}/images/qr.png`;
     const qrUrl = `${origin}/verify/certificate?id=${cert.id}`;
     const qrImg_with_link = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(
@@ -333,7 +333,12 @@ export default function CertificatesPage() {
 
             <div class="header-section">
               <img src="${govtImg}" class="header-logo" alt="Government Logo" />
-              <h3 class="header-title">${settings?.notes || ""}</h3>
+              <div>
+              <h3 class="header-title">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</h3>
+              <h1 class="header-title" style="color:green;font-size:20px;">${settings?.union_name || ""}</h1>
+              <h1 class="header-title"  >${settings?.upazila},${settings?.district}</h1>
+              <h1 class="header-title"  ><u>${settings?.notes }</u></h1>
+              </div>
               <img src="${unionImg}" class="header-logo" alt="Union Logo" />
             </div>
 
@@ -344,8 +349,9 @@ export default function CertificatesPage() {
               <p>তারিখ: ${bnIssueDate}</p>
             </div>
 
-            <div style="border: 1px solid green;margin:auto; background-color: #e6f4ea; padding: 5px; margin-top: 15px; border-radius: 7px; width: 200px; text-align: center;">
-  <h1 style="font-size: 15px; color: green; margin: auto;">
+            <div style="border: 1px solid green;margin:auto; background-color: #e6f4ea; padding: 5px; margin-top: 15px; border-radius: 7px;
+             width: 250px; text-align: center;">
+  <h1 style="font-size: 21px; color: #000080; margin: auto;">
     ${cert.type || "সার্টিফিকেট"}
   </h1>
 </div>
@@ -356,8 +362,8 @@ export default function CertificatesPage() {
 
             <table>
   <tr>
-    <td style="width: 30%;">নাম</td>
-    <td style="margin-left:20px;">: ${cert.applicantName}</td>
+    <td style="width: 30%;font-size:22px;">নাম</td>
+    <td style="margin-left:20px;font-size:22px;">: ${cert.applicantName}</td>
   </tr>
    ${applicantInfoRows}
   <tr>
@@ -381,9 +387,12 @@ export default function CertificatesPage() {
   </tr>
    
 </table>
-<div style="text-align:justify; line-height:1.6">
-  ${cert.notes || "-"}
+<div style="text-align:justify; line-height:1.6">  
+    ${cert.notes || "-"}
 </div>
+<br> 
+<br>
+ 
 
 
           
@@ -421,7 +430,7 @@ export default function CertificatesPage() {
     const [fiscal_start_bk, fiscal_end] = cert.fiscalYearEnd.split("_");
 
     const govtImg = `${origin}/images/govt.png`;
-    const unionImg = `${origin}/images/union2.png`;
+    const unionImg = `${origin}/images/union.png`;
     const qrImg = `${origin}/images/qr.png`;
     const qrUrl = `${origin}/verify/certificate?id=${cert.id}`;
     const qrImg_with_link = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(
