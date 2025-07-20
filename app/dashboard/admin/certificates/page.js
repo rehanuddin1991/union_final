@@ -1188,12 +1188,13 @@ export default function CertificatesPage() {
           <thead className="bg-blue-100">
             <tr>
               <th className="border p-2">সনদের ধরন</th>
+              <th className="border p-2">সিরিয়াল</th>
               <th className="border p-2">আবেদনকারীর নাম</th>
               <th className="border p-2">পিতার নাম</th>
               <th className="border p-2">মাতার নাম</th>
               <th className="border p-2">জন্ম তারিখ</th>
               <th className="border p-2">ঠিকানা</th>
-              <th className="border p-2">জারি তারিখ</th>
+               
               <th className="border p-2">নোটস</th>
               <th className="border p-2">অ্যাকশন</th>
             </tr>
@@ -1209,6 +1210,7 @@ export default function CertificatesPage() {
             {certificates.map((cert) => (
               <tr key={cert.id}>
                 <td className="border p-2">{cert.type}</td>
+                <td className="border p-2">{cert.letter_count}</td>
                 <td className="border p-2">{cert.applicantName}</td>
                 <td className="border p-2">{cert.fatherName || "-"}</td>
                 <td className="border p-2">{cert.motherName || "-"}</td>
@@ -1216,9 +1218,7 @@ export default function CertificatesPage() {
                   {cert.birthDate ? cert.birthDate.substring(0, 10) : "-"}
                 </td>
                 <td className="border p-2">{cert.address || "-"}</td>
-                <td className="border p-2">
-                  {cert.issuedDate ? cert.issuedDate.substring(0, 10) : "-"}
-                </td>
+                 
                 <td className="border p-2">
                   <div
                     dangerouslySetInnerHTML={{ __html: cert.notes || "-" }}
