@@ -335,14 +335,14 @@ export default function CertificatesPage() {
               <img src="${govtImg}" class="header-logo" alt="Government Logo" />
               <div>
               <h3 class="header-title">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</h3>
-              <h1 class="header-title" style="color:green;font-size:20px;">${settings?.union_name || ""}</h1>
-              <h1 class="header-title"  >${settings?.upazila},${settings?.district}</h1>
+              <h1 class="header-title" style="color:green;font-size:32px;font-weight:bold;">${settings?.union_name || ""}</h1>
+              <h1 class="header-title"  >${settings?.upazila},&nbsp;${settings?.district}</h1>
               <h1 class="header-title"  ><u>${settings?.notes }</u></h1>
               </div>
               <img src="${unionImg}" class="header-logo" alt="Union Logo" />
             </div>
 
-            
+            <hr>
 
             <div class="top-section">
               <p>স্মারক নং: ${settings?.sarok_no}${enToBnNumber( cert?.letter_count)}</p>
@@ -390,12 +390,8 @@ export default function CertificatesPage() {
 <div style="text-align:justify; line-height:1.6">  
     ${cert.notes || "-"}
 </div>
-<br> 
-<br>
  
-
-
-          
+        
 
              ${signatureHTML}
           </div>
