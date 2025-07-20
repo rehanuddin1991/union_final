@@ -390,7 +390,7 @@ export default function CertificatesPage() {
 <div style="text-align:justify; line-height:1.6">  
     ${cert.notes || "-"}
 </div>
- 
+ <br>
         
 
              ${signatureHTML}
