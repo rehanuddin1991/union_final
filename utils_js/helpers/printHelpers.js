@@ -23,6 +23,30 @@ export const openPrintWindow = (printContents) => {
 };
 
 
+
+
+// printhelper.js
+
+export function getHeaderSection(settings, govtImg, unionImg) {
+  return `
+  <div class="watermark"></div>
+    <div class="header-section">
+      <img src="${govtImg}" class="header-logo" alt="Government Logo" />
+      <div>
+        <h3 class="header-title">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</h3>
+        <h1 class="header-title" style="color:#A52A2A; font-size:33px; font-weight:bold;">
+          ${settings?.union_name || ""}
+        </h1>
+        <h1 class="header-title">${settings?.upazila},&nbsp;${settings?.district}</h1>
+        <h1 class="header-title"><u>${settings?.notes}</u></h1>
+      </div>
+      <img src="${unionImg}" class="header-logo" alt="Union Logo" />
+    </div>
+  `;
+}
+
+
+
 // helpers/printHelpers.js
 
 /**

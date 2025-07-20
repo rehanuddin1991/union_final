@@ -68,6 +68,9 @@ export default function Home() {
                  {emp.designation === "OFFICER_IN_CHARGE" ? "প্রশাসক" : ""}
                  {emp.designation === "ADMINISTRATIVE_OFFICER" ? "ইউপি প্রশাসনিক কর্মকর্তা" : ""}
                  {emp.designation === "ACCOUNTANT_COMPUTER_OPERATOR" ? "হিসাব সহকারী কাম কম্পিউটার অপারেটর" : ""}
+                 {emp.designation === "UP_MEMBER" ? "সদস্য" : ""}
+                 {emp.designation === "GRAM_POLICE" ? "গ্রাম পুলিশ" : ""}
+                 {emp.designation === "OTHERS" ? "অন্যান্য" : ""}
               </h2>
 
               <h2 className="card-title text-indigo-800 text-xl font-extrabold mb-3">

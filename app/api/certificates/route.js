@@ -32,37 +32,52 @@ export async function GET(req) {
 }
 
 
-export async function POST(req) {
+ export async function POST(req) {
   try {
     const body = await req.json();
 
     // ✅ Required field check
-    const requiredFields = ["applicantName", "fatherName", "motherName",   "birthDate"];
+    const requiredFields = ["applicantName", "fatherName", "motherName", "birthDate", "type"];
     for (const field of requiredFields) {
       if (!body[field] || body[field].toString().trim() === "") {
         return Response.json(
           { success: false, error: `${field} is required` },
-          { status: 400 } // 400 = Bad Request
+          { status: 400 }
         );
       }
     }
 
-    // id থাকলে মুছে ফেলো
     if ("id" in body) delete body.id;
 
-    // তারিখ কনভার্ট করা
     body.birthDate = new Date(body.birthDate);
     if (body.issuedDate) body.issuedDate = new Date(body.issuedDate);
 
-    // ✅ সেভ করা
+    // ✅ Type wise total count বের করুন
+    const existingCount = await prisma.certificate.count({
+      where: { type: body.type },
+    });
+
+    if (existingCount === 0) {
+      // ✅ যদি type wise কোনো ডাটা না থাকে → form এর letter_count নিন
+      body.letter_count = parseInt(body.letter_count) || 1;
+    } else {
+      // ✅ যদি ডাটা থাকে → max + 1 নিন
+      const maxLetterCount = await prisma.certificate.aggregate({
+        _max: { letter_count: true },
+        where: { type: body.type },
+      });
+
+      body.letter_count = (maxLetterCount._max.letter_count || 0) + 1;
+    }
+
+    // ✅ ডাটা Insert
     const certificate = await prisma.certificate.create({
-      data: {
-        ...body,
-      },
+      data: { ...body },
     });
 
     return Response.json({ success: true, certificate }, { status: 201 });
   } catch (error) {
+    console.error("Certificate Insert Error:", error.message);
     return Response.json({ success: false, error: error.message }, { status: 500 });
   }
 }

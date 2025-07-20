@@ -7,7 +7,7 @@ import { commonPrintStyles, taxTableStyles  } from "@/utils_js/helpers/printStyl
  
   
 
-import { preloadImage, openPrintWindow,generateSignatureHTML,generateApplicantInfoRows } from "@/utils_js/helpers/printHelpers";
+import {getHeaderSection , preloadImage, openPrintWindow,generateSignatureHTML,generateApplicantInfoRows } from "@/utils_js/helpers/printHelpers";
 
 import dynamic from "next/dynamic";
 import {
@@ -163,23 +163,24 @@ export default function CertificatesPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let letter_count = 1; // default
+    // let letter_count = 1; // default
 
-    const firstLetterCount = certificates[0]?.letter_count;
+    // const firstLetterCount = certificates[0]?.letter_count;
 
-    if (
-      firstLetterCount === null ||
-      firstLetterCount === 0 ||
-      isNaN(firstLetterCount)
-    ) {
-      letter_count = parseInt(form.letter_count) || 1;
-    } else {
-      letter_count = firstLetterCount + 1;
-    }
+    // if (
+    //   firstLetterCount === null ||
+    //   firstLetterCount === 0 ||
+    //   isNaN(firstLetterCount)
+    // ) {
+    //   letter_count = parseInt(form.letter_count) || 1;
+    // } else {
+    //   letter_count = firstLetterCount + 1;
+    // }
 
     const payload = {
-      ...form,
-      letter_count: parseInt(letter_count), // include it in payload
+      ...form
+      // ,
+      // letter_count: parseInt(letter_count), // include it in payload
     };
 
     const method = form.id ? "PATCH" : "POST";
@@ -315,6 +316,9 @@ export default function CertificatesPage() {
   qrImg_with_link
 );
 
+const headerHTML = getHeaderSection(settings, govtImg, unionImg);
+
+
     const printContents = `
     <!DOCTYPE html>
     <html lang="bn">
@@ -329,18 +333,9 @@ export default function CertificatesPage() {
       <div class="outer-border">
         <div class="middle-border">
           <div class="inner-border">
-            <div class="watermark"></div>
+             
 
-            <div class="header-section">
-              <img src="${govtImg}" class="header-logo" alt="Government Logo" />
-              <div>
-              <h3 class="header-title">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</h3>
-              <h1 class="header-title" style="color:#A52A2A	;font-size:33px;font-weight:bold;">${settings?.union_name || ""}</h1>
-              <h1 class="header-title"  >${settings?.upazila},&nbsp;${settings?.district}</h1>
-              <h1 class="header-title"  ><u>${settings?.notes }</u></h1>
-              </div>
-              <img src="${unionImg}" class="header-logo" alt="Union Logo" />
-            </div>
+            ${headerHTML}
 
             <hr>
 
@@ -449,6 +444,7 @@ export default function CertificatesPage() {
   settings,
   qrImg_with_link
 );
+  const headerHTML = getHeaderSection(settings, govtImg, unionImg);
 
     const printContents = `
     <!DOCTYPE html>
@@ -465,13 +461,12 @@ export default function CertificatesPage() {
       <div class="outer-border">
         <div class="middle-border">
           <div class="inner-border">
-            <div class="watermark"></div>
+             
 
-            <div class="header-section">
-              <img src="${govtImg}" class="header-logo" alt="Government Logo" />
-              <h3 class="header-title">${settings?.notes || ""}</h3>
-              <img src="${unionImg}" class="header-logo" alt="Union Logo" />
-            </div>
+          
+            ${headerHTML}
+
+            
 
             
 
@@ -480,9 +475,10 @@ export default function CertificatesPage() {
               <p>তারিখ-: ${bnIssueDate}</p>
             </div>
 
-            <div style="border: 1px solid green;margin:auto; background-color: #e6f4ea; padding: 5px; margin-top: 15px; border-radius: 7px; width: 200px; text-align: center;">
-  <h1 style="font-size: 15px; color: green; margin: auto;">
-    ${cert.type || "সার্টিফিকেট"}
+           <div style="border: 1px solid green;margin:auto; background-color: #e6f4ea; padding: 5px; margin-top: 15px; border-radius: 7px;
+             width: 250px; text-align: center;">
+  <h1 style="font-size: 21px; color: #000080; margin: auto;">
+    ${cert.type || "সার্টিফিকেট"}  
   </h1>
 </div>
 
@@ -492,8 +488,8 @@ export default function CertificatesPage() {
 
             <table>
             <tr>
-    <td style="width: 30%;">প্রতিষ্ঠানের নাম</td>
-    <td style="margin-left:20px;">: ${cert.trade_name}</td>
+    <td style="width: 30%;font-weight:bold;">প্রতিষ্ঠানের নাম</td>
+    <td style="margin-left:20px;font-weight:bold;">: ${cert.trade_name}</td>
   </tr>
 
 
@@ -517,12 +513,6 @@ export default function CertificatesPage() {
    
 
   <hr>
-
-   
-  
-
-  
-
 
     
 
@@ -609,13 +599,9 @@ export default function CertificatesPage() {
       <div class="outer-border">
         <div class="middle-border">
           <div class="inner-border">
-            <div class="watermark"></div>
+             
 
-            <div class="header-section">
-              <img src="${govtImg}" class="header-logo" alt="Government Logo" />
-              <h3 class="header-title">${settings?.notes || ""}</h3>
-              <img src="${unionImg}" class="header-logo" alt="Union Logo" />
-            </div>
+            ${headerHTML}
 
             
 
@@ -624,8 +610,11 @@ export default function CertificatesPage() {
               <p>তারিখ: ${bnIssueDate}</p>
             </div>
 
-            <div style="border: 1px solid green;margin:auto; background-color: #e6f4ea; padding: 5px; margin-top: 15px; border-radius: 7px; width: 200px; text-align: center;">
-  <h1 style="font-size: 15px; color: green; margin: auto;">
+             
+
+<div style="border: 1px solid green;margin:auto; background-color: #e6f4ea; padding: 5px; margin-top: 15px; border-radius: 7px;
+             width: 290px; text-align: center;">
+  <h1 style="font-size: 19px; color: #000080; margin: auto;">
     ${cert.type || "সার্টিফিকেট"} (অফিস কপি)
   </h1>
 </div>
@@ -1095,23 +1084,25 @@ export default function CertificatesPage() {
             </>
           )}
 
-          {certificates.length === 0 && (
+          
             <div>
-              <label className="font-semibold text-indigo-700">
+              <label className="font-semibold  text-red-500">
                 সনদের নাম্বার (শুধু প্রথমটির জন্য অবশ্যই ইংরেজি নাম্বার)
+                (যদি প্রথমটির জন্য ইনপুট দিতে ভুলে যান তবে ডেটা আপডেট না করে আবার ফরম পূরণ করে সেভ দিন, আপডেটে এই ফিল্ড কাজ করবে না)
               </label>
               <input
                 type="text"
-                value={form.letter_count}
+                 
+                value={form.letter_count ?? ""} 
                 onChange={(e) =>
                   setForm({ ...form, letter_count: e.target.value })
                 }
                 className="border p-2 rounded w-full"
                 placeholder="example: 357"
-                required
+                 
               />
             </div>
-          )}
+         
 
           <div>
             <label className="font-semibold text-indigo-700">

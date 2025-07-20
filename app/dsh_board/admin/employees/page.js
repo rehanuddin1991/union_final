@@ -93,6 +93,9 @@ export default function EmployeesPage() {
           <option value="CHAIRMAN">চেয়ারম্যান</option>
           <option value="ADMINISTRATIVE_OFFICER">প্রশাসনিক কর্মকর্তা</option>
           <option value="ACCOUNTANT_COMPUTER_OPERATOR">হিসাব সহকারী কাম কম্পিউটার অপারেটর</option>
+          <option value="UP_MEMBER">মেম্বার</option>
+          <option value="GRAM_POLICE">গ্রাম পুলিশ</option>
+          <option value="OTHERS">অন্যান্য</option>
         </select>
 
         <label className="block mb-1">ক্রম</label>
@@ -120,6 +123,7 @@ export default function EmployeesPage() {
               <th className="border p-2">পদবি</th>
               <th className="border p-2">মোবাইল</th>
               <th className="border p-2">ইমেইল</th>
+              <th className="border p-2">ক্রম</th>
               <th className="border p-2">অ্যাকশন</th>
             </tr>
           </thead>
@@ -130,6 +134,7 @@ export default function EmployeesPage() {
                 <td className="border p-2">{emp.designation}</td>
                 <td className="border p-2">{emp.mobile || '-'}</td>
                 <td className="border p-2">{emp.email || '-'}</td>
+                <td className="border p-2">{emp.order || '-'}</td>
                 <td className="border p-2">
                   <button onClick={() => handleEdit(emp)} className="text-blue-600 mr-2">✏️</button>
                   <button onClick={() => handleDelete(emp.id)} className="text-red-600">🗑</button>
