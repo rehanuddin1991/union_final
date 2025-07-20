@@ -401,8 +401,20 @@ export default function CertificatesPage() {
 
   const handlePrint_trade = async (cert) => {
     const origin = window.location.origin;
+    
+
     const dob= formatDobDate(cert.birthDate?.substring(0, 10))  ;
-    const applicantInfoRows = generateApplicantInfoRows(cert, dob);
+    const [day, month, year] = dob.split("-");
+    
+    const bnDob = `${enToBnNumber(day)}-${enToBnNumber(month)}-${enToBnNumber(year)}`;
+  const applicantInfoRows = generateApplicantInfoRows(cert, bnDob);
+
+  const issue_date_format=formatDate(cert.issuedDate || new Date());
+  const [issue_day, issue_month, issue_year] = issue_date_format.split("-");
+  const bnIssueDate = `${enToBnNumber(issue_day)}-${enToBnNumber(issue_month)}-${enToBnNumber(issue_year)}`;
+
+
+     
 
     const [startYear, endYear] = cert.fiscalYearEnd.split("_");
     const [fiscal_start, fiscal_end_bk] = cert.fiscalYear.split("_");
@@ -460,7 +472,7 @@ export default function CertificatesPage() {
 
             <div class="top-section">
               <p>স্মারক নং: ${settings?.sarok_no}${enToBnNumber(cert?.letter_count)}</p>
-              <p>তারিখ: ${formatDate(cert.issuedDate || new Date())}</p>
+              <p>তারিখ-: ${bnIssueDate}</p>
             </div>
 
             <div style="border: 1px solid green;margin:auto; background-color: #e6f4ea; padding: 5px; margin-top: 15px; border-radius: 7px; width: 200px; text-align: center;">
@@ -604,7 +616,7 @@ export default function CertificatesPage() {
 
             <div class="top-section">
               <p>স্মারক নং: ${settings?.sarok_no}${enToBnNumber(cert?.letter_count)}</p>
-              <p>তারিখ: ${formatDate(cert.issuedDate || new Date())}</p>
+              <p>তারিখ: ${bnIssueDate}</p>
             </div>
 
             <div style="border: 1px solid green;margin:auto; background-color: #e6f4ea; padding: 5px; margin-top: 15px; border-radius: 7px; width: 200px; text-align: center;">

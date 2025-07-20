@@ -154,7 +154,7 @@ export const taxTableStyles = `
   }
 
   .tax-table tbody tr.header-row td.header-cell {
-    padding: 0.1rem;
+    padding: 1px;
     font-weight: 700;
     color: #166534;
     text-align: center;
@@ -169,18 +169,18 @@ export const taxTableStyles = `
   }
 
   .label-cell {
-    padding: 0.1rem;
+    padding: 1px;
     font-weight: 600;
     white-space: nowrap;
   }
 
   .input-cell {
-    padding: 0.3rem;
+    padding: 2px;
   }
 
   .input-cell input[type="text"] {
     width: 100%;
-    padding: 0.1rem 0.1rem;
+    padding: 1px 1px;
     border: 1px solid #4ade80;
     border-radius: 0.375rem;
     background-color: #dcfce7;
