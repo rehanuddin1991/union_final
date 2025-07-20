@@ -68,12 +68,12 @@ export default function RootLayout({ children }) {
               >
                 Register
               </a> */}
-              <a
+              {/* <a
                 href="/login"
                 className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2.5 rounded-xl shadow-md transition duration-200"
               >
                 Login
-              </a>
+              </a> */}
             </div>
           </div>
         </main>

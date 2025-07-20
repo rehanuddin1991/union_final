@@ -133,10 +133,21 @@ export default function OfficeSettingsPage() {
           />
         </div>
 
+         <div>
+          <label className="font-semibold">ওয়েবসাইটের নাম:</label>
+          <input
+            type="text"
+            value={form.notes}
+            onChange={(e) => setForm({ ...form, notes: e.target.value })}
+            className="border p-2 rounded w-full"
+            placeholder="www.ramgarhup.khagracchari.gov.bd"  required
+          />
+        </div>
+
          
 
         {/* টেক্সট এডিটর */}
-        <div>
+        {/* <div>
           <label className="font-semibold">ওয়েবসাইটের নাম:</label>
           <Editor
             apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
@@ -151,7 +162,7 @@ export default function OfficeSettingsPage() {
             }}
             onEditorChange={(content) => setForm({ ...form, notes: content })}
           />
-        </div>
+        </div> */}
 
         <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded">
           {form.id ? 'আপডেট করুন' : 'সেভ করুন'}

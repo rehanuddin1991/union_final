@@ -6,7 +6,7 @@ export default function AdminLayout({ children }) {
 
   const handleLogout = async () => {
     await fetch('/api/logout');
-    router.push('/login');
+    router.push('/secure-login');
   };
 
   return (
