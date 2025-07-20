@@ -58,7 +58,7 @@ export const commonPrintStyles = `
     padding: 0 20px;
     position: relative;
     z-index: 1;
-    line-height: 0.6;
+    line-height: 0.5;
     font-size: 12px;
   }
 
