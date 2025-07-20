@@ -43,7 +43,7 @@ export default function RootLayout({ children }) {
             {/* Left: Union Image */}
             <div className="w-32 h-32 flex-shrink-0 shadow-lg rounded-full overflow-hidden">
               <Image
-                src="/images/union2.png"
+                src="/images/union.png"
                 alt="Union Logo"
                 width={128}
                 height={128}
@@ -54,7 +54,7 @@ export default function RootLayout({ children }) {
             {/* Center: Heading */}
             <div className="text-center flex-1">
               <h1 className="text-4xl font-extrabold text-green-500 mb-1 tracking-wide drop-shadow-sm">
-                আধুনিক ইউনিয়ন পরিষদ
+                ১নং রামগড় ইউনিয়ন পরিষদ
               </h1>
               <p className="text-md text-green-600 italic">সকল সেবা এক জায়গায়</p>
             </div>
