@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { Editor } from '@tinymce/tinymce-react'
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+export const dynamic = 'force-dynamic';
 
 export default function OfficeSettingsPage() {
   const [settings, setSettings] = useState([])

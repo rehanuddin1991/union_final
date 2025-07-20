@@ -1,16 +1,18 @@
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-  const response = NextResponse.json({ message: 'Logged out successfully' });
+  const res = NextResponse.json({ success: true, message: 'Logged out' });
 
-  // ✅ পুরানো token (HttpOnly Cookie) মুছে ফেলা
-  response.cookies.set('token', '', {
+  res.cookies.set({
+    name: 'token',
+    value: '',
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    sameSite: 'lax',
     path: '/',
-    expires: new Date(0), // সাথে সাথে Expire হবে
+    expires: new Date(0),
   });
 
-  return response;
+  res.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
+  return res;
 }

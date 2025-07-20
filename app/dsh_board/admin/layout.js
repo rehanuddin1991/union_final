@@ -5,13 +5,16 @@ export default function AdminLayout({ children }) {
   const router = useRouter();
 
   const handleLogout = async () => {
-    await fetch('/api/logout');
-     localStorage.removeItem('token');
-     sessionStorage.clear();
-    router.push('/secure-login');
-      router.refresh(); // Cached পেজ রিফ্রেশ
+  await fetch('/api/logout', { method: 'GET' });
 
-  };
+  localStorage.removeItem('token');
+  sessionStorage.clear();
+
+  // ✅ Hard redirect to clear browser back cache
+  window.location.replace('/secure-login');
+};
+
+
 
   return (
     <div className="flex min-h-screen">
