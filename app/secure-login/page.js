@@ -49,7 +49,7 @@ if (res.ok) {
    
   return (
     <>
-    <form autoComplete='on' onSubmit={handleSubmit} className="max-w-md mx-auto p-6 mt-12 bg-white rounded-2xl shadow-md">
+    <form autoComplete='on' onSubmit={handleSubmit} className="max-w-md mx-auto p-12 mt-12 bg-white rounded-2xl shadow-md">
   <h2 className="text-2xl font-semibold text-blue-700 mb-6 text-center">লগইন করুন</h2>
 
   <input

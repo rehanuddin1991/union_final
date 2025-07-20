@@ -37,45 +37,54 @@ export default function RootLayout({ children }) {
           theme="light"
         />
 
-        <main className="p-4 bg-white shadow-md rounded-lg mx-4 my-6">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            
-            {/* Left: Union Image */}
-            <div className="w-32 h-32 flex-shrink-0 shadow-lg rounded-full overflow-hidden">
-              <Image
-                src="/images/union.png"
-                alt="Union Logo"
-                width={128}
-                height={128}
-                className="object-cover"
-              />
-            </div>
+        <main className="p-3 bg-whitesmoke   rounded-lg mx-3 ">
+          <div
+  className="flex flex-col sm:flex-row items-center justify-between gap-6 p-6 bg-gradient-to-r from-[#fff8f5] to-[#f5e8e1] rounded-xl shadow-lg border border-brown-700"
+>
+  {/* Left Section: ইউনিয়নের লোগো ছবি */}
+  <div className="w-32 h-32 flex-shrink-0 rounded-full overflow-hidden shadow-xl border-4 border-[#A52A2A]">
+    <Image
+      src="/images/union.png"
+      alt="Union Logo"
+      width={128}
+      height={128}
+      className="object-cover"
+    />
+  </div>
 
-            {/* Center: Heading */}
-            <div className="text-center flex-1">
-              <h1 style={{ color: "#A52A2A" }} className="text-4xl font-extrabold text-green-500 mb-1 tracking-wide drop-shadow-sm">
-                ১নং রামগড় ইউনিয়ন পরিষদ
-              </h1>
-              <p className="text-md text-green-800 text-2xl font-extrabold italic">স্মার্ট সেবা </p>
-              <p className="text-md text-blue-800 font-bold"> সকল সেবা এক জায়গায়</p>
-            </div>
+  {/* Center Section: ইউনিয়নের নাম, স্লোগান */}
+  <div className="text-center flex-1 px-4">
+    <h1
+      style={{ color: "#A52A2A" }}
+      className="text-4xl font-extrabold mb-2 tracking-wide drop-shadow-md"
+    >
+      ১নং রামগড় ইউনিয়ন পরিষদ
+    </h1>
+    <p className="text-2xl font-extrabold italic text-green-800 drop-shadow-sm mb-1">
+      স্মার্ট সেবা
+    </p>
+    <p className="text-lg font-bold text-blue-800 drop-shadow-xs">
+      সকল সেবা এক জায়গায়
+    </p>
+  </div>
 
-            {/* Right: Buttons */}
-            <div className="space-x-3">
-              {/* <a
-                href="/register"
-                className="bg-green-600 hover:bg-green-700 text-white font-medium px-5 py-2.5 rounded-xl shadow-md transition duration-200"
-              >
-                Register
-              </a> */}
-              {/* <a
-                href="/login"
-                className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2.5 rounded-xl shadow-md transition duration-200"
-              >
-                Login
-              </a> */}
-            </div>
-          </div>
+  {/* Right Section: বাটনগুলো (প্রয়োজনে ব্যবহার করবেন) */}
+  <div className="space-x-3">
+    {/* <a
+        href="/register"
+        className="bg-green-600 hover:bg-green-700 text-white font-medium px-5 py-2.5 rounded-xl shadow-md transition duration-200"
+      >
+        Register
+      </a> */}
+    {/* <a
+        href="/login"
+        className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2.5 rounded-xl shadow-md transition duration-200"
+      >
+        Login
+      </a> */}
+  </div>
+</div>
+
         </main>
 
         {children}
