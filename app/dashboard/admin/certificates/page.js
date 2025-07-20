@@ -41,8 +41,8 @@ export default function CertificatesPage() {
 
   const handleLoadDefaultNote = () => {
     const defaultNote = `
-    <p>তিনি উপরোক্ত ঠিকানার একজন স্থায়ী বাসিন্দা এবং ব্যক্তিগতভাবে আমার পরিচিত। আমার জানামতে তিনি জন্মসূত্রে বাংলাদেশী নাগরিক। তিনি রাষ্ট্র বা সমাজ বিরোধী কোনো কার্যকলাপের সঙ্গে জড়িত নন।
-      আমি তাহার সর্বাঙ্গীন মঙ্গল ও উন্নতি কামনা করছি।</p>
+    <p>তিনি উল্লিখিত ঠিকানার একজন স্থায়ী বাসিন্দা এবং ব্যক্তিগতভাবে আমার পরিচিত। আমার জানা মতে তিনি জন্মসূত্রে বাংলাদেশী নাগরিক। তিনি রাষ্ট্র ও সমাজবিরোধী কোনো কার্যকলাপে জড়িত নন। আমি তাঁর সর্বাঙ্গীন মঙ্গল ও উন্নতি কামনা করি।
+</p>
      
   `;
     setForm({ ...form, notes: defaultNote });
@@ -282,8 +282,13 @@ export default function CertificatesPage() {
   const handlePrint = async (cert) => {
     const origin = window.location.origin;
     const dob= formatDobDate(cert.birthDate?.substring(0, 10))  ;
-    const applicantInfoRows = generateApplicantInfoRows(cert, dob);
-
+    const [day, month, year] = dob.split("-");
+    
+    const bnDob = `${enToBnNumber(day)}-${enToBnNumber(month)}-${enToBnNumber(year)}`;
+  const applicantInfoRows = generateApplicantInfoRows(cert, bnDob);
+  const issue_date_format=formatDate(cert.issuedDate || new Date());
+  const [issue_day, issue_month, issue_year] = issue_date_format.split("-");
+  const bnIssueDate = `${enToBnNumber(issue_day)}-${enToBnNumber(issue_month)}-${enToBnNumber(issue_year)}`;
 
     const govtImg = `${origin}/images/govt.png`;
     const unionImg = `${origin}/images/union2.png`;
@@ -336,7 +341,7 @@ export default function CertificatesPage() {
 
             <div class="top-section">
               <p>স্মারক নং: ${settings?.sarok_no}${enToBnNumber( cert?.letter_count)}</p>
-              <p>তারিখ: ${formatDate(cert.issuedDate || new Date())}</p>
+              <p>তারিখ: ${bnIssueDate}</p>
             </div>
 
             <div style="border: 1px solid green;margin:auto; background-color: #e6f4ea; padding: 5px; margin-top: 15px; border-radius: 7px; width: 200px; text-align: center;">

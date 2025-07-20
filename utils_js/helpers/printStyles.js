@@ -42,7 +42,7 @@ export const commonPrintStyles = `
     background-repeat: no-repeat;
     background-position: center;
     background-size: 60%;
-    opacity: 0.08;
+    opacity: 0.04;
     position: absolute;
     inset: 0;
     z-index: 0;
@@ -119,8 +119,10 @@ export const commonPrintStyles = `
   }
 
   .signature-box {
+  margin-top:10px;
     text-align: center;
     line-height: 1;
+    font-size:0.7rem;
   }
 
   .qr-code {

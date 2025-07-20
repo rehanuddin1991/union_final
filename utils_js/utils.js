@@ -29,6 +29,15 @@ export function enToBnNumber(enNum) {
     .join('');
 }
 
+export function enToBnNumberWithFormat(enNum) {
+  const bnDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+  return enNum
+    .toString()
+    .split('')
+    .map(digit => (/\d/.test(digit) ? bnDigits[digit] : digit))
+    .join('');
+}
+
 
 
 export function numberToBanglaWords(num) {

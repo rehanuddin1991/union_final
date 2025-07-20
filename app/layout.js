@@ -61,12 +61,12 @@ export default function RootLayout({ children }) {
 
             {/* Right: Buttons */}
             <div className="space-x-3">
-              <a
+              {/* <a
                 href="/register"
                 className="bg-green-600 hover:bg-green-700 text-white font-medium px-5 py-2.5 rounded-xl shadow-md transition duration-200"
               >
                 Register
-              </a>
+              </a> */}
               <a
                 href="/login"
                 className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2.5 rounded-xl shadow-md transition duration-200"

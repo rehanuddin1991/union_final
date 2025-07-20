@@ -56,12 +56,20 @@ export function generateSignatureHTML(
 
       <img src="${qrImgWithLink}" class="qr-code" alt="QR Code" />
 
-      <div class="signature-box">
+      <div class="signature-box" >
         <p style="margin: 0; width: 200px; padding-top: 5px;">
           ${signer?.name || ""}
         </p>
         <p>${designationText || ""}</p>
         <p>${settings?.union_name || ""}</p>
+
+        ${
+          signer?.notes
+            ? `<p> ও </p> <p style="font-size:12px; margin-top:3px;">${signer.notes}</p>`
+            : ""
+        }
+
+
         <p>${settings?.upazila || ""}, ${settings?.district || ""}</p>
       </div>
     </div>
@@ -85,10 +93,12 @@ export function generateApplicantInfoRows(cert, formatDobDate) {
       <td>মাতার নাম</td>
       <td>: ${cert.motherName || "-"}</td>
     </tr>
-    <tr>
-      <td>স্বামী/ স্ত্রীর নাম</td>
-      <td>: ${cert.spouse || ""}</td>
-    </tr>
+    ${cert.spouse ? `
+<tr>
+  <td>স্বামী/ স্ত্রীর নাম</td>
+  <td>: ${cert.spouse}</td>
+</tr>
+` : ""}
     <tr>
       <td>জন্ম তারিখ</td>
       <td>: ${formatDobDate}</td>
@@ -97,14 +107,26 @@ export function generateApplicantInfoRows(cert, formatDobDate) {
       <td>গ্রাম</td>
       <td>: ${cert.address || "-"}</td>
     </tr>
-    <tr>
-      <td>জাতীয় পরিচয়পত্র নম্বর</td>
-      <td>: ${cert.nid || ""}</td>
-    </tr>
-    <tr>
-      <td>জন্ম নিবন্ধন নম্বর</td>
-      <td>: ${cert.birth_no || ""}</td>
-    </tr>
+     
+
+     ${cert.nid ? `
+<tr>
+  <td>জাতীয় পরিচয়পত্র নম্বর</td>
+  <td>: ${cert.nid}</td>
+</tr>
+` : ""}
+
+${cert.birth_no ? `
+<tr>
+  <td>জন্ম নিবন্ধন নম্বর</td>
+  <td>: ${cert.birth_no}</td>
+</tr>
+` : ""}
+    
+     
+
+     
+
   `;
 }
 
