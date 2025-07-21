@@ -6,30 +6,42 @@ import { NextResponse } from 'next/server'
 
 export async function GET(req) {
   try {
-    const { searchParams } = new URL(req.url)
-    const id = searchParams.get('id')
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
 
     if (id) {
-      const certificate = await prisma.certificate.findUnique({
-        where: { id: parseInt(id) },
-      })
+      const certificate = await prisma.certificate.findFirst({
+        where: { 
+          id: parseInt(id),
+          is_deleted: false , // এখানে সরাসরি শর্ত দেয়া হলো
+        },
+      });
 
       if (!certificate) {
-        return NextResponse.json({ success: false, message: 'সনদ পাওয়া যায়নি' }, { status: 404 })
+        return NextResponse.json(
+          { success: false, message: "সনদ পাওয়া যায়নি" },
+          { status: 404 }
+        );
       }
 
-      return NextResponse.json({ success: true, certificates: [certificate] })
+      return NextResponse.json({ success: true, certificates: [certificate] });
     }
 
-    // যদি id না থাকে, সব সনদ ফেরত দাও
+    // যদি id না থাকে, সব active সনদ ফেরত দাও
     const certificates = await prisma.certificate.findMany({
-      orderBy: { id: 'desc' },
-    })
-    return NextResponse.json({ success: true, certificates })
+      where: { is_deleted: false  },
+      orderBy: { id: "desc" },
+    });
+
+    return NextResponse.json({ success: true, certificates });
   } catch (error) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 500 }
+    );
   }
 }
+
 
 
  export async function POST(req) {
@@ -54,7 +66,7 @@ export async function GET(req) {
 
     // ✅ Type wise total count বের করুন
     const existingCount = await prisma.certificate.count({
-      where: { type: body.type },
+      where: { type: body.type,is_deleted: false },
     });
 
     if (existingCount === 0) {
@@ -64,7 +76,7 @@ export async function GET(req) {
       // ✅ যদি ডাটা থাকে → max + 1 নিন
       const maxLetterCount = await prisma.certificate.aggregate({
         _max: { letter_count: true },
-        where: { type: body.type },
+        where: { type: body.type,is_deleted: false },
       });
 
       body.letter_count = (maxLetterCount._max.letter_count || 0) + 1;
@@ -112,14 +124,25 @@ export async function PATCH(req) {
 
 export async function DELETE(req) {
   try {
-    const url = new URL(req.url)
-    const id = parseInt(url.searchParams.get('id'))
-    if (!id) return Response.json({ success: false, error: 'ID missing' }, { status: 400 })
+    const url = new URL(req.url);
+    const id = parseInt(url.searchParams.get("id"));
+    if (!id)
+      return Response.json(
+        { success: false, error: "ID missing" },
+        { status: 400 }
+      );
 
-    await prisma.certificate.delete({ where: { id } })
+    // Soft delete (update is_deleted = true)
+    await prisma.certificate.update({
+      where: { id },
+      data: { is_deleted: true },
+    });
 
-    return Response.json({ success: true })
+    return Response.json({ success: true });
   } catch (error) {
-    return Response.json({ success: false, error: error.message }, { status: 500 })
+    return Response.json(
+      { success: false, error: error.message },
+      { status: 500 }
+    );
   }
 }

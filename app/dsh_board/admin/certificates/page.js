@@ -208,7 +208,7 @@ export default function CertificatesPage() {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm("ডিলিট নিশ্চিত করবেন?")) return;
+    if (!confirm("ডিলিট নিশ্চিত করবেন? ভুলে ডিলিট হলে ডেটা রিকভারি সম্ভব")) return;
     const res = await fetch(`/api/certificates?id=${id}`, { method: "DELETE" });
     const data = await res.json();
     if (data.success) {
@@ -1179,13 +1179,13 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
       </form>
 
       <div className="bg-white border p-4 rounded-xl shadow">
-        <h2 className="text-xl font-semibold mb-3">সনদ তালিকা</h2>
+        <h2 className="text-2xl font-semibold mb-3 text-[darkcyan]">সকল সনদ</h2>
         <table className="w-full text-sm border">
           <thead className="bg-blue-100">
             <tr>
               <th className="border p-2">সনদের ধরন</th>
               <th className="border p-2">সিরিয়াল</th>
-              <th className="border p-2">আবেদনকারীর নাম</th>
+              <th className="border p-2">নাম</th>
               <th className="border p-2">পিতার নাম</th>
               <th className="border p-2">মাতার নাম</th>
               <th className="border p-2">জন্ম তারিখ</th>
@@ -1220,10 +1220,10 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
                     dangerouslySetInnerHTML={{ __html: cert.notes || "-" }}
                   />
                 </td>
-                <td className="border p-2 space-x-1">
+                <td className="border p-2 space-x-1 text-2xl">
                   <button
                     onClick={() => handleEdit(cert)}
-                    className="text-blue-600"
+                    className="text-blue-600  "
                   >
                     ✏️
                   </button>
