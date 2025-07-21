@@ -37,9 +37,9 @@ export default function RootLayout({ children }) {
           theme="light"
         />
 
-        <main className="p-3 bg-whitesmoke   rounded-lg mx-3 ">
+        <main className="p-1 mt-1 bg-whitesmoke   rounded-lg mx-3 ">
           <div
-  className="flex flex-col sm:flex-row items-center justify-between gap-6 p-6 bg-gradient-to-r from-[#fff8f5] to-[#f5e8e1] rounded-xl shadow-lg border border-brown-700"
+  className="flex flex-col sm:flex-row items-center justify-between gap-6 p-2 bg-gradient-to-r from-[#fff8f5] to-[#f5e8e1] rounded-xl shadow-lg border border-brown-700"
 >
   {/* Left Section: ইউনিয়নের লোগো ছবি */}
   <div className="w-32 h-32 flex-shrink-0 rounded-full overflow-hidden shadow-xl border-4 border-[#A52A2A]">
