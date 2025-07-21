@@ -353,7 +353,7 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
 
 
 
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;প্রত্যয়ন করা যাচ্ছে যে,</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>প্রত্যয়ন করা যাচ্ছে যে,</b></p>
 
             <table>
   <tr>

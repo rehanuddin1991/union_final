@@ -50,14 +50,18 @@ export default function Home() {
         {employees.map((emp, i) => (
           <div key={emp.id} className="card w-full md:w-96 bg-white shadow-xl border border-indigo-300 hover:shadow-indigo-600 transition-shadow duration-300 rounded-xl flex flex-col">
             <figure className="px-16 pt-4">
-              <Image
-                src={ `/images/${i + 1}.jpg` }
+              
+
+               {emp.imageUrl && (
+        <Image
+                src={emp.imageUrl}  
                 width={200}
                 height={200}
                 alt={emp.name}
                 priority  
                 className="rounded-full shadow-lg border-4 border-indigo-300"
               />
+      )}
             </figure>
             <div className="card-body flex flex-col items-center text-center p-8 flex-grow">
               <h2 className="card-title text-indigo-800 text-2xl font-extrabold mb-3">

@@ -67,13 +67,18 @@ export const commonPrintStyles = `
     width: 100px;
     height: auto;
   }
+ 
 
   .header-title {
-    font-size: 18px;
-    font-weight: bold;
-    text-align: center;
-    flex: 1;
-  }
+  font-family: "SolaimanLipi", "Nikosh", "Roboto", "Arial", sans-serif;
+  font-size: 20px;          /* অফিসিয়াল লুকের জন্য সামান্য বড় */
+  font-weight: 600;         /* Semi-bold, অফিসিয়াল ফিল */
+  text-align: center;
+  flex: 1;
+  color: #1a1a1a;           /* ডার্ক অফিসিয়াল টেক্সট কালার */
+  letter-spacing: 0.5px;    /* অক্ষরের মাঝে হালকা ফাঁক */
+          /* প্রিন্টের জন্য ভালো লাইন হাইট */
+}
 
   hr {
     border: 1px solid #000;

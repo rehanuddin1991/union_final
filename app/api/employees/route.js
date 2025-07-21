@@ -21,14 +21,24 @@ export async function GET() {
 export async function POST(req) {
   try {
     const body = await req.json();
-    console.log("body datra",body)
+    // body এর মধ্যে অবশ্যই imageUrl থাকবে যদি ফর্ম থেকে পাঠানো হয়
+
     const employee = await prisma.employees.create({
-      data: body,
+      data: {
+        name: body.name,
+        mobile: body.mobile || null,
+        email: body.email || null,
+        designation: body.designation,
+        order: body.order ? Number(body.order) : null,
+        notes: body.notes || null,
+        imageUrl: body.imageUrl || null, // ✅ imgbb থেকে আসা URL
+      },
     });
-    return new Response(
-      JSON.stringify({ success: true, employee }),
-      { status: 201, headers: { "Content-Type": "application/json" } }
-    );
+
+    return new Response(JSON.stringify({ success: true, employee }), {
+      status: 201,
+      headers: { "Content-Type": "application/json" },
+    });
   } catch (error) {
     return new Response(
       JSON.stringify({ success: false, error: error.message }),
@@ -37,6 +47,9 @@ export async function POST(req) {
   }
 }
 
+/**
+ * ✅ নির্দিষ্ট কর্মচারীর তথ্য আপডেট করে
+ */
 export async function PATCH(req) {
   try {
     const url = new URL(req.url);
@@ -45,13 +58,21 @@ export async function PATCH(req) {
 
     const employee = await prisma.employees.update({
       where: { id },
-      data: body,
+      data: {
+        name: body.name,
+        mobile: body.mobile || null,
+        email: body.email || null,
+        designation: body.designation,
+        order: body.order ? Number(body.order) : null,
+        notes: body.notes || null,
+        imageUrl: body.imageUrl || null, // ✅ আপডেটের সময়ও নতুন URL সেভ হবে
+      },
     });
 
-    return new Response(
-      JSON.stringify({ success: true, employee }),
-      { status: 200, headers: { "Content-Type": "application/json" } }
-    );
+    return new Response(JSON.stringify({ success: true, employee }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
   } catch (error) {
     return new Response(
       JSON.stringify({ success: false, error: error.message }),

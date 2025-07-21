@@ -38,7 +38,7 @@ export function getHeaderSection(settings, govtImg, unionImg) {
           ${settings?.union_name || ""}
         </h1>
         <h1 class="header-title">${settings?.upazila},&nbsp;${settings?.district}</h1>
-        <h1 class="header-title"><u>${settings?.notes}</u></h1>
+        <h1 class="header-title"> ${settings?.notes} </h1>
       </div>
       <img src="${unionImg}" class="header-logo" alt="Union Logo" />
     </div>

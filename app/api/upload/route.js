@@ -1,36 +1,40 @@
 import { NextResponse } from "next/server";
-import { writeFile } from "fs/promises";
-import path from "path";
-import { v4 as uuidv4 } from "uuid";
 
 export async function POST(req) {
   try {
-    const data = await req.formData();
-    const file = data.get("image");
+    const formData = await req.formData();
+    const imageFile = formData.get("image");
 
-    if (!file || !file.arrayBuffer) {
-      return NextResponse.json({ success: false, message: "No image file" }, { status: 400 });
+    if (!imageFile) {
+      return NextResponse.json({ success: false, message: "No file uploaded" }, { status: 400 });
     }
 
-    const buffer = Buffer.from(await file.arrayBuffer());
+    // Image কে base64 এ রূপান্তর
+    const buffer = Buffer.from(await imageFile.arrayBuffer());
     const base64Image = buffer.toString("base64");
 
     const apiKey = process.env.IMGBB_API_KEY;
-    const response = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
+
+    // imgbb তে পাঠানো
+    const res = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ image: base64Image }),
+      body: new URLSearchParams({
+        image: base64Image,
+      }),
     });
 
-    const result = await response.json();
+    const data = await res.json();
 
-    if (result.success) {
-      return NextResponse.json({ url: result.data.url }, { status: 200 });
+    if (data.success) {
+      return NextResponse.json({ success: true, url: data.data.url });
     } else {
-      return NextResponse.json({ success: false, message: "Upload failed" }, { status: 500 });
+      return NextResponse.json(
+        { success: false, message: "Image upload failed", error: data.error },
+        { status: 500 }
+      );
     }
-  } catch (err) {
-    console.error("Upload Error:", err);
-    return NextResponse.json({ success: false, message: "Error uploading image" }, { status: 500 });
+  } catch (error) {
+    return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
 }

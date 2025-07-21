@@ -89,13 +89,16 @@ export default function RootLayout({ children }) {
 
         {children}
 
-        <footer className="footer sm:footer-horizontal footer-center bg-gray-200 text-green-700 p-4 mt-4 shadow-inner">
-          <aside>
-            <p className="    text-xl text-center">
-              Rehan Uddin, Upazila ICT OFFICER, DoICT © {new Date().getFullYear()} — All rights reserved
-            </p>
-          </aside>
-        </footer>
+        <footer className="bg-gray-100 text-gray-700 py-4 mt-6 border-t border-gray-300 shadow-inner">
+  <div className="max-w-4xl mx-auto text-center text-sm sm:text-base">
+    <p className="font-medium">
+      ©2025 — 
+      <span className="text-green-700 font-semibold"> Rehan Uddin</span>, 
+      Upazila ICT Officer, DoICT. All rights reserved.
+    </p>
+  </div>
+</footer>
+
       </body>
     </html>
   );

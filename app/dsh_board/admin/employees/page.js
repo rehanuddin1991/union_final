@@ -139,96 +139,114 @@ export default function EmployeesPage() {
 
   return (
     <div className="max-w-3xl mx-auto p-6">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white border p-6 rounded-xl shadow mb-8"
-      >
-        <h2 className="text-xl font-semibold mb-4">
-          {editingId ? "✏️ আপডেট কর্মকর্তা" : "📝 নতুন কর্মকর্তা যোগ করুন"}
-        </h2>
+     <form
+  onSubmit={handleSubmit}
+  className="bg-gradient-to-br from-white via-green-50 to-green-100 p-8 rounded-2xl shadow-2xl border border-green-200 mb-8 transition-all duration-300 hover:shadow-green-200/50"
+>
+  <h2 className="text-3xl font-extrabold mb-6 text-green-800 drop-shadow-md">
+    {editingId ? "✏️ আপডেট কর্মকর্তা" : "📝 নতুন কর্মকর্তা যোগ করুন"}
+  </h2>
 
-        {/* Existing form fields */}
-        <label className="block mb-1">নাম</label>
-        <input
-          type="text"
-          value={form.name}
-          onChange={(e) => setForm({ ...form, name: e.target.value })}
-          className="border p-2 mb-4 rounded w-full"
-          required
-        />
+  {/* নাম */}
+  <label className="block mb-1 font-medium text-green-700">নাম</label>
+  <input
+    type="text"
+    value={form.name}
+    onChange={(e) => setForm({ ...form, name: e.target.value })}
+    className="w-full p-3 mb-4 border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 focus:outline-none shadow-sm transition-all duration-200"
+    required
+  />
 
-        <label className="block mb-1">মোবাইল</label>
-        <input
-          type="text"
-          value={form.mobile}
-          onChange={(e) => setForm({ ...form, mobile: e.target.value })}
-          className="border p-2 mb-4 rounded w-full"
-        />
+  {/* মোবাইল */}
+  <label className="block mb-1 font-medium text-green-700">মোবাইল</label>
+  <input
+    type="text"
+    value={form.mobile}
+    onChange={(e) => setForm({ ...form, mobile: e.target.value })}
+    className="w-full p-3 mb-4 border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 focus:outline-none shadow-sm transition-all duration-200"
+  />
 
-        <label className="block mb-1">ইমেইল</label>
-        <input
-          type="email"
-          value={form.email}
-          onChange={(e) => setForm({ ...form, email: e.target.value })}
-          className="border p-2 mb-4 rounded w-full"
-        />
+  {/* ইমেইল */}
+  <label className="block mb-1 font-medium text-green-700">ইমেইল</label>
+  <input
+    type="email"
+    value={form.email}
+    onChange={(e) => setForm({ ...form, email: e.target.value })}
+    className="w-full p-3 mb-4 border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 focus:outline-none shadow-sm transition-all duration-200"
+  />
 
-        <label className="block mb-1">পদবি</label>
-        <select
-          value={form.designation}
-          onChange={(e) => setForm({ ...form, designation: e.target.value })}
-          className="border p-2 mb-4 rounded w-full"
-        >
-          <option value="OFFICER_IN_CHARGE">প্রশাসক</option>
-          <option value="CHAIRMAN">চেয়ারম্যান</option>
-          <option value="ADMINISTRATIVE_OFFICER">প্রশাসনিক কর্মকর্তা</option>
-          <option value="ACCOUNTANT_COMPUTER_OPERATOR">
-            হিসাব সহকারী কাম কম্পিউটার অপারেটর
-          </option>
-          <option value="UP_MEMBER">মেম্বার</option>
-          <option value="GRAM_POLICE">গ্রাম পুলিশ</option>
-          <option value="OTHERS">অন্যান্য</option>
-        </select>
+  {/* পদবি */}
+  <label className="block mb-1 font-medium text-green-700">পদবি</label>
+  <select
+    value={form.designation}
+    onChange={(e) => setForm({ ...form, designation: e.target.value })}
+    className="w-full p-3 mb-4 border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 focus:outline-none shadow-sm transition-all duration-200"
+  >
+    <option value="OFFICER_IN_CHARGE">প্রশাসক</option>
+    <option value="CHAIRMAN">চেয়ারম্যান</option>
+    <option value="ADMINISTRATIVE_OFFICER">প্রশাসনিক কর্মকর্তা</option>
+    <option value="ACCOUNTANT_COMPUTER_OPERATOR">
+      হিসাব সহকারী কাম কম্পিউটার অপারেটর
+    </option>
+    <option value="UP_MEMBER">মেম্বার</option>
+    <option value="GRAM_POLICE">গ্রাম পুলিশ</option>
+    <option value="OTHERS">অন্যান্য</option>
+  </select>
 
-        <label className="block mb-1">ক্রম</label>
-        <input
-          type="number"
-          value={form.order}
-          onChange={(e) => setForm({ ...form, order: +e.target.value })}
-          className="border p-2 mb-4 rounded w-full"
-        />
+  {/* ক্রম */}
+  <label className="block mb-1 font-medium text-green-700">ক্রম</label>
+  <input
+    type="number"
+    value={form.order}
+    onChange={(e) => setForm({ ...form, order: +e.target.value })}
+    className="w-full p-3 mb-4 border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 focus:outline-none shadow-sm transition-all duration-200"
+  />
 
-        <label className="block mb-1">নোটস</label>
-        <textarea
-          value={form.notes}
-          onChange={(e) => setForm({ ...form, notes: e.target.value })}
-          className="border p-2 mb-4 rounded w-full h-24"
-        ></textarea>
+  {/* নোটস */}
+  <label className="block mb-1 font-medium text-green-700">নোটস</label>
+  <textarea
+    value={form.notes}
+    onChange={(e) => setForm({ ...form, notes: e.target.value })}
+    className="w-full p-3 mb-4 border border-green-200 rounded-xl h-28 focus:ring-2 focus:ring-green-400 focus:outline-none shadow-sm transition-all duration-200"
+  ></textarea>
 
-        {/* Image Upload */}
-        <label className="block mb-1">ছবি আপলোড</label>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-          className="mb-4"
-        />
-        {preview && (
-          <img
-            src={preview}
-            alt="Preview"
-            className="mb-4 max-h-40 rounded border object-contain"
-          />
-        )}
+  {/* ছবি আপলোড */}
+  <label className="block mb-1 font-medium text-green-700">ছবি আপলোড</label>
+  <input
+    type="file"
+    accept="image/*"
+    onChange={handleImageChange}
+    className="block w-full text-sm text-gray-700 
+               file:mr-4 file:py-2 file:px-4 
+               file:rounded-lg file:border-0
+               file:text-sm file:font-semibold
+               file:bg-green-600 file:text-white
+               hover:file:bg-green-700 
+               cursor-pointer transition-all duration-300 mb-4"
+  />
 
-        <button
-          type="submit"
-          disabled={uploading}
-          className="w-full bg-green-600 text-white py-2 rounded disabled:opacity-50"
-        >
-          {uploading ? "ছবি আপলোড হচ্ছে..." : editingId ? "✅ আপডেট" : "✅ সংরক্ষণ করুন"}
-        </button>
-      </form>
+  {preview && (
+    <img
+      src={preview}
+      alt="Preview"
+      className="mb-4 max-h-40 rounded-xl border object-contain shadow-sm"
+    />
+  )}
+
+  {/* Submit Button */}
+  <button
+    type="submit"
+    disabled={uploading}
+    className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-3 rounded-xl font-semibold shadow-lg hover:shadow-green-300 transition-all duration-300 disabled:opacity-50"
+  >
+    {uploading
+      ? "⏳ ছবি আপলোড হচ্ছে..."
+      : editingId
+      ? "✅ আপডেট"
+      : "✅ সংরক্ষণ করুন"}
+  </button>
+</form>
+
 
       <div className="bg-white border p-4 rounded-xl shadow">
         <h2 className="text-xl font-semibold mb-3">📋 কর্মকর্তার তালিকা</h2>
