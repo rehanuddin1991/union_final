@@ -10,13 +10,9 @@ export default function EmployeesPage() {
     designation: "CHAIRMAN",
     order: "",
     notes: "",
-    imageUrl: "",   // <-- ImageBB URL রাখার জন্য নতুন ফিল্ড
   });
   const [employees, setEmployees] = useState([]);
   const [editingId, setEditingId] = useState(null);
-  const [imageFile, setImageFile] = useState(null);
-  const [preview, setPreview] = useState(null);
-  const [uploading, setUploading] = useState(false);
 
   const fetchEmployees = async () => {
     const res = await fetch("/api/employees");
@@ -29,57 +25,8 @@ export default function EmployeesPage() {
     fetchEmployees();
   }, []);
 
-  // ছবি সিলেক্ট করলে preview set হবে
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    setImageFile(file);
-
-    const reader = new FileReader();
-    reader.onloadend = () => setPreview(reader.result);
-    reader.readAsDataURL(file);
-  };
-
-  // ImageBB API তে ছবি আপলোড করে URL ফেরত নেয়
-  const uploadImage = async () => {
-    if (!imageFile) return null;
-
-    setUploading(true);
-    const formData = new FormData();
-    formData.append("image", imageFile);
-
-    try {
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await res.json();
-      if (res.ok) {
-        setUploading(false);
-        return data.url; // ImageBB থেকে পাওয়া URL
-      } else {
-        setUploading(false);
-        toast.error("ছবি আপলোড ব্যর্থ: " + data.message);
-        return null;
-      }
-    } catch (err) {
-      setUploading(false);
-      toast.error("ছবি আপলোডে সমস্যা");
-      return null;
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // যদি ছবি সিলেক্ট করা থাকে তাহলে আপলোড করে URL নিন
-    let imageUrl = form.imageUrl;
-    if (imageFile) {
-      const uploadedUrl = await uploadImage();
-      if (!uploadedUrl) return; // যদি ছবি আপলোড ব্যর্থ হয়, সাবমিট বন্ধ করবে
-      imageUrl = uploadedUrl;
-    }
-
     const method = editingId ? "PATCH" : "POST";
     const url = editingId ? `/api/employees?id=${editingId}` : "/api/employees";
 
@@ -87,7 +34,7 @@ export default function EmployeesPage() {
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, imageUrl }),
+        body: JSON.stringify(form),
       });
       const data = await res.json();
 
@@ -100,11 +47,8 @@ export default function EmployeesPage() {
           designation: "CHAIRMAN",
           order: "",
           notes: "",
-          imageUrl: "",
         });
         setEditingId(null);
-        setImageFile(null);
-        setPreview(null);
         fetchEmployees();
       } else toast.error("ব্যর্থ");
     } catch {
@@ -130,11 +74,8 @@ export default function EmployeesPage() {
       designation: emp.designation,
       order: emp.order || "",
       notes: emp.notes || "",
-      imageUrl: emp.imageUrl || "",
     });
     setEditingId(emp.id);
-    setPreview(emp.imageUrl || null);
-    setImageFile(null);
   };
 
   return (
@@ -147,7 +88,6 @@ export default function EmployeesPage() {
           {editingId ? "✏️ আপডেট কর্মকর্তা" : "📝 নতুন কর্মকর্তা যোগ করুন"}
         </h2>
 
-        {/* Existing form fields */}
         <label className="block mb-1">নাম</label>
         <input
           type="text"
@@ -198,6 +138,15 @@ export default function EmployeesPage() {
           className="border p-2 mb-4 rounded w-full"
         />
 
+        {/* নতুন ফাইল ইনপুট */}
+<label className="block mb-1">ছবি</label>
+<input
+  type="file"
+  accept="image/*"
+  onChange={(e) => setForm({ ...form, image: e.target.files[0] })}
+  className="border p-2 mb-4 rounded w-full"
+/>
+
         <label className="block mb-1">নোটস</label>
         <textarea
           value={form.notes}
@@ -205,28 +154,11 @@ export default function EmployeesPage() {
           className="border p-2 mb-4 rounded w-full h-24"
         ></textarea>
 
-        {/* Image Upload */}
-        <label className="block mb-1">ছবি আপলোড</label>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-          className="mb-4"
-        />
-        {preview && (
-          <img
-            src={preview}
-            alt="Preview"
-            className="mb-4 max-h-40 rounded border object-contain"
-          />
-        )}
-
         <button
           type="submit"
-          disabled={uploading}
-          className="w-full bg-green-600 text-white py-2 rounded disabled:opacity-50"
+          className="w-full bg-green-600 text-white py-2 rounded"
         >
-          {uploading ? "ছবি আপলোড হচ্ছে..." : editingId ? "✅ আপডেট" : "✅ সংরক্ষণ করুন"}
+          {editingId ? "✅ আপডেট" : "✅ সংরক্ষণ করুন"}
         </button>
       </form>
 
@@ -235,7 +167,6 @@ export default function EmployeesPage() {
         <table className="w-full text-sm border">
           <thead className="bg-green-100">
             <tr>
-               
               <th className="border p-2">নাম</th>
               <th className="border p-2">পদবি</th>
               <th className="border p-2">মোবাইল</th>
@@ -247,7 +178,6 @@ export default function EmployeesPage() {
           <tbody>
             {employees.map((emp) => (
               <tr key={emp.id}>
-                 
                 <td className="border p-2">{emp.name}</td>
 
                 <td className="border p-2">
@@ -283,7 +213,7 @@ export default function EmployeesPage() {
             ))}
             {employees.length === 0 && (
               <tr>
-                <td colSpan={7} className="text-center p-4">
+                <td colSpan={5} className="text-center p-4">
                   কোনো তথ্য পাওয়া যায়নি।
                 </td>
               </tr>

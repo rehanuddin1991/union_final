@@ -120,6 +120,7 @@ model Employees {
   is_deleted  Boolean     @default(false) // ✅ added
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
+  imageUrl    String? 
    @@map("employees")
 }
 

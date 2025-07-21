@@ -31,7 +31,7 @@ export default function AdminLayout({ children }) {
           <div className="space-y-1">
             <p className="font-semibold text-white">👨‍🎓 User</p>
             <div className="ml-4 space-y-1 text-sm">
-              <a href="/dsh_board/admin/user-creation" className="block hover:text-blue-300">
+              <a href="/dsh_board/admin/new-user-creation" className="block hover:text-blue-300">
                 🧾  User Management
               </a>
             </div>
