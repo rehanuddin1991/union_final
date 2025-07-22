@@ -29,17 +29,20 @@ export default function VerifyCertificateClient() {
   const formatDobDate = (date) => {
     const data = date?.substring(0, 10).split("-");
     return `${data[2]}-${data[1]}-${data[0]}`;
-    if (!date || date.length !== 8) return date; // 8 digit হলে মনে করব yyyymmdd
-    const year = date.slice(0, 4);
-    const month = date.slice(4, 6);
-    const day = date.slice(6, 8);
-    return `${day}-${month}-${year}`;
   };
 
-  const dob2= formatDobDate(certificate.birthDate?.substring(0, 10))  ;
-      const [day, month, year] = dob2.split("-");
-      
-      const bnDob2 = `${enToBnNumber(day)}-${enToBnNumber(month)}-${enToBnNumber(year)}`;
+  const enToBnNumber = (str) => {
+    const enDigits = ['0','1','2','3','4','5','6','7','8','9'];
+    const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+    return str.replace(/[0-9]/g, (d) => bnDigits[enDigits.indexOf(d)]);
+  };
+
+  let bnDob2 = '';
+  if (certificate?.birthDate) {
+    const dob2 = formatDobDate(certificate.birthDate.substring(0, 10));
+    const [day, month, year] = dob2.split("-");
+    bnDob2 = `${enToBnNumber(day)}-${enToBnNumber(month)}-${enToBnNumber(year)}`;
+  }
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow rounded mt-10">
