@@ -51,8 +51,9 @@ export default function VerifyCertificateClient() {
       {error && <p className="text-red-600">{error}</p>}
 
       {certificate && (
-        <div className="space-y-2">
+        <div className="space-y-2 text-[darkcyan]">
           <p><strong>নাম:</strong> {certificate.applicantName}</p>
+          <p><strong>পিতার নাম:</strong> {certificate.fatherName}</p>
           <p><strong>জাতীয় পরিচয়পত্র:</strong> {certificate.nid}</p>
           <p><strong>জন্ম নিবন্ধন:</strong> {certificate.birth_no}</p>
           <p><strong>জন্ম তারিখ:</strong> {bnDob2}</p>
