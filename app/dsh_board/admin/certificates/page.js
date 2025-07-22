@@ -7,7 +7,7 @@ import { commonPrintStyles, taxTableStyles  } from "@/utils_js/helpers/printStyl
  
   
 
-import {getHeaderSection , preloadImage, openPrintWindow,generateSignatureHTML,generateApplicantInfoRows } from "@/utils_js/helpers/printHelpers";
+import {getHeaderSection ,getHeaderSectionTrade, preloadImage, openPrintWindow,generateSignatureHTML,generateApplicantInfoRows } from "@/utils_js/helpers/printHelpers";
 
 import dynamic from "next/dynamic";
 import {
@@ -560,7 +560,7 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
   settings,
   qrImg_with_link
 );
-  const headerHTML = getHeaderSection(settings, govtImg, unionImg);
+  const headerHTML = getHeaderSectionTrade(settings, govtImg, unionImg);
 
     const printContents = `
     <!DOCTYPE html>
@@ -586,9 +586,9 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
 
             
 
-            <div class="top-section">
+            <div class="top-section"  style="margin-top:12px;">
               <p>স্মারক নং: ${settings?.sarok_no}${enToBnNumber(cert?.letter_count)}</p>
-              <p>তারিখ-: ${bnIssueDate}</p>
+              <p>তারিখ: ${bnIssueDate}</p>
             </div>
 
            <div style="border: 1px solid green;margin:auto; background-color: #e6f4ea; padding: 5px; margin-top: 15px; border-radius: 7px;
