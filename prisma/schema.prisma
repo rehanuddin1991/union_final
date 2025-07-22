@@ -172,6 +172,22 @@ model Certificate {
   @@map("certificate")
 }
 
+
+model Institution {
+  id           Int      @id @default(autoincrement())
+  type         String
+  name         String
+  head         String
+  address      String
+  headMobile   String
+  comments     String?   @db.Text
+  is_deleted   Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@map("institutions")
+}
+
 //npx prisma migrate dev --name add_spouse_field
 //npx prisma generate
 
