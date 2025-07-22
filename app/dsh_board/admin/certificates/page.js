@@ -37,16 +37,28 @@ export default function CertificatesPage() {
     } else toast.error("অফিস সেটিংস লোড করতে ব্যর্থ হয়েছে");
   };
 
-  //console.log("dddddd" + settings?.sarok_no);
+   
 
-  const handleLoadDefaultNote = () => {
-    const defaultNote = `
-    <p> সংশ্লিষ্ট ওয়ার্ড সদস্যের প্রত্যয়ন সূত্রে জানতে পারি, তিনি উল্লিখিত ঠিকানার একজন স্থায়ী বাসিন্দা এবং জন্মসূত্রে বাংলাদেশী নাগরিক। তিনি রাষ্ট্র ও সমাজবিরোধী কোনো কার্যকলাপে জড়িত নন। আমি তাঁর সর্বাঙ্গীন মঙ্গল ও উন্নতি কামনা করি।
-</p>
-     
-  `;
-    setForm({ ...form, notes: defaultNote });
-  };
+const handleLoadDefaultNote = (type) => {
+  let defaultNote = "";
+
+  if (type === 1) {
+    defaultNote = `
+      <p> সংশ্লিষ্ট ওয়ার্ড সদস্যের প্রত্যয়ন সূত্রে জানতে পারি, তিনি উল্লিখিত ঠিকানার একজন স্থায়ী বাসিন্দা এবং জন্মসূত্রে বাংলাদেশী নাগরিক। তিনি রাষ্ট্র ও সমাজবিরোধী কোনো কার্যকলাপে জড়িত নন। আমি তাঁর সর্বাঙ্গীন মঙ্গল ও উন্নতি কামনা করি।</p>
+    `;
+  } else {
+    defaultNote = `
+      <p>তিনি উল্লিখিত ঠিকানার একজন স্থায়ী বাসিন্দা। সংশ্লিষ্ট ওয়ার্ড সদস্যের প্রত্যয়ন সূত্রে জানতে পারি,
+       তিনি জন্মসূত্রে বাংলাদেশী নাগরিক। উক্ত ব্যক্তির জন্ম/জাতীয় সনদসহ অন্যান্য সনদে ${form.applicantName || "আবেদনকারী"} পরিলক্ষিত হলেও, ভুলবশত তাঁর নামীয় কিছু কাগজপত্রে (ভূমি/অন্যান্য) ${form.applicantName || "আবেদনকারী"} লেখা আছে।  আমার জানামতে, ${form.applicantName || "আবেদনকারী"} ও ${form.applicantName || "আবেদনকারী"} একই ব্যক্তি। আমি তাঁর সর্বাঙ্গীন মঙ্গল ও উন্নতি কামনা করি।</p>
+    `;
+  }
+
+  setForm((prevForm) => ({
+    ...prevForm,
+    notes: defaultNote,
+  }));
+};
+
 
   const fetchEmployees = async () => {
     const res = await fetch("/api/employees");
@@ -389,6 +401,110 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
         
 
              ${signatureHTML}
+          </div>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+
+     openPrintWindow(printContents);
+  };
+
+  const handlePrintNameRelated = async (cert,settings) => {
+    const origin = window.location.origin;
+    const dob= formatDobDate(cert.birthDate?.substring(0, 10))  ;
+    const [day, month, year] = dob.split("-");
+    
+    const bnDob = `${enToBnNumber(day)}-${enToBnNumber(month)}-${enToBnNumber(year)}`;
+  const applicantInfoRows = generateApplicantInfoRows(cert, bnDob);
+  const issue_date_format=formatDate(cert.issuedDate || new Date());
+  const [issue_day, issue_month, issue_year] = issue_date_format.split("-");
+  const bnIssueDate = `${enToBnNumber(issue_day)}-${enToBnNumber(issue_month)}-${enToBnNumber(issue_year)}`;
+
+    const govtImg = `${origin}/images/govt.png`;
+    const unionImg = `${origin}/images/union.png`;
+    const qrImg = `${origin}/images/qr.png`;
+    const qrUrl = `${origin}/verify/certificate?id=${cert.id}`;
+    const qrImg_with_link = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(
+      qrUrl
+    )}&size=100x100`;
+    //const qrImg_with_link = `https://api.qrserver.com/v1/create-qr-code/?data=https://google.com&size=150x150`;
+
+     // ✅ প্রিলোড ইমেজ
+  try {
+    await Promise.all([preloadImage(govtImg), preloadImage(unionImg)]);
+  } catch (err) {
+    console.error("Error preloading images:", err);
+  }
+
+  const signatureHTML = generateSignatureHTML(
+  signer,
+  signer2,
+  designationText,
+  designationText2,
+  settings,
+  qrImg_with_link
+);
+
+const headerHTML = getHeaderSection(settings, govtImg, unionImg);
+
+
+    const printContents = `
+    <!DOCTYPE html>
+    <html lang="bn">
+    <head>
+      <meta charset="UTF-8">
+      <title>${cert.type || "Certificate"}</title>
+       <style>
+        ${commonPrintStyles.replace("__UNION_IMG__", unionImg)}
+      </style>
+    </head>
+    <body>
+      <div class="outer-border">
+        <div class="middle-border">
+          <div class="inner-border">
+             
+
+            ${headerHTML}
+
+            <hr>
+
+            <div class="top-section">
+              <p>স্মারক নং: ${settings?.sarok_no}${enToBnNumber( cert?.letter_count)}</p>
+              <p>তারিখ: ${bnIssueDate}</p>
+            </div>
+
+            <div style="border: 1px solid green;margin:auto; background-color: #e6f4ea; padding: 5px; margin-top: 35px; border-radius: 7px;
+             width: 250px; text-align: center;">
+  <h1 style="font-size: 21px; color: #000080; margin: auto;">
+    ${cert.type || "সার্টিফিকেট"}
+  </h1>
+</div>
+
+
+
+           
+
+            
+<div style="text-align:justify; line-height:2.2;margin-top:32px;">  
+ <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>এই মর্মে প্রত্যয়ন করা যাচ্ছে যে,&nbsp;${cert.applicantName},&nbsp; পিতা: ${cert.fatherName}, 
+            মাতা: ${cert.motherName},</b>  
+            জন্ম তারিখ: ${bnDob},</b>
+            গ্রাম: ${cert.address}, ওয়ার্ড: ${cert.ward},&nbsp;${settings?.union_name}, ডাকঘর: ${cert.post_office},উপজেলা: ${settings?.upazila},
+            জেলা: ${settings?.district} ।
+            </p>
+    <p>${cert.notes || "-"}</p>
+</div>
+ <br>
+        
+
+             ${signatureHTML}
+
+             <br>
+             <br>
+             <br>
+              
           </div>
         </div>
       </div>
@@ -767,6 +883,7 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
               <option value="ওয়ারিশ সনদ">ওয়ারিশ সনদ</option>
               <option value="বার্ষিক আয়ের সনদ">বার্ষিক আয়ের সনদ</option>
               <option value="ট্রেড লাইসেন্স">ট্রেড লাইসেন্স</option>
+              <option value="নাম সংক্রান্ত প্রত্যয়ন পত্র">নাম সংক্রান্ত প্রত্যয়ন পত্র</option>
               <option value="বিবিধ সনদ">বিবিধ সনদ</option>
             </select>
           </div>
@@ -1121,10 +1238,20 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
           <label className="font-semibold text-indigo-700">নোটস</label>
           <button
             type="button"
-            onClick={handleLoadDefaultNote}
+                onClick={() => handleLoadDefaultNote(1)}
+
             className="bg-green-500 text-white mx-4 my-2 px-3 py-1 text-sm rounded-2xl shadow hover:bg-green-600"
           >
             Load Default
+          </button>
+
+          <button
+            type="button"
+                onClick={() => handleLoadDefaultNote(2)}
+
+            className="bg-green-500 text-white mx-4 my-2 px-3 py-1 text-sm rounded-2xl shadow hover:bg-green-600"
+          >
+            Load Default (নাম সংক্রান্ত প্রত্যয়ন)
           </button>
           <Editor
             apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
@@ -1240,6 +1367,18 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
                   >
                     🖨️
                   </button>)}
+
+
+                  {cert.type === "নাম সংক্রান্ত প্রত্যয়ন পত্র" && (
+                  <button
+                    onClick={() => handlePrintNameRelated(cert,settings)}
+                    className="text-green-600"
+                  >
+                    নাম সংক্রান্ত
+                  </button>)}
+
+
+
 
                   {cert.type === "ট্রেড লাইসেন্স" && (
   <button
