@@ -3,11 +3,19 @@ import { useEffect, useState, useRef } from "react";
 //import { Editor } from '@tinymce/tinymce-react'
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { commonPrintStyles, taxTableStyles  } from "@/utils_js/helpers/printStyles";
- 
-  
+import {
+  commonPrintStyles,
+  taxTableStyles,
+} from "@/utils_js/helpers/printStyles";
 
-import {getHeaderSection ,getHeaderSectionTrade, preloadImage, openPrintWindow,generateSignatureHTML,generateApplicantInfoRows } from "@/utils_js/helpers/printHelpers";
+import {
+  getHeaderSection,
+  getHeaderSectionTrade,
+  preloadImage,
+  openPrintWindow,
+  generateSignatureHTML,
+  generateApplicantInfoRows,
+} from "@/utils_js/helpers/printHelpers";
 
 import dynamic from "next/dynamic";
 import {
@@ -37,28 +45,31 @@ export default function CertificatesPage() {
     } else toast.error("অফিস সেটিংস লোড করতে ব্যর্থ হয়েছে");
   };
 
-   
+  const handleLoadDefaultNote = (type) => {
+    let defaultNote = "";
 
-const handleLoadDefaultNote = (type) => {
-  let defaultNote = "";
-
-  if (type === 1) {
-    defaultNote = `
+    if (type === 1) {
+      defaultNote = `
       <p> সংশ্লিষ্ট ওয়ার্ড সদস্যের প্রত্যয়ন সূত্রে জানতে পারি, তিনি উল্লিখিত ঠিকানার একজন স্থায়ী বাসিন্দা এবং জন্মসূত্রে বাংলাদেশী নাগরিক। তিনি রাষ্ট্র ও সমাজবিরোধী কোনো কার্যকলাপে জড়িত নন। আমি তাঁর সর্বাঙ্গীন মঙ্গল ও উন্নতি কামনা করি।</p>
     `;
-  } else {
-    defaultNote = `
+    } else {
+      defaultNote = `
       <p>তিনি উল্লিখিত ঠিকানার একজন স্থায়ী বাসিন্দা। সংশ্লিষ্ট ওয়ার্ড সদস্যের প্রত্যয়ন সূত্রে জানতে পারি,
-       তিনি জন্মসূত্রে বাংলাদেশী নাগরিক। উক্ত ব্যক্তির জন্ম/জাতীয় সনদসহ অন্যান্য সনদে ${form.applicantName || "আবেদনকারী"} পরিলক্ষিত হলেও, ভুলবশত তাঁর নামীয় কিছু কাগজপত্রে (ভূমি/অন্যান্য) ${form.applicantName || "আবেদনকারী"} লেখা আছে।  আমার জানামতে, ${form.applicantName || "আবেদনকারী"} ও ${form.applicantName || "আবেদনকারী"} একই ব্যক্তি। আমি তাঁর সর্বাঙ্গীন মঙ্গল ও উন্নতি কামনা করি।</p>
+       তিনি জন্মসূত্রে বাংলাদেশী নাগরিক। উক্ত ব্যক্তির জন্ম/জাতীয় সনদসহ অন্যান্য সনদে ${
+         form.applicantName || "আবেদনকারী"
+       } পরিলক্ষিত হলেও, ভুলবশত তাঁর নামীয় কিছু কাগজপত্রে (ভূমি/অন্যান্য) ${
+        form.applicantName || "আবেদনকারী"
+      } লেখা আছে।  আমার জানামতে, ${form.applicantName || "আবেদনকারী"} ও ${
+        form.applicantName || "আবেদনকারী"
+      } একই ব্যক্তি। আমি তাঁর সর্বাঙ্গীন মঙ্গল ও উন্নতি কামনা করি।</p>
     `;
-  }
+    }
 
-  setForm((prevForm) => ({
-    ...prevForm,
-    notes: defaultNote,
-  }));
-};
-
+    setForm((prevForm) => ({
+      ...prevForm,
+      notes: defaultNote,
+    }));
+  };
 
   const fetchEmployees = async () => {
     const res = await fetch("/api/employees");
@@ -190,7 +201,7 @@ const handleLoadDefaultNote = (type) => {
     // }
 
     const payload = {
-      ...form
+      ...form,
       // ,
       // letter_count: parseInt(letter_count), // include it in payload
     };
@@ -220,7 +231,8 @@ const handleLoadDefaultNote = (type) => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm("ডিলিট নিশ্চিত করবেন? ভুলে ডিলিট হলে ডেটা রিকভারি সম্ভব")) return;
+    if (!confirm("ডিলিট নিশ্চিত করবেন? ভুলে ডিলিট হলে ডেটা রিকভারি সম্ভব"))
+      return;
     const res = await fetch(`/api/certificates?id=${id}`, { method: "DELETE" });
     const data = await res.json();
     if (data.success) {
@@ -294,14 +306,18 @@ const handleLoadDefaultNote = (type) => {
 
   const handlePrint = async (cert) => {
     const origin = window.location.origin;
-    const dob= formatDobDate(cert.birthDate?.substring(0, 10))  ;
+    const dob = formatDobDate(cert.birthDate?.substring(0, 10));
     const [day, month, year] = dob.split("-");
-    
-    const bnDob = `${enToBnNumber(day)}-${enToBnNumber(month)}-${enToBnNumber(year)}`;
-  const applicantInfoRows = generateApplicantInfoRows(cert, bnDob);
-  const issue_date_format=formatDate(cert.issuedDate || new Date());
-  const [issue_day, issue_month, issue_year] = issue_date_format.split("-");
-  const bnIssueDate = `${enToBnNumber(issue_day)}-${enToBnNumber(issue_month)}-${enToBnNumber(issue_year)}`;
+
+    const bnDob = `${enToBnNumber(day)}-${enToBnNumber(month)}-${enToBnNumber(
+      year
+    )}`;
+    const applicantInfoRows = generateApplicantInfoRows(cert, bnDob);
+    const issue_date_format = formatDate(cert.issuedDate || new Date());
+    const [issue_day, issue_month, issue_year] = issue_date_format.split("-");
+    const bnIssueDate = `${enToBnNumber(issue_day)}-${enToBnNumber(
+      issue_month
+    )}-${enToBnNumber(issue_year)}`;
 
     const govtImg = `${origin}/images/govt.png`;
     const unionImg = `${origin}/images/union.png`;
@@ -312,24 +328,23 @@ const handleLoadDefaultNote = (type) => {
     )}&size=100x100`;
     //const qrImg_with_link = `https://api.qrserver.com/v1/create-qr-code/?data=https://google.com&size=150x150`;
 
-     // ✅ প্রিলোড ইমেজ
-  try {
-    await Promise.all([preloadImage(govtImg), preloadImage(unionImg)]);
-  } catch (err) {
-    console.error("Error preloading images:", err);
-  }
+    // ✅ প্রিলোড ইমেজ
+    try {
+      await Promise.all([preloadImage(govtImg), preloadImage(unionImg)]);
+    } catch (err) {
+      console.error("Error preloading images:", err);
+    }
 
-  const signatureHTML = generateSignatureHTML(
-  signer,
-  signer2,
-  designationText,
-  designationText2,
-  settings,
-  qrImg_with_link
-);
+    const signatureHTML = generateSignatureHTML(
+      signer,
+      signer2,
+      designationText,
+      designationText2,
+      settings,
+      qrImg_with_link
+    );
 
-const headerHTML = getHeaderSection(settings, govtImg, unionImg);
-
+    const headerHTML = getHeaderSection(settings, govtImg, unionImg);
 
     const printContents = `
     <!DOCTYPE html>
@@ -352,7 +367,9 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
             <hr>
 
             <div class="top-section">
-              <p>স্মারক নং: ${settings?.sarok_no}${enToBnNumber( cert?.letter_count)}</p>
+              <p>স্মারক নং: ${settings?.sarok_no}${enToBnNumber(
+      cert?.letter_count
+    )}</p>
               <p>তারিখ: ${bnIssueDate}</p>
             </div>
 
@@ -370,7 +387,9 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
             <table>
   <tr>
     <td style="width: 30%;font-size:16px;font-weight:bold;">নাম</td>
-    <td style="margin-left:20px;font-size:16px;font-weight:bold;">: ${cert.applicantName}</td>
+    <td style="margin-left:20px;font-size:16px;font-weight:bold;">: ${
+      cert.applicantName
+    }</td>
   </tr>
    ${applicantInfoRows}
   <tr>
@@ -408,19 +427,23 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
     </html>
   `;
 
-     openPrintWindow(printContents);
+    openPrintWindow(printContents);
   };
 
-  const handlePrintNameRelated = async (cert,settings) => {
+  const handlePrintNameRelated = async (cert, settings) => {
     const origin = window.location.origin;
-    const dob= formatDobDate(cert.birthDate?.substring(0, 10))  ;
+    const dob = formatDobDate(cert.birthDate?.substring(0, 10));
     const [day, month, year] = dob.split("-");
-    
-    const bnDob = `${enToBnNumber(day)}-${enToBnNumber(month)}-${enToBnNumber(year)}`;
-  const applicantInfoRows = generateApplicantInfoRows(cert, bnDob);
-  const issue_date_format=formatDate(cert.issuedDate || new Date());
-  const [issue_day, issue_month, issue_year] = issue_date_format.split("-");
-  const bnIssueDate = `${enToBnNumber(issue_day)}-${enToBnNumber(issue_month)}-${enToBnNumber(issue_year)}`;
+
+    const bnDob = `${enToBnNumber(day)}-${enToBnNumber(month)}-${enToBnNumber(
+      year
+    )}`;
+    const applicantInfoRows = generateApplicantInfoRows(cert, bnDob);
+    const issue_date_format = formatDate(cert.issuedDate || new Date());
+    const [issue_day, issue_month, issue_year] = issue_date_format.split("-");
+    const bnIssueDate = `${enToBnNumber(issue_day)}-${enToBnNumber(
+      issue_month
+    )}-${enToBnNumber(issue_year)}`;
 
     const govtImg = `${origin}/images/govt.png`;
     const unionImg = `${origin}/images/union.png`;
@@ -431,24 +454,23 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
     )}&size=100x100`;
     //const qrImg_with_link = `https://api.qrserver.com/v1/create-qr-code/?data=https://google.com&size=150x150`;
 
-     // ✅ প্রিলোড ইমেজ
-  try {
-    await Promise.all([preloadImage(govtImg), preloadImage(unionImg)]);
-  } catch (err) {
-    console.error("Error preloading images:", err);
-  }
+    // ✅ প্রিলোড ইমেজ
+    try {
+      await Promise.all([preloadImage(govtImg), preloadImage(unionImg)]);
+    } catch (err) {
+      console.error("Error preloading images:", err);
+    }
 
-  const signatureHTML = generateSignatureHTML(
-  signer,
-  signer2,
-  designationText,
-  designationText2,
-  settings,
-  qrImg_with_link
-);
+    const signatureHTML = generateSignatureHTML(
+      signer,
+      signer2,
+      designationText,
+      designationText2,
+      settings,
+      qrImg_with_link
+    );
 
-const headerHTML = getHeaderSection(settings, govtImg, unionImg);
-
+    const headerHTML = getHeaderSection(settings, govtImg, unionImg);
 
     const printContents = `
     <!DOCTYPE html>
@@ -471,7 +493,9 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
             <hr>
 
             <div class="top-section">
-              <p>স্মারক নং: ${settings?.sarok_no}${enToBnNumber( cert?.letter_count)}</p>
+              <p>স্মারক নং: ${settings?.sarok_no}${enToBnNumber(
+      cert?.letter_count
+    )}</p>
               <p>তারিখ: ${bnIssueDate}</p>
             </div>
 
@@ -488,10 +512,14 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
 
             
 <div style="text-align:justify; line-height:2.2;margin-top:32px;">  
- <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>এই মর্মে প্রত্যয়ন করা যাচ্ছে যে,&nbsp;${cert.applicantName},&nbsp; পিতা: ${cert.fatherName}, 
+ <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>এই মর্মে প্রত্যয়ন করা যাচ্ছে যে,&nbsp;${
+   cert.applicantName
+ },&nbsp; পিতা: ${cert.fatherName}, 
             মাতা: ${cert.motherName},</b>  
             জন্ম তারিখ: ${bnDob},</b>
-            গ্রাম: ${cert.address}, ওয়ার্ড: ${cert.ward},&nbsp;${settings?.union_name}, ডাকঘর: ${cert.post_office},উপজেলা: ${settings?.upazila},
+            গ্রাম: ${cert.address}, ওয়ার্ড: ${cert.ward},&nbsp;${
+      settings?.union_name
+    }, ডাকঘর: ${cert.post_office},উপজেলা: ${settings?.upazila},
             জেলা: ${settings?.district} ।
             </p>
     <p>${cert.notes || "-"}</p>
@@ -512,25 +540,25 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
     </html>
   `;
 
-     openPrintWindow(printContents);
+    openPrintWindow(printContents);
   };
 
   const handlePrint_trade = async (cert) => {
     const origin = window.location.origin;
-    
 
-    const dob= formatDobDate(cert.birthDate?.substring(0, 10))  ;
+    const dob = formatDobDate(cert.birthDate?.substring(0, 10));
     const [day, month, year] = dob.split("-");
-    
-    const bnDob = `${enToBnNumber(day)}-${enToBnNumber(month)}-${enToBnNumber(year)}`;
-  const applicantInfoRows = generateApplicantInfoRows(cert, bnDob);
 
-  const issue_date_format=formatDate(cert.issuedDate || new Date());
-  const [issue_day, issue_month, issue_year] = issue_date_format.split("-");
-  const bnIssueDate = `${enToBnNumber(issue_day)}-${enToBnNumber(issue_month)}-${enToBnNumber(issue_year)}`;
+    const bnDob = `${enToBnNumber(day)}-${enToBnNumber(month)}-${enToBnNumber(
+      year
+    )}`;
+    const applicantInfoRows = generateApplicantInfoRows(cert, bnDob);
 
-
-     
+    const issue_date_format = formatDate(cert.issuedDate || new Date());
+    const [issue_day, issue_month, issue_year] = issue_date_format.split("-");
+    const bnIssueDate = `${enToBnNumber(issue_day)}-${enToBnNumber(
+      issue_month
+    )}-${enToBnNumber(issue_year)}`;
 
     const [startYear, endYear] = cert.fiscalYearEnd.split("_");
     const [fiscal_start, fiscal_end_bk] = cert.fiscalYear.split("_");
@@ -546,21 +574,21 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
     //const qrImg_with_link = `https://api.qrserver.com/v1/create-qr-code/?data=https://google.com&size=150x150`;
 
     // ✅ প্রিলোড ইমেজ
-  try {
-    await Promise.all([preloadImage(govtImg), preloadImage(unionImg)]);
-  } catch (err) {
-    console.error("Error preloading images:", err);
-  }
+    try {
+      await Promise.all([preloadImage(govtImg), preloadImage(unionImg)]);
+    } catch (err) {
+      console.error("Error preloading images:", err);
+    }
 
-  const signatureHTML = generateSignatureHTML(
-  signer,
-  signer2,
-  designationText,
-  designationText2,
-  settings,
-  qrImg_with_link
-);
-  const headerHTML = getHeaderSectionTrade(settings, govtImg, unionImg);
+    const signatureHTML = generateSignatureHTML(
+      signer,
+      signer2,
+      designationText,
+      designationText2,
+      settings,
+      qrImg_with_link
+    );
+    const headerHTML = getHeaderSectionTrade(settings, govtImg, unionImg);
 
     const printContents = `
     <!DOCTYPE html>
@@ -587,7 +615,9 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
             
 
             <div class="top-section"  style="margin-top:12px;">
-              <p>স্মারক নং: ${settings?.sarok_no}${enToBnNumber(cert?.letter_count)}</p>
+              <p>স্মারক নং: ${settings?.sarok_no}${enToBnNumber(
+      cert?.letter_count
+    )}</p>
               <p>তারিখ: ${bnIssueDate}</p>
             </div>
 
@@ -722,7 +752,9 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
             
 
             <div class="top-section">
-              <p>স্মারক নং: ${settings?.sarok_no}${enToBnNumber(cert?.letter_count)}</p>
+              <p>স্মারক নং: ${settings?.sarok_no}${enToBnNumber(
+      cert?.letter_count
+    )}</p>
               <p>তারিখ: ${bnIssueDate}</p>
             </div>
 
@@ -856,8 +888,7 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
     </html>
   `;
 
-       openPrintWindow(printContents);
-
+    openPrintWindow(printContents);
   };
 
   return (
@@ -883,14 +914,16 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
               <option value="ওয়ারিশ সনদ">ওয়ারিশ সনদ</option>
               <option value="বার্ষিক আয়ের সনদ">বার্ষিক আয়ের সনদ</option>
               <option value="ট্রেড লাইসেন্স">ট্রেড লাইসেন্স</option>
-              <option value="নাম সংক্রান্ত প্রত্যয়ন পত্র">নাম সংক্রান্ত প্রত্যয়ন পত্র</option>
+              <option value="নাম সংক্রান্ত প্রত্যয়ন পত্র">
+                নাম সংক্রান্ত প্রত্যয়ন পত্র
+              </option>
               <option value="বিবিধ সনদ">বিবিধ সনদ</option>
             </select>
           </div>
 
           <div>
             <label className="font-semibold text-indigo-700">
-              আবেদনকারীর নাম
+              আবেদনকারীর নাম  <span className="text-red-600 text-xl ">*</span>
             </label>
             <input
               type="text"
@@ -905,7 +938,7 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
           </div>
 
           <div>
-            <label className="font-semibold text-indigo-700">পিতার নাম</label>
+            <label className="font-semibold text-indigo-700">পিতার নাম<span className="text-red-600 text-xl ">*</span></label>
             <input
               type="text"
               value={form.fatherName}
@@ -917,7 +950,7 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
           </div>
 
           <div>
-            <label className="font-semibold text-indigo-700">মাতার নাম</label>
+            <label className="font-semibold text-indigo-700">মাতার নাম<span className="text-red-600 text-xl ">*</span></label>
             <input
               type="text"
               value={form.motherName}
@@ -942,7 +975,7 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
           </div>
 
           <div>
-            <label className="font-semibold text-indigo-700">জন্ম তারিখ</label>
+            <label className="font-semibold text-indigo-700">জন্ম তারিখ<span className="text-red-600 text-xl ">*</span></label>
             <input
               type="date"
               value={form.birthDate}
@@ -957,10 +990,16 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
             </label>
             <input
               type="text"
-              value={form.nid}
-              onChange={(e) => setForm({ ...form, nid: e.target.value })}
+              value={form.nid ?? ""}
+              onChange={(e) => {
+                const value = e.target.value;
+                // ✅ কেবল বাংলা সংখ্যা (০-৯) অনুমোদিত
+                if (/^[০-৯]*$/.test(value)) {
+                  setForm({ ...form, nid: value });
+                }
+              }}
               className="border p-2 rounded w-full"
-              placeholder="NID"
+              placeholder="NID (শুধু বাংলা সংখ্যা)"
             />
           </div>
 
@@ -968,12 +1007,19 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
             <label className="font-semibold text-indigo-700">
               জন্ম নিবন্ধন নম্বর
             </label>
+
             <input
               type="text"
-              value={form.birth_no}
-              onChange={(e) => setForm({ ...form, birth_no: e.target.value })}
+              value={form.birth_no ?? ""}
+              onChange={(e) => {
+                const value = e.target.value;
+                // ✅ কেবল বাংলা সংখ্যা (০-৯) অনুমোদিত
+                if (/^[০-৯]*$/.test(value)) {
+                  setForm({ ...form, birth_no: value });
+                }
+              }}
               className="border p-2 rounded w-full"
-              placeholder="জন্ম নিবন্ধন নম্বর"
+              placeholder="শুধু বাংলা সংখ্যা"
             />
           </div>
 
@@ -981,11 +1027,16 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
             <label className="font-semibold text-indigo-700">ওয়ার্ড</label>
             <input
               type="text"
-              value={form.ward}
-              onChange={(e) => setForm({ ...form, ward: e.target.value })}
+              value={form.ward ?? ""}
+              onChange={(e) => {
+                const value = e.target.value;
+                // ✅ কেবল বাংলা সংখ্যা (০-৯) অনুমোদিত
+                if (/^[০-৯]*$/.test(value)) {
+                  setForm({ ...form, ward: value });
+                }
+              }}
               className="border p-2 rounded w-full"
-              placeholder="ওয়ার্ড"
-              required
+              placeholder="শুধু বাংলা সংখ্যা"
             />
           </div>
 
@@ -993,11 +1044,16 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
             <label className="font-semibold text-indigo-700">হোল্ডিং</label>
             <input
               type="text"
-              value={form.holding_no}
-              onChange={(e) => setForm({ ...form, holding_no: e.target.value })}
+              value={form.holding_no ?? ""}
+              onChange={(e) => {
+                const value = e.target.value;
+                // ✅ কেবল বাংলা সংখ্যা (০-৯) অনুমোদিত
+                if (/^[০-৯]*$/.test(value)) {
+                  setForm({ ...form, holding_no: value });
+                }
+              }}
               className="border p-2 rounded w-full"
-              placeholder="হোল্ডিং"
-              required
+              placeholder="শুধু বাংলা সংখ্যা"
             />
           </div>
 
@@ -1009,7 +1065,7 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
               onChange={(e) => setForm({ ...form, mouza: e.target.value })}
               className="border p-2 rounded w-full"
               placeholder="মৌজা"
-              required
+              
             />
           </div>
 
@@ -1028,7 +1084,7 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
           </div>
 
           <div className="md:col-span-2">
-            <label className="font-semibold text-indigo-700">ঠিকানা</label>
+            <label className="font-semibold text-indigo-700">ঠিকানা<span className="text-red-600 text-xl ">*</span></label>
             <textarea
               value={form.address}
               onChange={(e) => setForm({ ...form, address: e.target.value })}
@@ -1042,7 +1098,7 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
             <>
               <div>
                 <label className="font-semibold text-indigo-700">
-                  প্রতিষ্ঠানের নাম
+                  প্রতিষ্ঠানের নাম<span className="text-red-600 text-xl ">*</span>
                 </label>
                 <input
                   type="text"
@@ -1058,7 +1114,7 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
 
               <div>
                 <label className="font-semibold text-indigo-700">
-                  প্রতিষ্ঠানের ঠিকানা
+                  প্রতিষ্ঠানের ঠিকানা<span className="text-red-600 text-xl ">*</span>
                 </label>
                 <input
                   type="text"
@@ -1074,7 +1130,7 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
 
               <div>
                 <label className="font-semibold text-indigo-700">
-                  ট্রেডের ধরন
+                  ট্রেডের ধরন<span className="text-red-600 text-xl ">*</span>
                 </label>
                 <input
                   type="text"
@@ -1090,14 +1146,19 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
               <div>
                 <label className="font-semibold text-indigo-700">
                   {" "}
-                  ট্রেড লাইসেন্স ফি
+                  ট্রেড লাইসেন্স ফি<span className="text-red-600 text-xl ">*</span>
                 </label>
+
                 <input
                   type="text"
-                  value={form.trade_fee}
-                  onChange={(e) =>
-                    setForm({ ...form, trade_fee: e.target.value })
-                  }
+                  value={form.trade_fee ?? ""}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    // ✅ কেবল বাংলা সংখ্যা (০-৯) অনুমোদিত
+                    if (/^[০-৯]*$/.test(value)) {
+                      setForm({ ...form, trade_fee: value });
+                    }
+                  }}
                   className="border p-2 rounded w-full"
                   placeholder="ট্রেড লাইসেন্স ফি"
                 />
@@ -1107,12 +1168,17 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
                 <label className="font-semibold text-indigo-700">
                   মুলধন কর
                 </label>
+
                 <input
                   type="text"
-                  value={form.trade_capital_tax}
-                  onChange={(e) =>
-                    setForm({ ...form, trade_capital_tax: e.target.value })
-                  }
+                  value={form.trade_capital_tax ?? ""}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    // ✅ কেবল বাংলা সংখ্যা (০-৯) অনুমোদিত
+                    if (/^[০-৯]*$/.test(value)) {
+                      setForm({ ...form, trade_capital_tax: value });
+                    }
+                  }}
                   className="border p-2 rounded w-full"
                   placeholder="মুলধন কর"
                 />
@@ -1120,12 +1186,17 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
 
               <div>
                 <label className="font-semibold text-indigo-700">বকেয়া</label>
+
                 <input
                   type="text"
-                  value={form.trade_due}
-                  onChange={(e) =>
-                    setForm({ ...form, trade_due: e.target.value })
-                  }
+                  value={form.trade_due ?? ""}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    // ✅ কেবল বাংলা সংখ্যা (০-৯) অনুমোদিত
+                    if (/^[০-৯]*$/.test(value)) {
+                      setForm({ ...form, trade_due: value });
+                    }
+                  }}
                   className="border p-2 rounded w-full"
                   placeholder="বকেয়া"
                 />
@@ -1133,12 +1204,17 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
 
               <div>
                 <label className="font-semibold text-indigo-700">ভ্যাট</label>
+
                 <input
                   type="text"
-                  value={form.trade_vat}
-                  onChange={(e) =>
-                    setForm({ ...form, trade_vat: e.target.value })
-                  }
+                  value={form.trade_vat ?? ""}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    // ✅ কেবল বাংলা সংখ্যা (০-৯) অনুমোদিত
+                    if (/^[০-৯]*$/.test(value)) {
+                      setForm({ ...form, trade_vat: value });
+                    }
+                  }}
                   className="border p-2 rounded w-full"
                   placeholder="ভ্যাট"
                 />
@@ -1148,12 +1224,17 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
                 <label className="font-semibold text-indigo-700">
                   সর্বমোট কর
                 </label>
+
                 <input
                   type="text"
-                  value={form.trade_total_tax}
-                  onChange={(e) =>
-                    setForm({ ...form, trade_total_tax: e.target.value })
-                  }
+                  value={form.trade_total_tax ?? ""}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    // ✅ কেবল বাংলা সংখ্যা (০-৯) অনুমোদিত
+                    if (/^[০-৯]*$/.test(value)) {
+                      setForm({ ...form, trade_total_tax: value });
+                    }
+                  }}
                   className="border p-2 rounded w-full"
                   placeholder="মোট কর"
                 />
@@ -1201,25 +1282,26 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
             </>
           )}
 
-          
-            <div>
-              <label className="font-semibold  text-red-500">
-                সনদের নাম্বার (শুধু প্রথমটির জন্য অবশ্যই ইংরেজি নাম্বার)
-                (যদি প্রথমটির জন্য ইনপুট দিতে ভুলে যান তবে ডেটা আপডেট না করে আবার ফরম পূরণ করে সেভ দিন, আপডেটে এই ফিল্ড কাজ করবে না)
-              </label>
-              <input
-                type="text"
-                 
-                value={form.letter_count ?? ""} 
-                onChange={(e) =>
-                  setForm({ ...form, letter_count: e.target.value })
+          <div>
+            <label className="font-semibold  text-red-500">
+              সনদের নাম্বার (শুধু প্রথমটির জন্য অবশ্যই ইংরেজি নাম্বার) (যদি
+              প্রথমটির জন্য ইনপুট দিতে ভুলে যান তবে ডেটা আপডেট না করে আবার ফরম
+              পূরণ করে সেভ দিন, আপডেটে এই ফিল্ড কাজ করবে না)
+            </label>
+            <input
+              type="text"
+              value={form.letter_count ?? ""}
+              onChange={(e) => {
+                const value = e.target.value;
+                // ✅ শুধুমাত্র ইংরেজি সংখ্যা (0-9) অনুমোদিত
+                if (/^\d*$/.test(value)) {
+                  setForm({ ...form, letter_count: value });
                 }
-                className="border p-2 rounded w-full"
-                placeholder="example: 357"
-                 
-              />
-            </div>
-         
+              }}
+              className="border p-2 rounded w-full"
+              placeholder="example: 357"
+            />
+          </div>
 
           <div>
             <label className="font-semibold text-indigo-700">
@@ -1238,8 +1320,7 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
           <label className="font-semibold text-indigo-700">নোটস</label>
           <button
             type="button"
-                onClick={() => handleLoadDefaultNote(1)}
-
+            onClick={() => handleLoadDefaultNote(1)}
             className="bg-green-500 text-white mx-4 my-2 px-3 py-1 text-sm rounded-2xl shadow hover:bg-green-600"
           >
             Load Default
@@ -1247,8 +1328,7 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
 
           <button
             type="button"
-                onClick={() => handleLoadDefaultNote(2)}
-
+            onClick={() => handleLoadDefaultNote(2)}
             className="bg-green-500 text-white mx-4 my-2 px-3 py-1 text-sm rounded-2xl shadow hover:bg-green-600"
           >
             Load Default (নাম সংক্রান্ত প্রত্যয়ন)
@@ -1317,7 +1397,7 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
               <th className="border p-2">মাতার নাম</th>
               <th className="border p-2">জন্ম তারিখ</th>
               <th className="border p-2">ঠিকানা</th>
-               
+
               <th className="border p-2">নোটস</th>
               <th className="border p-2">অ্যাকশন</th>
             </tr>
@@ -1341,7 +1421,7 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
                   {cert.birthDate ? cert.birthDate.substring(0, 10) : "-"}
                 </td>
                 <td className="border p-2">{cert.address || "-"}</td>
-                 
+
                 <td className="border p-2">
                   <div
                     dangerouslySetInnerHTML={{ __html: cert.notes || "-" }}
@@ -1360,34 +1440,32 @@ const headerHTML = getHeaderSection(settings, govtImg, unionImg);
                   >
                     🗑
                   </button>
-                   {cert.type != "ট্রেড লাইসেন্স" && (
-                  <button
-                    onClick={() => handlePrint(cert)}
-                    className="text-green-600"
-                  >
-                    🖨️
-                  </button>)}
-
+                  {cert.type != "ট্রেড লাইসেন্স" && (
+                    <button
+                      onClick={() => handlePrint(cert)}
+                      className="text-green-600"
+                    >
+                      🖨️
+                    </button>
+                  )}
 
                   {cert.type === "নাম সংক্রান্ত প্রত্যয়ন পত্র" && (
-                  <button
-                    onClick={() => handlePrintNameRelated(cert,settings)}
-                    className="text-green-600"
-                  >
-                    নাম সংক্রান্ত
-                  </button>)}
-
-
-
+                    <button
+                      onClick={() => handlePrintNameRelated(cert, settings)}
+                      className="text-green-600"
+                    >
+                      নাম সংক্রান্ত
+                    </button>
+                  )}
 
                   {cert.type === "ট্রেড লাইসেন্স" && (
-  <button
-    onClick={() => handlePrint_trade(cert)}
-    className="text-green-600"
-  >
-    🖨️ Trade
-  </button>
-)}
+                    <button
+                      onClick={() => handlePrint_trade(cert)}
+                      className="text-green-600"
+                    >
+                      🖨️ Trade
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}
