@@ -148,7 +148,7 @@ export default function EmployeesPage() {
   </h2>
 
   {/* নাম */}
-  <label className="block mb-1 font-medium text-green-700">নাম</label>
+  <label className="block mb-1 font-medium text-green-700">নাম<span className="text-red-600 text-xl ">*</span></label>
   <input
     type="text"
     value={form.name}
@@ -158,7 +158,7 @@ export default function EmployeesPage() {
   />
 
   {/* মোবাইল */}
-  <label className="block mb-1 font-medium text-green-700">মোবাইল</label>
+  <label className="block mb-1 font-medium text-green-700">মোবাইল<span className="text-red-600 text-xl ">*</span></label>
   <input
     type="text"
     value={form.mobile}
@@ -176,7 +176,7 @@ export default function EmployeesPage() {
   />
 
   {/* পদবি */}
-  <label className="block mb-1 font-medium text-green-700">পদবি</label>
+  <label className="block mb-1 font-medium text-green-700">পদবি<span className="text-red-600 text-xl ">*</span></label>
   <select
     value={form.designation}
     onChange={(e) => setForm({ ...form, designation: e.target.value })}
@@ -194,7 +194,7 @@ export default function EmployeesPage() {
   </select>
 
   {/* ক্রম */}
-  <label className="block mb-1 font-medium text-green-700">ক্রম</label>
+  <label className="block mb-1 font-medium text-green-700">ক্রম<span className="text-red-600 text-xl ">*</span></label>
   <input
     type="number"
     value={form.order}

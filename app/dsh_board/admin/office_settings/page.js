@@ -87,7 +87,7 @@ export default function OfficeSettingsPage() {
       <form onSubmit={handleSubmit} className="bg-white border p-6 rounded-xl shadow space-y-4 mb-8">
         {/* স্মারক নং */}
         <div>
-          <label className="font-semibold">স্মারক নং</label>
+          <label className="font-semibold">স্মারক নং<span className="text-red-600 text-xl ">*</span></label>
           <input
             type="text"
             value={form.sarok_no}
@@ -100,7 +100,7 @@ export default function OfficeSettingsPage() {
 
         {/* ইউনিয়ন নাম */}
         <div>
-          <label className="font-semibold">ইউনিয়নের নাম</label>
+          <label className="font-semibold">ইউনিয়নের নাম<span className="text-red-600 text-xl ">*</span></label>
           <input
             type="text"
             value={form.union_name}
@@ -112,7 +112,7 @@ export default function OfficeSettingsPage() {
 
         {/* উপজেলা */}
         <div>
-          <label className="font-semibold">উপজেলা</label>
+          <label className="font-semibold">উপজেলা<span className="text-red-600 text-xl ">*</span></label>
           <input
             type="text"
             value={form.upazila}
@@ -124,7 +124,7 @@ export default function OfficeSettingsPage() {
 
         {/* জেলা */}
         <div>
-          <label className="font-semibold">জেলা</label>
+          <label className="font-semibold">জেলা<span className="text-red-600 text-xl ">*</span></label>
           <input
             type="text"
             value={form.district}
@@ -135,7 +135,7 @@ export default function OfficeSettingsPage() {
         </div>
 
          <div>
-          <label className="font-semibold">ওয়েবসাইটের নাম:</label>
+          <label className="font-semibold">ওয়েবসাইটের নাম:<span className="text-red-600 text-xl ">*</span></label>
           <input
             type="text"
             value={form.notes}
