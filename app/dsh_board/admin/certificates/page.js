@@ -1070,7 +1070,7 @@ export default function CertificatesPage() {
           </div>
 
           <div>
-            <label className="font-semibold text-indigo-700">পোস্ট অফিস</label>
+            <label className="font-semibold text-indigo-700">পোস্ট অফিস<span className="text-red-600 text-xl ">*</span></label>
             <input
               type="text"
               value={form.post_office}
@@ -1084,7 +1084,7 @@ export default function CertificatesPage() {
           </div>
 
           <div className="md:col-span-2">
-            <label className="font-semibold text-indigo-700">ঠিকানা<span className="text-red-600 text-xl ">*</span></label>
+            <label className="font-semibold text-indigo-700">ঠিকানা(গ্রাম)<span className="text-red-600 text-xl ">*</span></label>
             <textarea
               value={form.address}
               onChange={(e) => setForm({ ...form, address: e.target.value })}
