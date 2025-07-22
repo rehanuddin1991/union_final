@@ -26,6 +26,16 @@ export default function VerifyCertificateClient() {
     fetchCert()
   }, [id])
 
+  const formatDobDate = (date) => {
+    const data = date?.substring(0, 10).split("-");
+    return `${data[2]}-${data[1]}-${data[0]}`;
+    if (!date || date.length !== 8) return date; // 8 digit হলে মনে করব yyyymmdd
+    const year = date.slice(0, 4);
+    const month = date.slice(4, 6);
+    const day = date.slice(6, 8);
+    return `${day}-${month}-${year}`;
+  };
+
   const dob2= formatDobDate(certificate.birthDate?.substring(0, 10))  ;
       const [day, month, year] = dob2.split("-");
       
