@@ -19,6 +19,7 @@ export const commonPrintStyles = `
     padding: 0;
     line-height: 1.3;
     background: #f9f9f9;
+    font-size:18px;
   }
 
   .outer-border {
@@ -66,7 +67,7 @@ export const commonPrintStyles = `
     position: relative;
     z-index: 1;
     line-height: 0.5;
-    font-size: 12px;
+    font-size: 14px;
   }
 
   .header-logo {
@@ -136,8 +137,8 @@ export const commonPrintStyles = `
   .signature-box {
   margin-top:10px;
     text-align: center;
-    line-height: 0.7;
-    font-size:12px;
+    line-height: 0.4;
+    font-size:14px;
     font-weight:bold;
      
   }
