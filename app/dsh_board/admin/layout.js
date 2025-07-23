@@ -64,7 +64,7 @@ export default function AdminLayout({ children }) {
             ⚙️ Office Settings
           </a>
 
-          <a href="/dsh_board/admin/institute" className="block   py-2 rounded-lg hover:bg-green-600 hover:text-white hover:shadow-md transition-all duration-300">
+          <a href="/dsh_board/admin/institutions" className="block   py-2 rounded-lg hover:bg-green-600 hover:text-white hover:shadow-md transition-all duration-300">
             ⚙️ সব প্রতিষ্ঠানের তথ্য
           </a>
 

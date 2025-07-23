@@ -4,43 +4,22 @@ const prisma = new PrismaClient()
 import { NextResponse } from 'next/server'
 //import { prisma } from '@/lib/prisma'
 
-export async function GET(req) {
+ 
+
+export async function GET() {
   try {
-    const { searchParams } = new URL(req.url);
-    const id = searchParams.get("id");
-
-    if (id) {
-      const institute = await prisma.institute.findFirst({
-        where: { 
-          id: parseInt(id),
-          is_deleted: false , // এখানে সরাসরি শর্ত দেয়া হলো
-        },
-      });
-
-      if (!institute) {
-        return NextResponse.json(
-          { success: false, message: "সনদ পাওয়া যায়নি" },
-          { status: 404 }
-        );
-      }
-
-      return NextResponse.json({ success: true, institutes: [institute] });
-    }
-
-    // যদি id না থাকে, সব active সনদ ফেরত দাও
-    const institutes = await prisma.institute.findMany({
-      where: { is_deleted: false  },
-      orderBy: { id: "desc" },
+    const institutions = await prisma.institution.findMany({
+      where: {
+        is_deleted: false,
+      },
     });
-
-    return NextResponse.json({ success: true, institutes });
+    return NextResponse.json(institutions);
   } catch (error) {
-    return NextResponse.json(
-      { success: false, error: error.message },
-      { status: 500 }
-    );
+    console.error("Error fetching institutions:", error);
+    return NextResponse.json({ error: "Failed to fetch data" }, { status: 500 });
   }
 }
+
 
 
 
@@ -66,7 +45,7 @@ export async function GET(req) {
      
 
     // ✅ ডাটা Insert
-    const institute = await prisma.institute.create({
+    const institute = await prisma.institution.create({
       data: { ...body },
     });
 
@@ -90,7 +69,7 @@ export async function PATCH(req) {
 
     
 
-    const institute = await prisma.institute.update({
+    const institute = await prisma.institution.update({
       where: { id },
       data: {
         ...body,
@@ -115,7 +94,7 @@ export async function DELETE(req) {
       );
 
     // Soft delete (update is_deleted = true)
-    await prisma.institute.update({
+    await prisma.institution.update({
       where: { id },
       data: { is_deleted: true },
     });
