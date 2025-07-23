@@ -4,8 +4,15 @@ export const commonPrintStyles = `
     margin: 0;
   }
 
+  @font-face {
+  font-family: 'Nikosh';
+  src: url('/fonts/Nikosh.ttf') format('truetype');
+}
+  
+
   body {
-    font-family: 'SolaimanLipi', 'Kalpurush', 'Noto Serif Bengali', serif;
+    font-family: 'Nikosh', 'SolaimanLipi', 'Kalpurush', 'Noto Serif Bengali', serif;
+
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
     margin: 0;
@@ -70,7 +77,7 @@ export const commonPrintStyles = `
  
 
   .header-title {
-  font-family: "SolaimanLipi", "Nikosh", "Roboto", "Arial", sans-serif;
+  font-family: "Nikosh","SolaimanLipi",  "Roboto", "Arial", sans-serif;
   font-size: 20px;          /* অফিসিয়াল লুকের জন্য সামান্য বড় */
   font-weight: 600;         /* Semi-bold, অফিসিয়াল ফিল */
   text-align: center;
