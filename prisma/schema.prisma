@@ -173,6 +173,22 @@ model Certificate {
 }
 
 
+model Daily_Collection {
+  id                Int        @id @default(autoincrement())
+  team              String // নাগরিক সনদ, জাতীয়তা সনদ, ইত্যাদি
+  receipt     String
+  total_taka        String?
+  total_cost        String?   
+  date         DateTime?
+  area           String?
+  comments           String?
+  gram_police  String?   
+  is_deleted        Boolean    @default(false) // ✅ added
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+  @@map("daily_collection")
+}
+
 model Institution {
   id           Int      @id @default(autoincrement())
   type         String
