@@ -4,14 +4,22 @@ export const commonPrintStyles = `
     margin: 0;
   }
 
+  @font-face {
+  font-family: 'Nikosh';
+  src: url('/fonts/Nikosh.ttf') format('truetype');
+}
+  
+
   body {
-    font-family: 'SolaimanLipi', 'Kalpurush', 'Noto Serif Bengali', serif;
+    font-family: 'Nikosh', 'SolaimanLipi', 'Kalpurush', 'Noto Serif Bengali', serif;
+
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
     margin: 0;
     padding: 0;
     line-height: 1.3;
     background: #f9f9f9;
+    font-size:18px;
   }
 
   .outer-border {
@@ -59,7 +67,7 @@ export const commonPrintStyles = `
     position: relative;
     z-index: 1;
     line-height: 0.5;
-    font-size: 12px;
+    font-size: 14px;
   }
 
   .header-logo {
@@ -70,7 +78,7 @@ export const commonPrintStyles = `
  
 
   .header-title {
-  font-family: "SolaimanLipi", "Nikosh", "Roboto", "Arial", sans-serif;
+  font-family: "Nikosh","SolaimanLipi",  "Roboto", "Arial", sans-serif;
   font-size: 20px;          /* অফিসিয়াল লুকের জন্য সামান্য বড় */
   font-weight: 600;         /* Semi-bold, অফিসিয়াল ফিল */
   text-align: center;
@@ -129,8 +137,8 @@ export const commonPrintStyles = `
   .signature-box {
   margin-top:10px;
     text-align: center;
-    line-height: 0.7;
-    font-size:12px;
+    line-height: 0.4;
+    font-size:14px;
     font-weight:bold;
      
   }
