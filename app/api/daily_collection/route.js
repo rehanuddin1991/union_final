@@ -14,6 +14,7 @@ export async function GET(req) {
         where: {
           id: parseInt(id),
           is_deleted: false,
+
         },
       });
 
@@ -32,7 +33,7 @@ export async function GET(req) {
 
     const daily_collections = await prisma.daily_Collection.findMany({
       where: { is_deleted: false },
-      orderBy: { id: "desc" },
+      orderBy: { date: "desc" },
     });
 
     return NextResponse.json({ success: true, daily_collections });

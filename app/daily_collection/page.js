@@ -174,6 +174,7 @@ export default function DailyCollectionPage() {
           <th className="border px-2 py-1">মোট খরচ</th>
           <th className="border px-2 py-1">এলাকা</th>
           <th className="border px-2 py-1">গ্রাম পুলিশ</th>
+          <th className="border px-2 py-1">মন্তব্য</th>
         </tr>
       </thead>
       <tbody>
@@ -190,6 +191,7 @@ export default function DailyCollectionPage() {
             <td className="border px-2 py-1">{item.total_cost}</td>
             <td className="border px-2 py-1">{item.area}</td>
             <td className="border px-2 py-1">{item.gram_police}</td>
+            <td className="border px-2 py-1">{item.comments}</td>
           </tr>
         ))}
       </tbody>
