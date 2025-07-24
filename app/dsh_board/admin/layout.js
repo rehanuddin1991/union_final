@@ -68,6 +68,15 @@ export default function AdminLayout({ children }) {
             ⚙️ সব প্রতিষ্ঠানের তথ্য
           </a>
 
+          <a href="/dsh_board/admin/masterrole" className="block   py-2 rounded-lg hover:bg-green-600 hover:text-white hover:shadow-md transition-all duration-300">
+            🤲মাস্টাররোল তৈরি
+          </a>
+
+           <a href="/dsh_board/admin/poor" className="block   py-2 rounded-lg hover:bg-green-600 hover:text-white hover:shadow-md transition-all duration-300">
+            🤲হতদরিদ্রের তালিকা
+          </a>
+
+
           
 
 

@@ -138,6 +138,43 @@ model OfficeSettings {
    @@map("officesettings")
 }
 
+
+model Poor {
+  id                Int        @id @default(autoincrement())   
+  name     String
+  father        String?
+  mother        String?   
+  nid               String?
+  mobile               String?
+  ward              String?   
+  address              String?   
+  comments             String?    @db.Text
+  is_deleted        Boolean    @default(false) // ✅ added
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+  @@map("poor")
+}
+
+
+model MasterRole {
+  id                Int        @id @default(autoincrement())   
+  type String?
+  name     String?
+  father        String?
+  mother        String?   
+  nid               String?
+  mobile               String?
+  ward              String?   
+  address              String?   
+  comments             String?    @db.Text
+  is_deleted        Boolean    @default(false) // ✅ added
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+  @@map("masterrole")
+}
+
+
+
 model Certificate {
   id                Int        @id @default(autoincrement())
   type              String // নাগরিক সনদ, জাতীয়তা সনদ, ইত্যাদি
