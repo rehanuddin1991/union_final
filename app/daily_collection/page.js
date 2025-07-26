@@ -4,6 +4,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function DailyCollectionPage() {
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     team: "",
     receipt: "",
@@ -18,23 +19,36 @@ export default function DailyCollectionPage() {
   const [data, setData] = useState([]);
   const [editingId, setEditingId] = useState(null);
 
+  
+
   const getData = async () => {
+  setLoading(true); // ✅ লোডিং শুরু
+  try {
     const res = await fetch("/api/daily_collection");
     const json = await res.json();
     setData(json.daily_collections || []);
-  };
+  } catch (error) {
+    toast.error("ডাটা লোডিং ব্যর্থ হয়েছে!");
+  } finally {
+    setLoading(false); // ✅ লোডিং শেষ
+  }
+};
+
 
   useEffect(() => {
     getData();
   }, []);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const method = editingId ? "PATCH" : "POST";
-    const url = editingId
-      ? `/api/daily_collection?id=${editingId}`
-      : "/api/daily_collection";
+  e.preventDefault();
+  setLoading(true); // ✅ লোডিং শুরু
 
+  const method = editingId ? "PATCH" : "POST";
+  const url = editingId
+    ? `/api/daily_collection?id=${editingId}`
+    : "/api/daily_collection";
+
+  try {
     const res = await fetch(url, {
       method,
       headers: { "Content-Type": "application/json" },
@@ -58,7 +72,11 @@ export default function DailyCollectionPage() {
     } else {
       toast.error("সাবমিশনে সমস্যা হয়েছে!");
     }
-  };
+  } finally {
+    setLoading(false); // ✅ লোডিং শেষ
+  }
+};
+
 
   const handleEdit = (item) => {
   setForm({
@@ -213,13 +231,30 @@ export default function DailyCollectionPage() {
           </div>
         </div>
 
+        
+
         <button
-          type="submit"
-          className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-3 mt-4 rounded-xl font-semibold shadow-lg hover:shadow-green-300 transition-all duration-300"
-        >
-          {editingId ? "✅ আপডেট করুন" : "✅ সংরক্ষণ করুন"}
-        </button>
+  type="submit"
+  disabled={loading}
+  className={`w-full bg-gradient-to-r from-green-600 to-green-700 
+  hover:from-green-700 hover:to-green-800 text-white py-3 mt-4 
+  rounded-xl font-semibold shadow-lg transition-all duration-300
+  ${loading ? "opacity-70 cursor-not-allowed" : "hover:shadow-green-300"}`}
+>
+  {loading
+    ? "⏳ লোড হচ্ছে..."
+    : editingId
+    ? "✅ Update"
+    : "✅ Save"}
+</button>
       </form>
+
+      {loading && (
+  <div className="text-center my-4">
+    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto"></div>
+    <p className="text-green-700 text-sm mt-2">লোড হচ্ছে...</p>
+  </div>
+)}
 
       <div className="bg-white border p-4 rounded-xl shadow">
         <h2 className="text-xl font-semibold mb-3">📋 দৈনিক সংগ্রহ তালিকা</h2>

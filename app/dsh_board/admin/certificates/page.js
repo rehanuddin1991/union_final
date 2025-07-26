@@ -31,6 +31,8 @@ const Editor = dynamic(
 );
 
 export default function CertificatesPage() {
+  const [loading, setLoading] = useState(false);
+
   const [certificates, setCertificates] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [settings, setSettings] = useState(null);
@@ -111,13 +113,27 @@ export default function CertificatesPage() {
 
   const printRef = useRef();
 
-  // Load all certificates
+  // Load all certificates  
+
   const fetchCertificates = async () => {
+  setLoading(true); // ✅ লোডিং শুরু
+  try {
     const res = await fetch("/api/certificates");
     const data = await res.json();
-    if (data.success) setCertificates(data.certificates);
-    else toast.error("Failed to load certificates");
-  };
+    if (data.success) {
+      setCertificates(data.certificates);
+    } else {
+      toast.error("Failed to load certificates");
+    }
+  } catch (error) {
+    toast.error("ডাটা লোডিং ব্যর্থ হয়েছে!");
+  } finally {
+    setLoading(false); // ✅ লোডিং শেষ
+  }
+};
+
+
+
 
   useEffect(() => {
     fetchCertificates();
@@ -183,52 +199,43 @@ export default function CertificatesPage() {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+   
 
-    // let letter_count = 1; // default
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true); // ✅ লোডিং শুরু
 
-    // const firstLetterCount = certificates[0]?.letter_count;
-
-    // if (
-    //   firstLetterCount === null ||
-    //   firstLetterCount === 0 ||
-    //   isNaN(firstLetterCount)
-    // ) {
-    //   letter_count = parseInt(form.letter_count) || 1;
-    // } else {
-    //   letter_count = firstLetterCount + 1;
-    // }
-
-    const payload = {
-      ...form,
-      // ,
-      // letter_count: parseInt(letter_count), // include it in payload
-    };
-
-    const method = form.id ? "PATCH" : "POST";
-    const url = form.id
-      ? `/api/certificates?id=${form.id}`
-      : "/api/certificates";
-
-    try {
-      const res = await fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      const data = await res.json();
-      if (data.success) {
-        toast.success(form.id ? "Updated Successfully" : "Added Successfully");
-        resetForm();
-        fetchCertificates();
-      } else {
-        toast.error("Operation failed");
-      }
-    } catch {
-      toast.error("Error Occurred");
-    }
+  const payload = {
+    ...form,
   };
+
+  const method = form.id ? "PATCH" : "POST";
+  const url = form.id
+    ? `/api/certificates?id=${form.id}`
+    : "/api/certificates";
+
+  try {
+    const res = await fetch(url, {
+      method,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      toast.success(form.id ? "Updated Successfully" : "Added Successfully");
+      resetForm();
+      fetchCertificates();
+    } else {
+      toast.error("Operation failed");
+    }
+  } catch {
+    toast.error("Error Occurred");
+  } finally {
+    setLoading(false); // ✅ কাজ শেষে লোডিং বন্ধ
+  }
+};
+
 
   const handleDelete = async (id) => {
     if (!confirm("ডিলিট নিশ্চিত করবেন? ভুলে ডিলিট হলে ডেটা রিকভারি সম্ভব"))
@@ -275,16 +282,7 @@ export default function CertificatesPage() {
     });
   };
 
-  // const formatDate = (date) => {
-  //   const d = new Date(date);
-  //   return d
-  //     .toLocaleDateString("bn-BD", {
-  //       day: "numeric",
-  //       month: "long",
-  //       year: "numeric",
-  //     })
-  //     .replace(/,/, ""); // এখানে কমা সরানো হয়েছে
-  // };
+   
 
   const formatDobDate = (date) => {
     const data = date?.substring(0, 10).split("-");
@@ -1367,12 +1365,19 @@ export default function CertificatesPage() {
           />
         </div>
 
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded mt-4"
-        >
-          {form.id ? "আপডেট করুন" : "সেভ করুন"}
-        </button>
+       <button
+  type="submit"
+  disabled={loading} // ✅ লোডিং চললে ডিসেবল হবে
+  className={`w-full bg-blue-600 text-white py-2 rounded mt-4 
+    ${loading ? "opacity-70 cursor-not-allowed" : "hover:bg-blue-700"}`}
+>
+  {loading
+    ? "⏳ loading..."
+    : form.id
+    ? "আপডেট করুন"
+    : "সেভ করুন"}
+</button>
+
 
         {form.id && (
           <button
@@ -1386,6 +1391,13 @@ export default function CertificatesPage() {
       </form>
 
       <div className="bg-white border p-4 rounded-xl shadow">
+
+         {loading && (
+  <div className="text-center my-4 ">
+    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+    <p className="text-red-600 text-sm mt-2">loading...................................</p>
+  </div>
+)}
         <h2 className="text-2xl font-semibold mb-3 text-[darkcyan]">সকল সনদ</h2>
         <table className="w-full text-sm border">
           <thead className="bg-blue-100">
@@ -1403,6 +1415,9 @@ export default function CertificatesPage() {
             </tr>
           </thead>
           <tbody>
+           
+
+
             {certificates.length === 0 && (
               <tr>
                 <td colSpan={9} className="text-center p-4">
