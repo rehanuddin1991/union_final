@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 
 export default function EmployeesPage() {
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     name: "",
     mobile: "",
@@ -19,11 +20,19 @@ export default function EmployeesPage() {
   const [uploading, setUploading] = useState(false);
 
   const fetchEmployees = async () => {
+  setLoading(true); // ✅ লোডিং শুরু
+  try {
     const res = await fetch("/api/employees");
     const data = await res.json();
     if (data.success) setEmployees(data.employees);
     else toast.error("তথ্য লোড করতে ব্যর্থ");
-  };
+  } catch (error) {
+    toast.error("লোডিং সমস্যা হয়েছে");
+  } finally {
+    setLoading(false); // ✅ লোডিং শেষ
+  }
+};
+
 
   useEffect(() => {
     fetchEmployees();
@@ -69,48 +78,53 @@ export default function EmployeesPage() {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true); // ✅ শুরু
 
-    // যদি ছবি সিলেক্ট করা থাকে তাহলে আপলোড করে URL নিন
-    let imageUrl = form.imageUrl;
-    if (imageFile) {
-      const uploadedUrl = await uploadImage();
-      if (!uploadedUrl) return; // যদি ছবি আপলোড ব্যর্থ হয়, সাবমিট বন্ধ করবে
-      imageUrl = uploadedUrl;
+  let imageUrl = form.imageUrl;
+  if (imageFile) {
+    const uploadedUrl = await uploadImage();
+    if (!uploadedUrl) {
+      setLoading(false); // ✅ ছবি আপলোড ব্যর্থ হলে লোডিং বন্ধ
+      return;
     }
+    imageUrl = uploadedUrl;
+  }
 
-    const method = editingId ? "PATCH" : "POST";
-    const url = editingId ? `/api/employees?id=${editingId}` : "/api/employees";
+  const method = editingId ? "PATCH" : "POST";
+  const url = editingId ? `/api/employees?id=${editingId}` : "/api/employees";
 
-    try {
-      const res = await fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, imageUrl }),
+  try {
+    const res = await fetch(url, {
+      method,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...form, imageUrl }),
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      toast.success(editingId ? "আপডেট হয়েছে" : "সংরক্ষিত");
+      setForm({
+        name: "",
+        mobile: "",
+        email: "",
+        designation: "CHAIRMAN",
+        order: "",
+        notes: "",
+        imageUrl: "",
       });
-      const data = await res.json();
-
-      if (data.success) {
-        toast.success(editingId ? "আপডেট হয়েছে" : "সংরক্ষিত");
-        setForm({
-          name: "",
-          mobile: "",
-          email: "",
-          designation: "CHAIRMAN",
-          order: "",
-          notes: "",
-          imageUrl: "",
-        });
-        setEditingId(null);
-        setImageFile(null);
-        setPreview(null);
-        fetchEmployees();
-      } else toast.error("ব্যর্থ");
-    } catch {
-      toast.error("এরর হয়েছে");
-    }
-  };
+      setEditingId(null);
+      setImageFile(null);
+      setPreview(null);
+      fetchEmployees();
+    } else toast.error("ব্যর্থ");
+  } catch {
+    toast.error("এরর হয়েছে");
+  } finally {
+    setLoading(false); // ✅ কাজ শেষ
+  }
+};
 
   const handleDelete = async (id) => {
     if (!confirm("আপনি কি মুছে ফেলতে চান?")) return;
@@ -158,13 +172,26 @@ export default function EmployeesPage() {
   />
 
   {/* মোবাইল */}
-  <label className="block mb-1 font-medium text-green-700">মোবাইল<span className="text-red-600 text-xl ">*</span></label>
+  <label className="block mb-1 font-medium text-green-700">মোবাইল<span className="text-red-600 text-sm "> *(শুধু ইংরেজি সংখ্যা)</span></label>
+   
+
   <input
-    type="text"
-    value={form.mobile}
-    onChange={(e) => setForm({ ...form, mobile: e.target.value })}
-    className="w-full p-3 mb-4 border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 focus:outline-none shadow-sm transition-all duration-200"
-  />
+  type="text"
+  value={form.mobile}
+  onChange={(e) => {
+    const value = e.target.value;
+    // ✅ শুধুমাত্র সংখ্যা (0-9) এবং সর্বোচ্চ 11 ডিজিট
+    if (/^\d{0,11}$/.test(value)) {
+      setForm({ ...form, mobile: value });
+    }
+  }}
+  placeholder="01812462044"
+  className="w-full p-3 mb-4 border border-green-200 rounded-xl 
+             focus:ring-2 focus:ring-green-400 focus:outline-none 
+             shadow-sm transition-all duration-200"
+/>
+
+
 
   {/* ইমেইল */}
   <label className="block mb-1 font-medium text-green-700">ইমেইল</label>
@@ -194,13 +221,20 @@ export default function EmployeesPage() {
   </select>
 
   {/* ক্রম */}
-  <label className="block mb-1 font-medium text-green-700">ক্রম<span className="text-red-600 text-xl ">*</span></label>
+  <label className="block mb-1 font-medium text-green-700">ক্রম<span className="text-red-600 text-sm "> *(ইংরেজি সংখ্যা)</span></label>
   <input
-    type="number"
-    value={form.order}
-    onChange={(e) => setForm({ ...form, order: +e.target.value })}
-    className="w-full p-3 mb-4 border border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 focus:outline-none shadow-sm transition-all duration-200"
-  />
+  type="text" // ✅ number না, text ব্যবহার করব
+  value={form.order}
+  onChange={(e) => {
+    const value = e.target.value;
+    if (/^\d*$/.test(value)) {  // ✅ কেবল 0-9 অনুমোদিত
+      setForm({ ...form, order: value });
+    }
+  }}
+  className="w-full p-3 mb-4 border border-green-200 rounded-xl 
+             focus:ring-2 focus:ring-green-400 focus:outline-none 
+             shadow-sm transition-all duration-200"
+/>
 
   {/* নোটস */}
   <label className="block mb-1 font-medium text-green-700">নোটস</label>
@@ -233,22 +267,35 @@ export default function EmployeesPage() {
     />
   )}
 
-  {/* Submit Button */}
-  <button
-    type="submit"
-    disabled={uploading}
-    className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-3 rounded-xl font-semibold shadow-lg hover:shadow-green-300 transition-all duration-300 disabled:opacity-50"
-  >
-    {uploading
-      ? "⏳ ছবি আপলোড হচ্ছে..."
-      : editingId
-      ? "✅ আপডেট"
-      : "✅ সংরক্ষণ করুন"}
-  </button>
+ <button
+  type="submit"
+  disabled={uploading || loading}
+  className="w-full bg-gradient-to-r from-green-600 to-green-700 
+             hover:from-green-700 hover:to-green-800 text-white 
+             py-3 rounded-xl font-semibold shadow-lg 
+             hover:shadow-green-300 transition-all duration-300 
+             disabled:opacity-50"
+>
+  {uploading
+    ? "⏳ ছবি আপলোড হচ্ছে..."
+    : loading
+    ? (editingId ? "⏳ আপডেট হচ্ছে..." : "⏳ সংরক্ষণ হচ্ছে...")
+    : editingId
+    ? "✅ আপডেট"
+    : "✅ সংরক্ষণ করুন"}
+</button>
+
 </form>
 
 
       <div className="bg-white border p-4 rounded-xl shadow">
+        {loading && (
+  <div className="text-center my-4">
+    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto"></div>
+    <p className="text-red-700 text-sm mt-2">loading.........</p>
+  </div>
+)}
+
         <h2 className="text-xl font-semibold mb-3">📋 কর্মকর্তার তালিকা</h2>
         <table className="w-full text-sm border">
           <thead className="bg-green-100">
