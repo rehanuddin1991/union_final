@@ -6,7 +6,7 @@ export default function CertificateApprovalPage() {
   const [loading, setLoading] = useState(false);
   const [certificates, setCertificates] = useState([]);
 
-  // ✅ Certificates লোড
+  // ✅ Certificates লোড  
   const fetchCertificates = async () => {
     setLoading(true);
     try {
