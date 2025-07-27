@@ -2,15 +2,39 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 export const dynamic = "force-dynamic"; // ✅ Vercel এ build time এ প্রি-রেন্ডার করবে না
 
-export async function GET() {
+export async function GET(req) {
   try {
+    const url = new URL(req.url);
+    const id = url.searchParams.get("id");
+
+    if (id) {
+      // ✅ শুধু একক holding ফেরত দেবে
+      const holding = await prisma.holding_Information.findUnique({
+        where: { id: parseInt(id), is_deleted: false },
+      });
+
+      if (!holding) {
+        return Response.json(
+          { success: false, message: "Holding not found" },
+          { status: 404 }
+        );
+      }
+
+      return Response.json({ success: true, holding });
+    }
+
+    // ✅ সব holding ফেরত দেবে
     const holdings = await prisma.holding_Information.findMany({
-      where: { is_deleted: false },   // শুধু is_deleted=false ডাটা নেবে
-      orderBy: { id: 'desc' }
-    })
-    return Response.json({ success: true, holdings })
+      where: { is_deleted: false },
+      orderBy: { id: "desc" },
+    });
+
+    return Response.json({ success: true, holdings });
   } catch (error) {
-    return Response.json({ success: false, error: error.message }, { status: 500 })
+    return Response.json(
+      { success: false, error: error.message },
+      { status: 500 }
+    );
   }
 }
 
