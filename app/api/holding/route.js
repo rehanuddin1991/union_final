@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
+export const dynamic = "force-dynamic"; // ✅ Vercel এ build time এ প্রি-রেন্ডার করবে না
 
 export async function GET() {
   try {
