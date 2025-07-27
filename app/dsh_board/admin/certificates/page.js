@@ -205,6 +205,27 @@ const handleSubmit = async (e) => {
   e.preventDefault();
   setLoading(true); // ✅ লোডিং শুরু
 
+  // Required validation
+    if (!form.applicantName || form.applicantName.trim() === "") {
+      toast.error("নাম অবশ্যই দিতে হবে");
+      setLoading(false);
+      return;
+    }
+
+     
+    if (!form.fatherName || form.fatherName.trim() === "") {
+      toast.error("পিতার নাম অবশ্যই দিতে হবে");
+      setLoading(false);
+      return;
+    }
+
+     
+    if (!form.motherName || form.motherName.trim() === "") {
+      toast.error("মাতার নাম অবশ্যই দিতে হবে");
+      setLoading(false);
+      return;
+    }
+
   const payload = {
     ...form,
   };

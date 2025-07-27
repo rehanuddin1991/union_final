@@ -78,6 +78,10 @@ export default function AdminLayout({ children }) {
             📜 সকল সনদ
           </a>
 
+          <a href="/dsh_board/admin/approval" className="block py-2 rounded-lg hover:bg-green-600 transition-all duration-300">
+            📜 Open Certificate Approval
+          </a>
+
           <a href="/dsh_board/admin/office_settings" className="block py-2 rounded-lg hover:bg-green-600 transition-all duration-300">
             ⚙️ Office Settings
           </a>

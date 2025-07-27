@@ -71,10 +71,10 @@ export default function RootLayout({ children }) {
   {/* Right Section: বাটনগুলো (প্রয়োজনে ব্যবহার করবেন) */}
   <div className="space-x-3">
     {/* <a
-        href="/register"
+        href="/certificates_open"
         className="bg-green-600 hover:bg-green-700 text-white font-medium px-5 py-2.5 rounded-xl shadow-md transition duration-200"
       >
-        Register
+        সনদের আবেদন
       </a> */}
     {/* <a
         href="/login"

@@ -199,11 +199,13 @@ model Certificate {
   ward              String?
   mouza             String?
   post_office       String?
+  entry_page       String?
   holding_no        String?
   letter_count      Int        @default(0)
   issuedDate        DateTime   @default(now())
   notes             String?    @db.Text
   is_deleted        Boolean    @default(false) // ✅ added
+  is_approved       Boolean    @default(false) // ✅ added
   createdAt         DateTime   @default(now())
   updatedAt         DateTime   @updatedAt
   @@map("certificate")

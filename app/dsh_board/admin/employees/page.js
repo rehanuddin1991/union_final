@@ -80,13 +80,34 @@ export default function EmployeesPage() {
 
  const handleSubmit = async (e) => {
   e.preventDefault();
-  setLoading(true); // ✅ শুরু
+  setLoading(true);
+
+  // Required validation
+  if (!form.name || form.name.trim() === "") {
+    toast.error("নাম অবশ্যই দিতে হবে");
+    setLoading(false);
+    return;
+  }
+  if (!form.designation || form.designation.trim() === "") {
+    toast.error("পদবী অবশ্যই দিতে হবে");
+    setLoading(false);
+    return;
+  }
+  if (
+    form.order === "" || 
+    form.order === null || 
+    isNaN(Number(form.order))
+  ) {
+    toast.error("অর্ডার অবশ্যই একটি সংখ্যা হতে হবে");
+    setLoading(false);
+    return;
+  }
 
   let imageUrl = form.imageUrl;
   if (imageFile) {
     const uploadedUrl = await uploadImage();
     if (!uploadedUrl) {
-      setLoading(false); // ✅ ছবি আপলোড ব্যর্থ হলে লোডিং বন্ধ
+      setLoading(false);
       return;
     }
     imageUrl = uploadedUrl;
@@ -122,9 +143,10 @@ export default function EmployeesPage() {
   } catch {
     toast.error("এরর হয়েছে");
   } finally {
-    setLoading(false); // ✅ কাজ শেষ
+    setLoading(false);
   }
 };
+
 
   const handleDelete = async (id) => {
     if (!confirm("আপনি কি মুছে ফেলতে চান?")) return;
