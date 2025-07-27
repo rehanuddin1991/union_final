@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@pdf-lib/fontkit": "^1.1.1",
     "@prisma/client": "^6.12.0",
     "@tinymce/tinymce-react": "^6.2.1",
     "bcryptjs": "^3.0.2",
@@ -18,11 +19,14 @@
     "jsonwebtoken": "^9.0.2",
     "next": "15.3.5",
     "node-fetch": "^3.3.2",
+    "pdf-lib": "^1.17.1",
+    "qrcode": "^1.5.4",
     "qrcode.react": "^4.2.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-to-print": "^3.1.1",
-    "react-toastify": "^11.0.5"
+    "react-toastify": "^11.0.5",
+    "regenerator-runtime": "^0.14.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
