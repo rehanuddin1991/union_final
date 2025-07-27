@@ -348,6 +348,7 @@ export default function EmployeesPage() {
                   {emp.designation === "UP_MEMBER" ? "সদস্য" : ""}
                   {emp.designation === "GRAM_POLICE" ? "গ্রাম পুলিশ" : ""}
                   {emp.designation === "OTHERS" ? "অন্যান্য" : ""}
+                  {emp.designation === "CHAIRMAN" ? "চেয়ারম্যান" : ""}
                 </td>
                 <td className="border p-2">{emp.mobile || "-"}</td>
                 <td className="border p-2">{emp.email || "-"}</td>
