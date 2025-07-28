@@ -132,6 +132,7 @@ model OfficeSettings {
   letter_count String?
   notes        String?  @db.Text
   sarok_no     String?
+  imageUrl    String? 
   is_deleted   Boolean  @default(false) // ✅ added
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt

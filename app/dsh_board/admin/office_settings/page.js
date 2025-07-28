@@ -14,8 +14,11 @@ export default function OfficeSettingsPage() {
     union_name: '',
     upazila: '',
     district: '',
-     
+    imageUrl: '', // ✅ image URL field
   })
+  const [imageFile, setImageFile] = useState(null)
+  const [preview, setPreview] = useState(null)
+  const [uploading, setUploading] = useState(false)
 
   const fetchSettings = async () => {
     const res = await fetch('/api/office_settings')
@@ -28,16 +31,63 @@ export default function OfficeSettingsPage() {
     fetchSettings()
   }, [])
 
+  // ✅ Handle image change
+  const handleImageChange = (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+    setImageFile(file)
+
+    const reader = new FileReader()
+    reader.onloadend = () => setPreview(reader.result)
+    reader.readAsDataURL(file)
+  }
+
+  // ✅ Upload image to ImageBB
+  const uploadImage = async () => {
+    if (!imageFile) return null
+    setUploading(true)
+
+    const formData = new FormData()
+    formData.append('image', imageFile)
+
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      })
+      const data = await res.json()
+      if (res.ok) {
+        setUploading(false)
+        return data.url
+      } else {
+        toast.error('ছবি আপলোড ব্যর্থ: ' + data.message)
+        setUploading(false)
+        return null
+      }
+    } catch {
+      toast.error('ছবি আপলোডে সমস্যা হয়েছে')
+      setUploading(false)
+      return null
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     const method = form.id ? 'PATCH' : 'POST'
     const url = form.id ? `/api/office_settings?id=${form.id}` : '/api/office_settings'
 
+    let imageUrl = form.imageUrl
+    if (imageFile) {
+      const uploaded = await uploadImage()
+      if (!uploaded) return
+      imageUrl = uploaded
+    }
+
     try {
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, imageUrl }),
       })
       const data = await res.json()
       if (data.success) {
@@ -50,8 +100,10 @@ export default function OfficeSettingsPage() {
           union_name: '',
           upazila: '',
           district: '',
-           
+          imageUrl: '',
         })
+        setImageFile(null)
+        setPreview(null)
       } else toast.error('সেভ করতে সমস্যা হয়েছে')
     } catch {
       toast.error('এরর হয়েছে')
@@ -76,8 +128,10 @@ export default function OfficeSettingsPage() {
       union_name: s.union_name || '',
       upazila: s.upazila || '',
       district: s.district || '',
-       
+      imageUrl: s.imageUrl || '',
     })
+    setPreview(s.imageUrl || null)
+    setImageFile(null)
   }
 
   return (
@@ -147,23 +201,29 @@ export default function OfficeSettingsPage() {
 
          
 
-        {/* টেক্সট এডিটর */}
-        {/* <div>
-          <label className="font-semibold">ওয়েবসাইটের নাম:</label>
-          <Editor
-            apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
-            value={form.notes}
-            init={{
-              height: 200,
-              menubar: false,
-              directionality: 'ltr',
-              plugins: 'lists link code preview',
-              toolbar:
-                'undo redo | bold italic underline | alignleft aligncenter alignright | bullist numlist | removeformat',
-            }}
-            onEditorChange={(content) => setForm({ ...form, notes: content })}
+        {/* ছবি আপলোড */}
+        <div>
+          <label className="font-semibold">লোগো / সিল</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="block w-full text-sm text-gray-700 
+              file:mr-4 file:py-2 file:px-4 
+              file:rounded-lg file:border-0
+              file:text-sm file:font-semibold
+              file:bg-blue-600 file:text-white
+              hover:file:bg-blue-700 
+              cursor-pointer transition-all duration-300"
           />
-        </div> */}
+          {preview && (
+            <img
+              src={preview}
+              alt="লোগো"
+              className="mt-4 max-h-40 rounded-xl border object-contain shadow"
+            />
+          )}
+        </div>
 
         <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded">
           {form.id ? 'আপডেট করুন' : 'সেভ করুন'}

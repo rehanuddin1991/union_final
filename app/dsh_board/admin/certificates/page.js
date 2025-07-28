@@ -339,7 +339,8 @@ const handleSubmit = async (e) => {
     )}-${enToBnNumber(issue_year)}`;
 
     const govtImg = `${origin}/images/govt.png`;
-    const unionImg = `${origin}/images/union.png`;
+    const unionImg = settings?.imageUrl || `${origin}/images/union.png`;
+
     const qrImg = `${origin}/images/qr.png`;
     const qrUrl = `${origin}/verify/certificate?id=${cert.id}`;
     const qrImg_with_link = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(
@@ -465,7 +466,8 @@ const handleSubmit = async (e) => {
     )}-${enToBnNumber(issue_year)}`;
 
     const govtImg = `${origin}/images/govt.png`;
-    const unionImg = `${origin}/images/union.png`;
+    const unionImg = settings?.imageUrl || `${origin}/images/union.png`;
+
     const qrImg = `${origin}/images/qr.png`;
     const qrUrl = `${origin}/verify/certificate?id=${cert.id}`;
     const qrImg_with_link = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(
@@ -584,7 +586,8 @@ const handleSubmit = async (e) => {
     const [fiscal_start_bk, fiscal_end] = cert.fiscalYearEnd.split("_");
 
     const govtImg = `${origin}/images/govt.png`;
-    const unionImg = `${origin}/images/union.png`;
+   const unionImg = settings?.imageUrl || `${origin}/images/union.png`;
+
     const qrImg = `${origin}/images/qr.png`;
     const qrUrl = `${origin}/verify/certificate?id=${cert.id}`;
     const qrImg_with_link = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(
