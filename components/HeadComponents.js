@@ -48,7 +48,7 @@ export default function HomePage() {
             style={{ color: "#A52A2A" }}
             className="text-4xl font-extrabold mb-2 tracking-wide drop-shadow-md"
           >
-            {headerData.union_name || "১নং রামগড় ইউনিয়ন পরিষদ"}
+            {headerData.union_name || ""}
           </h1>
           <p className="text-2xl font-extrabold italic text-green-800 drop-shadow-sm mb-1">
             স্মার্ট সেবা
