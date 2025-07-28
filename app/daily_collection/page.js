@@ -134,6 +134,9 @@ export default function DailyCollectionPage() {
               <option value="ফাহাদ,রনি">ফাহাদ,রনি</option>
               <option value="আরাফাত, সাইমুন">আরাফাত, সাইমুন</option>
               <option value="রিমন,রিফাত">রিমন,রিফাত</option>
+              <option value="রিমন,আরাফাত">রিমন,আরাফাত</option>
+              <option value="সাইমুন,রিফাত">সাইমুন,রিফাত</option>
+              <option value="রনি,রিফাত">রনি,রিফাত</option>
               <option value="অন্যান্য">অন্যান্য</option>
               <option value="সকল">সকল</option>
             </select>
