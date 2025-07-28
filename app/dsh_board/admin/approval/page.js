@@ -85,6 +85,7 @@ export default function CertificateApprovalPage() {
                 <td className="border p-2">{cert.motherName}</td>
                 <td className="border p-2">{cert.nid}</td>
                 <td className="border p-2">{cert.birth_no}</td>
+                <td className="border p-2">{cert.address}</td>
                
                 <td className="border p-2 text-center">
                   <button
@@ -107,7 +108,7 @@ export default function CertificateApprovalPage() {
         </table>
       </div>
 
-      <ToastContainer position="top-center" autoClose={3000} />
+      <ToastContainer position="top-center" autoClose={1000} />
     </div>
   );
 }

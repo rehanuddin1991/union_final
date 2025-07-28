@@ -146,6 +146,15 @@ const handleSubmit = async (e) => {
       return;
     }
 
+     if (
+    (!form.nid || form.nid.trim() === "") &&
+    (!form.birth_no || form.birth_no.trim() === "")
+  ) {
+    toast.error("NID অথবা জন্ম নিবন্ধন নম্বর যেকোনো একটি দিতে হবে");
+    setLoading(false);
+    return;
+  }
+
  const payload = {
     ...form,
     letter_count: 0,
@@ -273,17 +282,18 @@ const handleSubmit = async (e) => {
 
           <div>
             <label className="font-semibold text-indigo-700">জন্ম তারিখ<span className="text-red-600 text-xl ">*</span></label>
-            <input
+            <input required
               type="date"
               value={form.birthDate}
               onChange={(e) => setForm({ ...form, birthDate: e.target.value })}
               className="border p-2 rounded w-full"
             />
           </div>
+           
 
           <div>
-            <label className="font-semibold text-indigo-700">
-              জাতীয় পরিচয়পত্র নম্বর
+            <label className="font-semibold text-[crimson]">
+              জাতীয় পরিচয়পত্র নম্বর (NID  না থাকলে জন্ম নিবন্ধন দিন)
             </label>
             <input
               type="text"
@@ -301,8 +311,8 @@ const handleSubmit = async (e) => {
           </div>
 
           <div>
-            <label className="font-semibold text-indigo-700">
-              জন্ম নিবন্ধন নম্বর (শুধু NID না থাকলে)
+            <label className="font-semibold text-[crimson]">
+              জন্ম নিবন্ধন নম্বর (যদি NID না থাকে )
             </label>
 
             <input
@@ -600,7 +610,7 @@ const handleSubmit = async (e) => {
             />
           </div> */}
 
-          <div>
+          <div className="hidden">
             <label className="font-semibold text-indigo-700">
               জারি করার তারিখ
             </label>
@@ -642,8 +652,8 @@ const handleSubmit = async (e) => {
   {loading
     ? "⏳ loading..."
     : form.id
-    ? "আপডেট করুন"
-    : "সেভ করুন"}
+    ? "Update"
+    : "Save"}
 </button>
 
 
@@ -660,7 +670,7 @@ const handleSubmit = async (e) => {
 
        
 
-      <ToastContainer position="top-center" autoClose={3000} />
+      <ToastContainer position="top-center" autoClose={2000} />
     </div>
   );
 }

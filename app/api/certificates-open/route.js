@@ -33,7 +33,7 @@ export async function GET(req) {
     // যদি id না থাকে, সব active সনদ ফেরত দাও
     const certificates = await prisma.certificate.findMany({
       where: { entry_page: "open", is_deleted:true ,  is_approved:false },
-      orderBy: { id: "desc" },
+      orderBy: { id: "asc" },
     });
 
     return NextResponse.json({ success: true, certificates });
@@ -50,19 +50,37 @@ export async function PATCH(req) {
     const id = parseInt(searchParams.get("id"));
     const body = await req.json();
 
-    const maxLetterCount = await prisma.certificate.aggregate({
-        _max: { letter_count: true },
-        where: { type: body.type,is_deleted: false },
-      });
+    if (!id) {
+      return Response.json({ success: false, error: "Invalid ID" }, { status: 400 });
+    }
 
-      const letter_count_new = (maxLetterCount._max.letter_count || 0) + 1;
+    // 🔍 প্রথমে type খুঁজে বের করো ওই id দিয়ে
+    const existingCertificate = await prisma.certificate.findUnique({
+      where: { id },
+      select: { type: true },
+    });
+
+    if (!existingCertificate) {
+      return Response.json({ success: false, error: "Certificate not found" }, { status: 404 });
+    }
+
+    const type = existingCertificate.type;
+
+    // 🔢 ঐ type অনুযায়ী সর্বোচ্চ letter_count বের করো
+    const maxLetterCount = await prisma.certificate.aggregate({
+      _max: { letter_count: true },
+      where: { type, is_deleted: false },
+    });
+
+    const letter_count_new = (maxLetterCount._max.letter_count || 0) + 1;
+
+    // ✅ এখন update করো
     const updated = await prisma.certificate.update({
       where: { id },
       data: {
         is_approved: body.is_approved ?? false,
         is_deleted: body.is_deleted ?? false,
-        letter_count: letter_count_new ?? false,
-
+        letter_count: letter_count_new,
       },
     });
 
@@ -72,6 +90,7 @@ export async function PATCH(req) {
     return Response.json({ success: false, error: error.message }, { status: 500 });
   }
 }
+
 
  export async function POST(req) {
   try {
