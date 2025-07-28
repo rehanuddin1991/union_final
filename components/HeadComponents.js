@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export default function HomePage() {
   const [headerData, setHeaderData] = useState({
@@ -33,13 +34,14 @@ export default function HomePage() {
       <div className="flex flex-col sm:flex-row items-center justify-between gap-6 p-2 bg-gradient-to-r from-[#fff8f5] to-[#f5e8e1] rounded-xl shadow-lg border border-brown-700">
         {/* Left Section: ইউনিয়নের লোগো */}
         <div className="w-32 h-32 flex-shrink-0 rounded-full overflow-hidden shadow-xl border-4 border-[#A52A2A]">
+         <Link href="/">
           <Image
             src={headerData.imageUrl || "/images/union2.png"}
             alt="Union Logo"
             width={128}
             height={128}
             className="object-cover"
-          />
+          /></Link>
         </div>
 
         {/* Center Section: ইউনিয়নের নাম, স্লোগান */}

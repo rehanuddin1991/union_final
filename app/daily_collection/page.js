@@ -255,7 +255,7 @@ export default function DailyCollectionPage() {
       {loading && (
   <div className="text-center my-4">
     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto"></div>
-    <p className="text-green-700 text-sm mt-2">লোড হচ্ছে...</p>
+    <p className="text-red-700 text-sm mt-2">লোড হচ্ছে...................</p>
   </div>
 )}
 
