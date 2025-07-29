@@ -60,7 +60,7 @@ model User {
 model Holding_Information {
   id               Int                 @id @default(autoincrement())
   headName         String
-  ward             Int
+  ward             String?
   holdingNo        String
   father           String
   mother           String
@@ -69,20 +69,24 @@ model Holding_Information {
   dob              DateTime
   gender           Gender              @default(MALE)
   occupation       String
-  maleMembers      Int
-  femaleMembers    Int
-  othersMembers    Int
-  maleBaby         Int
-  femaleBaby       Int
-  othersBaby       Int
+  maleMembers      String?
+  femaleMembers    String?
+  othersMembers    String?
+  maleBaby         String?
+  femaleBaby       String?
+  othersBaby       String?
   address          String
+  religion          String?
+  comments          String?
+  rawRoom String?
   area             String
-  multiStoriedRoom Int
-  buildingRoom     Int
-  semiBuildingRoom Int
-  ownHouseRent     Int
-  othersRent       Int
-  imposedTax       Int
+  multiStoriedRoom String?
+  buildingRoom     String?
+  semiBuildingRoom String?
+  
+  ownHouseRent     String?
+  othersRent       String?
+  imposedTax       String?
   collections      HoldingCollection[]
   is_deleted       Boolean             @default(false) // ✅ added
   createdAt        DateTime            @default(now())
@@ -97,11 +101,14 @@ model HoldingCollection {
   holdingInformationId Int
   holdingNumber        String
   fiscalYear           FiscalYear @default(Y2025_2026)
-  amount               Int
+  amount               String?
   paymentDate          DateTime
   is_deleted           Boolean    @default(false) // ✅ added
   createdAt            DateTime   @default(now())
   updatedAt            DateTime   @updatedAt
+  comments          String?
+  currentAmount String?
+  dueAmount String?
 
   holdingInformation Holding_Information @relation(fields: [holdingInformationId], references: [id])
 

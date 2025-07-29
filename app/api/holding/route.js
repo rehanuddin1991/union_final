@@ -44,13 +44,13 @@ export async function POST(req) {
     const body = await req.json()
     const dobDate = body.dob ? new Date(body.dob) : null
 
-    const imposedTaxInt = body.imposedTax ? parseInt(body.imposedTax, 10) : 0
+     
 
     const holding = await prisma.holding_Information.create({
       data: {
         ...body,
         dob: dobDate,
-        imposedTax: imposedTaxInt,
+         
         is_deleted: false,   // নতুন ডাটা তৈরি হলে ডিফল্ট false
       },
     })
@@ -69,14 +69,14 @@ export async function PATCH(req) {
     const body = await req.json()
     const dobDate = body.dob ? new Date(body.dob) : null
 
-    const imposedTaxInt = body.imposedTax ? parseInt(body.imposedTax, 10) : 0
+     
 
     const holding = await prisma.holding_Information.update({
       where: { id },
       data: {
         ...body,
         dob: dobDate,
-        imposedTax: imposedTaxInt,
+         
       },
     })
 
