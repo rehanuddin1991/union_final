@@ -98,6 +98,11 @@ export default function AdminLayout({ children }) {
             🤲 হতদরিদ্রের তালিকা
           </a>
 
+          <a href="/dsh_board/admin/projects" className="block py-2 rounded-lg hover:bg-green-600 transition-all duration-300">
+            📁 প্রকল্প ব্যবস্থাপনা
+
+          </a>
+
           <a href="/dsh_board/admin/login-history" className="block py-2 rounded-lg hover:bg-green-600 transition-all duration-300">
             🔐 Login History
           </a>

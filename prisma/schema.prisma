@@ -254,5 +254,25 @@ model LoginHistory {
   status    String // "SUCCESS", "FAILURE"
 }
 
+
+model Project {
+  id          Int            @id @default(autoincrement())
+  title       String
+  description String?
+  status      ProjectStatus  @default(PROPOSED)
+  startDate   DateTime?
+  endDate     DateTime?
+  comments    String?
+  is_deleted   Boolean        @default(false)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+enum ProjectStatus {
+  PROPOSED
+  ONGOING
+  COMPLETE
+  OTHERS
+}
 //npx prisma migrate dev --name add_spouse_field
 //npx prisma generate
