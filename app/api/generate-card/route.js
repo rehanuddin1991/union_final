@@ -8,8 +8,9 @@ import { createCanvas, registerFont } from "canvas";
 import "regenerator-runtime/runtime";
 
 const prisma = new PrismaClient();
-
-async function textToImage(text, fontSize = 9, width = 260, height = 25) {
+const office = await prisma.officeSettings.findFirst();
+const unionTitle = office?.union_name || "ইউনিয়ন পরিষদ"; // fallback
+async function textToImage(text, fontSize = 9, width = 260, height = 25, color = "#000") {
   const fontPath = path.join(process.cwd(), "public", "fonts", "Nikosh.ttf");
   registerFont(fontPath, { family: "Nikosh" });
 
@@ -17,24 +18,22 @@ async function textToImage(text, fontSize = 9, width = 260, height = 25) {
   const canvas = createCanvas(width * scale, height * scale);
   const ctx = canvas.getContext("2d");
 
-  ctx.clearRect(0, 0, width * scale, height * scale); // Clear full canvas
-  ctx.scale(scale, scale); // scale down so drawing matches intended size
+  ctx.clearRect(0, 0, width * scale, height * scale);
+  ctx.scale(scale, scale);
 
   ctx.textBaseline = "top";
   ctx.textAlign = "left";
 
-  // Optional subtle shadow for clarity
   ctx.shadowColor = "rgba(0,0,0,0.1)";
   ctx.shadowBlur = 1;
-  ctx.shadowOffsetX = 0;
-  ctx.shadowOffsetY = 0;
 
-  ctx.fillStyle = "#000"; // cadet blue color
+  ctx.fillStyle = color;
   ctx.font = `${fontSize}px Nikosh`;
-  ctx.fillText(text, 5, 0); // y=0 since baseline is top
+  ctx.fillText(text, 5, 0);
 
   return canvas.toBuffer("image/png");
 }
+
 
 export async function GET() {
   try {
@@ -73,28 +72,30 @@ export async function GET() {
         borderWidth: 2,
       });
 
-      // Title: ইউনিয়ন পরিষদ
       const unionTitleImg = await pdfDoc.embedPng(
-        await textToImage("১নং রামগড় ইউনিয়ন পরিষদ", 14, 260, 25)
-      );
-      page.drawImage(unionTitleImg, { x: 60, y: 145, width: 260, height: 25 });
+  await textToImage(unionTitle, 14, 260, 25, "#006400") // dark green
+);
 
-      // Subtitle: স্মার্ট হোল্ডিং কার্ড
-      const titleImg = await pdfDoc.embedPng(
-        await textToImage("স্মার্ট হোল্ডিং কার্ড", 14, 260, 20)
-      );
-      page.drawImage(titleImg, { x: 80, y: 135, width: 260, height: 20 });
+page.drawImage(unionTitleImg, { x: 60, y: 135, width: 260, height: 25 });
 
-      let currentY = 125;
+const titleImg = await pdfDoc.embedPng(
+  await textToImage("স্মার্ট হোল্ডিং কার্ড", 14, 260, 20, "#800000") // maroon
+);
+
+page.drawImage(titleImg, { x: 80, y: 125, width: 260, height: 20 });
+
+      let currentY = 105;
 
       const holdingImg = await pdfDoc.embedPng(
-        await textToImage(`হোল্ডিং: ${holding.holdingNo}`, 11, 260, 15)
+        await textToImage(`হোল্ডিং: ${holding.holdingNo}`, 11, 260, 15,"#008B8B")
       );
       page.drawImage(holdingImg, { x: 10, y: currentY, width: 260, height: 15 });
+
+
       currentY -= 15;
 
       const nameImg = await pdfDoc.embedPng(
-        await textToImage(`নাম: ${holding.headName}`, 11, 260, 15)
+        await textToImage(`নাম: ${holding.headName}`, 11, 260, 15,"#4B0082")
       );
       page.drawImage(nameImg, { x: 10, y: currentY, width: 260, height: 15 });
       currentY -= 15;
@@ -106,33 +107,33 @@ export async function GET() {
       currentY -= 15;
 
       const motherImg = await pdfDoc.embedPng(
-        await textToImage(`মাতা: ${holding.mother}`, 11, 260, 15)
+        await textToImage(`মাতা: ${holding.mother}`, 11, 260, 15,"#4B0082")
       );
-      page.drawImage(motherImg, { x: 10, y: currentY, width: 260, height: 15 });
+      page.drawImage(motherImg, { x: 10, y: currentY, width: 260, height: 15  });
       currentY -= 15;
 
       const nidImg = await pdfDoc.embedPng(
-        await textToImage(`NID: ${holding.nid || "NA"}`, 11, 260, 15)
+        await textToImage(`NID: ${holding.nid || "NA"}`, 11, 260, 15,"#4B0082")
       );
-      page.drawImage(nidImg, { x: 10, y: currentY, width: 260, height: 15 });
+      page.drawImage(nidImg, { x: 10, y: currentY, width: 260, height: 15  });
       currentY -= 15;
 
       const wardImg = await pdfDoc.embedPng(
-        await textToImage(`ওয়ার্ড: ${holding.ward}`, 11, 260, 15)
+        await textToImage(`ওয়ার্ড: ${holding.ward}`, 11, 260, 15,"#4B0082")
       );
       page.drawImage(wardImg, { x: 10, y: currentY, width: 260, height: 15 });
       currentY -= 15;
 
       const addressImg = await pdfDoc.embedPng(
-        await textToImage(`ঠিকানা: ${holding.address}`, 11, 260, 15)
+        await textToImage(`ঠিকানা: ${holding.address}`, 11, 260, 15,"#4B0082")
       );
       page.drawImage(addressImg, { x: 10, y: currentY, width: 260, height: 15 });
       currentY -= 15;
 
-      const taxImg = await pdfDoc.embedPng(
-        await textToImage(`মোট কর: ${holding.imposedTax} টাকা`, 11, 260, 15)
-      );
-      page.drawImage(taxImg, { x: 10, y: currentY, width: 260, height: 15 });
+      // const taxImg = await pdfDoc.embedPng(
+      //   await textToImage(`মোট কর: ${holding.imposedTax} টাকা`, 11, 260, 15)
+      // );
+      // page.drawImage(taxImg, { x: 10, y: currentY, width: 260, height: 15 });
 
       // QR কোড
       page.drawImage(qrImage, {

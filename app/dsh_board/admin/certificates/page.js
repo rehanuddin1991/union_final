@@ -54,7 +54,9 @@ export default function CertificatesPage() {
       defaultNote = `
       <p> সংশ্লিষ্ট ওয়ার্ড সদস্যের প্রত্যয়ন সূত্রে জানতে পারি, তিনি উল্লিখিত ঠিকানার একজন স্থায়ী বাসিন্দা এবং জন্মসূত্রে বাংলাদেশী নাগরিক। তিনি রাষ্ট্র ও সমাজবিরোধী কোনো কার্যকলাপে জড়িত নন। আমি তাঁর সর্বাঙ্গীন মঙ্গল ও উন্নতি কামনা করি।</p>
     `;
-    } else {
+    }
+    
+    else if(type===2) {
       defaultNote = `
       <p>তিনি উল্লিখিত ঠিকানার একজন স্থায়ী বাসিন্দা। সংশ্লিষ্ট ওয়ার্ড সদস্যের প্রত্যয়ন সূত্রে জানতে পারি,
        তিনি জন্মসূত্রে বাংলাদেশী নাগরিক। উক্ত ব্যক্তির জন্ম/জাতীয় সনদসহ অন্যান্য সনদে ${
@@ -64,6 +66,32 @@ export default function CertificatesPage() {
       } লেখা আছে।  আমার জানামতে, ${form.applicantName || "আবেদনকারী"} ও ${
         form.applicantName || "আবেদনকারী"
       } একই ব্যক্তি। আমি তাঁর সর্বাঙ্গীন মঙ্গল ও উন্নতি কামনা করি।</p>
+    `;
+    }
+
+
+    
+    else if (type === 3) {
+      defaultNote = `
+      <p> সংশ্লিষ্ট ওয়ার্ড সদস্যের প্রত্যয়ন সূত্রে জানতে পারি, তিনি উল্লিখিত ঠিকানার একজন স্থায়ী বাসিন্দা এবং জন্মসূত্রে বাংলাদেশী নাগরিক। তিনি রাষ্ট্র ও সমাজবিরোধী কোনো কার্যকলাপে জড়িত নন এবং তাঁর স্বভাব-চরিত্র ভালো। আমি তাঁর সর্বাঙ্গীন মঙ্গল ও উন্নতি কামনা করি।</p>
+    `;
+    }
+
+    else if (type === 4) {
+      defaultNote = `
+      <p> সংশ্লিষ্ট ওয়ার্ড সদস্যের প্রত্যয়ন সূত্রে জানতে পারি, তিনি উল্লিখিত ঠিকানার একজন স্থায়ী বাসিন্দা এবং জন্মসূত্রে বাংলাদেশী নাগরিক। তিনি রাষ্ট্র ও সমাজবিরোধী কোনো কার্যকলাপে জড়িত নন এবং তিনি স্বামী পরিত্যক্তা/বিধবা। আমি তাঁর সর্বাঙ্গীন মঙ্গল ও উন্নতি কামনা করি।</p>
+    `;
+    }
+
+    else if (type === 5) {
+      defaultNote = `
+      <p> সংশ্লিষ্ট ওয়ার্ড সদস্যের প্রত্যয়ন সূত্রে জানতে পারি, তিনি উল্লিখিত ঠিকানার একজন স্থায়ী বাসিন্দা এবং জন্মসূত্রে বাংলাদেশী নাগরিক। তিনি রাষ্ট্র ও সমাজবিরোধী কোনো কার্যকলাপে জড়িত নন। তিনি উল্লিখিত ঠিকানায় বসবাস করেন এবং ভোটার স্থানান্তরের জন্য তাঁর আবেদন সঠিক ও যৌক্তিক। আমি তাঁর সর্বাঙ্গীন মঙ্গল ও উন্নতি কামনা করি। </p>
+    `;
+    }
+
+    else if (type === 6) {
+      defaultNote = `
+      <p> সংশ্লিষ্ট ওয়ার্ড সদস্যের প্রত্যয়ন সূত্রে জানতে পারি, তিনি উল্লিখিত ঠিকানার একজন স্থায়ী বাসিন্দা এবং জন্মসূত্রে বাংলাদেশী নাগরিক। তিনি রাষ্ট্র ও সমাজবিরোধী কোনো কার্যকলাপে জড়িত নন এবং তিনি অবিবাহিত। আমি তাঁর সর্বাঙ্গীন মঙ্গল ও উন্নতি কামনা করি।</p>
     `;
     }
 
@@ -940,6 +968,12 @@ const handleSubmit = async (e) => {
                 নাম সংক্রান্ত প্রত্যয়ন পত্র
               </option>
               <option value="বিবিধ সনদ">বিবিধ সনদ</option>
+              <option value="চারিত্রিক সনদ">চারিত্রিক সনদ</option>
+              <option value="অবিবাহিত সনদ">অবিবাহিত সনদ</option>
+              <option value="স্বামী পরিত্যক্তা সনদ">স্বামী পরিত্যক্তা সনদ</option>
+              <option value="বিধবা সনদ">বিধবা সনদ</option>
+              <option value="ভোটার স্থানান্তর সংক্রান্ত সনদ">ভোটার স্থানান্তর সংক্রান্ত সনদ</option>
+              <option value="অভিভাবক সম্মতিপত্র">অভিভাবক সম্মতিপত্র</option>
             </select>
           </div>
 
@@ -1348,13 +1382,50 @@ const handleSubmit = async (e) => {
             Load Default
           </button>
 
+         
+
           <button
             type="button"
             onClick={() => handleLoadDefaultNote(2)}
-            className="bg-green-500 text-white mx-4 my-2 px-3 py-1 text-sm rounded-2xl shadow hover:bg-green-600"
+            className="bg-[seagreen] text-white mx-4 my-2 px-3 py-1 text-sm rounded-2xl shadow hover:bg-green-600"
           >
             Load Default (নাম সংক্রান্ত প্রত্যয়ন)
           </button>
+
+           <button
+            type="button"
+            onClick={() => handleLoadDefaultNote(3)}
+            className="bg-[darkcyan] text-white mx-4 my-2 px-3 py-1 text-sm rounded-2xl shadow hover:bg-green-600"
+          >
+            Load Default(চারিত্রিক)
+          </button>
+
+
+           <button
+            type="button"
+            onClick={() => handleLoadDefaultNote(4)}
+            className="bg-[indigo] text-white mx-4 my-2 px-3 py-1 text-sm rounded-2xl shadow hover:bg-green-600"
+          >
+            Load Default(স্বামী পরিত্যক্তা/বিধবা)
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleLoadDefaultNote(5)}
+            className="bg-[cadetblue] text-white mx-4 my-2 px-3 py-1 text-sm rounded-2xl shadow hover:bg-green-600"
+          >
+            Load Default(ভোটার স্থানান্তর)
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleLoadDefaultNote(6)}
+            className="bg-[crimson] text-white mx-4 my-2 px-3 py-1 text-sm rounded-2xl shadow hover:bg-green-600"
+          >
+            Load Default(অবিবাহিত)
+          </button>
+
+
           <Editor
             apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
             value={form.notes}

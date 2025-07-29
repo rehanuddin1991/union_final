@@ -238,7 +238,10 @@ export default function EmployeesPage() {
       হিসাব সহকারী কাম কম্পিউটার অপারেটর
     </option>
     <option value="UP_MEMBER">মেম্বার</option>
+     <option value="ENTREPRENEUR">উদ্যোক্তা</option>
     <option value="GRAM_POLICE">গ্রাম পুলিশ</option>
+   
+    
     <option value="OTHERS">অন্যান্য</option>
   </select>
 
@@ -349,6 +352,7 @@ export default function EmployeesPage() {
                   {emp.designation === "GRAM_POLICE" ? "গ্রাম পুলিশ" : ""}
                   {emp.designation === "OTHERS" ? "অন্যান্য" : ""}
                   {emp.designation === "CHAIRMAN" ? "চেয়ারম্যান" : ""}
+                  {emp.designation === "ENTREPRENEUR" ? "উদ্যোক্তা" : ""}
                 </td>
                 <td className="border p-2">{emp.mobile || "-"}</td>
                 <td className="border p-2">{emp.email || "-"}</td>
