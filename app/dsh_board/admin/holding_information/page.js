@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 export default function HoldingPage() {
     
   const [form, setForm] = useState({
@@ -233,16 +234,23 @@ export default function HoldingPage() {
               htmlFor="dob"
               className="block mb-2 font-semibold text-darkcyan"
             >
-              জন্ম তারিখ
+              জন্ম তারিখ<span className="text-red-600">*</span>
             </label>
-            <input
-              id="dob"
-              type="date"
-              placeholder="জন্ম তারিখ"
-              value={form.dob}
-              onChange={(e) => setForm({ ...form, dob: e.target.value })}
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
-            />
+
+            <DatePicker
+    id="dob"
+    selected={form.dob ? new Date(form.dob) : null}
+    onChange={(date) =>
+      setForm({ ...form, dob: date?.toISOString().split("T")[0] || '' })
+    }
+    dateFormat="yyyy-MM-dd"
+    placeholderText="জন্ম তারিখ নির্বাচন করুন"
+    className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
+    required
+  />
+
+
+            
           </div>
 
           {/* লিঙ্গ */}

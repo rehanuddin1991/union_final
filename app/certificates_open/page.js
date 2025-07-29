@@ -4,7 +4,8 @@ import { useEffect, useState, useRef } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
  
-
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
  
 
 export default function CertificatesPage() {
@@ -230,8 +231,10 @@ const handleSubmit = async (e) => {
               <option value="অবিবাহিত সনদ">অবিবাহিত সনদ</option>
               <option value="স্বামী পরিত্যক্তা সনদ">স্বামী পরিত্যক্তা সনদ</option>
               <option value="বিধবা সনদ">বিধবা সনদ</option>
+              <option value="বার্ষিক আয়ের সনদ">বার্ষিক আয়ের সনদ</option>
               <option value="ভোটার স্থানান্তর সংক্রান্ত সনদ">ভোটার স্থানান্তর সংক্রান্ত সনদ</option>
               <option value="অভিভাবক সম্মতিপত্র">অভিভাবক সম্মতিপত্র</option>
+              <option value="দ্বিতীয়/পুনঃ বিবাহ না হওয়ার সনদপত্র">দ্বিতীয়/পুনঃ বিবাহ না হওয়ার সনদপত্র</option>
             </select>
 
 
@@ -292,12 +295,21 @@ const handleSubmit = async (e) => {
 
           <div>
             <label className="font-semibold text-indigo-700">জন্ম তারিখ<span className="text-red-600 text-xl ">*</span></label>
-            <input required
-              type="date"
-              value={form.birthDate}
-              onChange={(e) => setForm({ ...form, birthDate: e.target.value })}
-              className="border p-2 rounded w-full"
-            />
+             
+ <br></br>
+            <DatePicker
+                      id="birthDate"
+                      selected={form.birthDate ? new Date(form.birthDate) : null}
+                      onChange={(date) =>
+                        setForm({ ...form, birthDate: date?.toISOString().split("T")[0] || '' })
+                      }
+                      dateFormat="yyyy-MM-dd"
+                      placeholderText="জন্ম তারিখ নির্বাচন করুন"
+                     className="border p-2 rounded w-full min-w-64"
+                      required
+                    />
+
+
           </div>
            
 

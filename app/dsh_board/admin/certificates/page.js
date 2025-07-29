@@ -2,6 +2,8 @@
 import { useEffect, useState, useRef } from "react";
 //import { Editor } from '@tinymce/tinymce-react'
 import { toast, ToastContainer } from "react-toastify";
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 import "react-toastify/dist/ReactToastify.css";
 import {
   commonPrintStyles,
@@ -93,6 +95,25 @@ export default function CertificatesPage() {
     else if (type === 6) {
       defaultNote = `
       <p> সংশ্লিষ্ট ওয়ার্ড সদস্যের প্রত্যয়ন সূত্রে জানতে পারি, তিনি উল্লিখিত ঠিকানার একজন স্থায়ী বাসিন্দা এবং জন্মসূত্রে বাংলাদেশী নাগরিক। তিনি রাষ্ট্র ও সমাজবিরোধী কোনো কার্যকলাপে জড়িত নন এবং তিনি অবিবাহিত। আমি তাঁর সর্বাঙ্গীন মঙ্গল ও উন্নতি কামনা করি।</p>
+    `;
+    }
+
+    else if (type === 7) {
+      defaultNote = `
+      <p> সংশ্লিষ্ট ওয়ার্ড সদস্যের প্রত্যয়ন সূত্রে জানতে পারি, তিনি উল্লিখিত ঠিকানার একজন স্থায়ী বাসিন্দা এবং জন্মসূত্রে বাংলাদেশী নাগরিক। তিনি রাষ্ট্র ও সমাজবিরোধী কোনো কার্যকলাপে জড়িত নন। তাঁর স্বামীর মৃত্যুর পর অদ্যাবধি তিনি দ্বিতীয়/পুনঃ বিবাহ বন্ধনে আবদ্ধ হন নাই। আমি তাঁর সর্বাঙ্গীন মঙ্গল ও উন্নতি কামনা করি।</p>
+    `;
+    }
+
+    else if (type === 8) {
+      defaultNote = `
+      <p> সংশ্লিষ্ট ওয়ার্ড সদস্যের প্রত্যয়ন সূত্রে জানতে পারি, তিনি উল্লিখিত ঠিকানার একজন স্থায়ী বাসিন্দা এবং জন্মসূত্রে বাংলাদেশী নাগরিক। তিনি রাষ্ট্র ও সমাজবিরোধী কোনো কার্যকলাপে জড়িত নন। তিনি একজন দিনমজুর এবং তাঁর বার্ষিক আয় ৬০০০০/- (ষাট হাজার টাকা) মাত্র। আমি তাঁর সর্বাঙ্গীন মঙ্গল ও উন্নতি কামনা করি।</p>
+    `;
+    }
+
+    else if (type === 9) {
+      defaultNote = `
+      <p> উল্লিখিত ব্যক্তি আমার সন্তান। তাকে বাংলাদেশ সেনা/পুলিশ/নৌ/বিমান/আনসার বাহিনীতে নিয়োগের জন্য স্ব-জ্ঞানে সম্মতি প্রদান করিলাম এবং আপনার সম্মুখে স্বাক্ষর প্রদান করিলাম। এই নিয়োগের ব্যাপারে আমার কিংবা আমার পরিবারের কোনো আপত্তি নাই।
+      </p>
     `;
     }
 
@@ -973,8 +994,10 @@ const handleSubmit = async (e) => {
               <option value="অবিবাহিত সনদ">অবিবাহিত সনদ</option>
               <option value="স্বামী পরিত্যক্তা সনদ">স্বামী পরিত্যক্তা সনদ</option>
               <option value="বিধবা সনদ">বিধবা সনদ</option>
+              <option value="বার্ষিক আয়ের সনদ">বার্ষিক আয়ের সনদ</option>
               <option value="ভোটার স্থানান্তর সংক্রান্ত সনদ">ভোটার স্থানান্তর সংক্রান্ত সনদ</option>
               <option value="অভিভাবক সম্মতিপত্র">অভিভাবক সম্মতিপত্র</option>
+              <option value="দ্বিতীয়/পুনঃ বিবাহ না হওয়ার সনদপত্র">দ্বিতীয়/পুনঃ বিবাহ না হওয়ার সনদপত্র</option>
             </select>
           </div>
 
@@ -1033,13 +1056,24 @@ const handleSubmit = async (e) => {
 
           <div>
             <label className="font-semibold text-indigo-700">জন্ম তারিখ<span className="text-red-600 text-xl ">*</span></label>
-            <input
-            required
-              type="date"
-              value={form.birthDate}
-              onChange={(e) => setForm({ ...form, birthDate: e.target.value })}
-              className="border p-2 rounded w-full"
-            />
+            <br></br>
+             
+
+      <DatePicker
+          id="birthDate"
+          selected={form.birthDate ? new Date(form.birthDate) : null}
+          onChange={(date) =>
+            setForm({ ...form, birthDate: date?.toISOString().split("T")[0] || '' })
+          }
+          dateFormat="yyyy-MM-dd"
+          placeholderText="জন্ম তারিখ নির্বাচন করুন"
+         className="border p-2 rounded w-full min-w-64"
+          required
+        />
+
+
+
+
           </div>
 
           <div>
@@ -1427,6 +1461,29 @@ const handleSubmit = async (e) => {
             Load Default(অবিবাহিত)
           </button>
 
+<button
+            type="button"
+            onClick={() => handleLoadDefaultNote(7)}
+            className="bg-[crimson] text-white mx-4 my-2 px-3 py-1 text-sm rounded-2xl shadow hover:bg-green-600"
+          >
+            Load Default(দ্বিতীয়/পুনঃ বিবাহ না হওয়ার)
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleLoadDefaultNote(8)}
+            className="bg-[darkcyan] text-white mx-4 my-2 px-3 py-1 text-sm rounded-2xl shadow hover:bg-green-600"
+          >
+            Load Default(বার্ষিক আয়)
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleLoadDefaultNote(9)}
+            className="bg-[blue] text-white mx-4 my-2 px-3 py-1 text-sm rounded-2xl shadow hover:bg-green-600"
+          >
+            Load Default(অভিভাবক সম্মতিপত্র)
+          </button>
 
           <Editor
             apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}

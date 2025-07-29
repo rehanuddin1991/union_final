@@ -1,7 +1,8 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
-
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 export default function HoldingCollectionPage() {
   const today = new Date().toISOString().split("T")[0];
 
@@ -290,14 +291,21 @@ export default function HoldingCollectionPage() {
             <label htmlFor="paymentDate" className="block mb-1 font-medium text-gray-700">
               পেমেন্ট তারিখ<span className="text-red-600 text-xl ">*</span>
             </label>
-            <input
-              id="paymentDate"
-              type="date"
-              value={form.paymentDate}
-              onChange={e => setForm({ ...form, paymentDate: e.target.value })}
-              className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
-              required
-            />
+
+            <DatePicker
+    id="paymentDate"
+    selected={form.paymentDate ? new Date(form.paymentDate) : null}
+    onChange={(date) =>
+      setForm({ ...form, paymentDate: date?.toISOString().split("T")[0] || '' })
+    }
+    dateFormat="yyyy-MM-dd"
+    placeholderText="তারিখ নির্বাচন করুন"
+    className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
+    required
+  />
+
+
+             
           </div>
 
           <div className="md:col-span-2">

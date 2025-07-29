@@ -91,6 +91,7 @@ export function generateSignatureHTML(
   return `
     <div class="signature-area">
       <div class="signature-box">
+     
         <p style="margin: 0; width: 200px; padding-top: 5px;font-size:19px;font-weight:bold;">
           ${signer2?.name || ""}
         </p>
@@ -102,6 +103,12 @@ export function generateSignatureHTML(
       <img src="${qrImgWithLink}" class="qr-code" alt="QR Code" />
 
       <div class="signature-box" >
+      <p>  ${
+    settings?.union_name === "২নং পাতাছড়া ইউনিয়ন পরিষদ"
+      ? `<img src="/images/patachara_sign.png" alt="" style="width:100px;height:30px; margin-top:-50px;" />`
+      : ""
+  }</p>
+      
         <p style="margin: 0; width: 200px; padding-top: 5px;font-size:19px;font-weight:bold;">
           ${signer?.name || ""}
         </p>
