@@ -32,6 +32,7 @@ const Editor = dynamic(
 
 export default function CertificatesPage() {
   const [loading, setLoading] = useState(false);
+  
 
   const [certificates, setCertificates] = useState([]);
   const [employees, setEmployees] = useState([]);
@@ -1033,6 +1034,7 @@ const handleSubmit = async (e) => {
           <div>
             <label className="font-semibold text-indigo-700">জন্ম তারিখ<span className="text-red-600 text-xl ">*</span></label>
             <input
+            required
               type="date"
               value={form.birthDate}
               onChange={(e) => setForm({ ...form, birthDate: e.target.value })}

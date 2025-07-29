@@ -208,7 +208,9 @@ const handleSubmit = async (e) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="font-semibold text-indigo-700">সনদের ধরন</label>
-            <select
+            
+
+             <select
               required
               value={form.type}
               onChange={(e) => setForm({ ...form, type: e.target.value })}
@@ -217,14 +219,22 @@ const handleSubmit = async (e) => {
               <option value="">-- সনদের ধরন নির্বাচন করুন --</option>
               <option value="নাগরিকত্ব সনদ">নাগরিকত্ব সনদ</option>
               <option value="জাতীয়তা সনদ">জাতীয়তা সনদ</option>
-              {/* <option value="ওয়ারিশ সনদ">ওয়ারিশ সনদ</option>
-              <option value="বার্ষিক আয়ের সনদ">বার্ষিক আয়ের সনদ</option> */}
-              {/* <option value="ট্রেড লাইসেন্স">ট্রেড লাইসেন্স</option> */}
-              {/* <option value="নাম সংক্রান্ত প্রত্যয়ন পত্র">
+              <option value="ওয়ারিশ সনদ">ওয়ারিশ সনদ</option>
+              <option value="বার্ষিক আয়ের সনদ">বার্ষিক আয়ের সনদ</option>
+              <option value="ট্রেড লাইসেন্স">ট্রেড লাইসেন্স</option>
+              <option value="নাম সংক্রান্ত প্রত্যয়ন পত্র">
                 নাম সংক্রান্ত প্রত্যয়ন পত্র
-              </option> */}
+              </option>
               <option value="বিবিধ সনদ">বিবিধ সনদ</option>
+              <option value="চারিত্রিক সনদ">চারিত্রিক সনদ</option>
+              <option value="অবিবাহিত সনদ">অবিবাহিত সনদ</option>
+              <option value="স্বামী পরিত্যক্তা সনদ">স্বামী পরিত্যক্তা সনদ</option>
+              <option value="বিধবা সনদ">বিধবা সনদ</option>
+              <option value="ভোটার স্থানান্তর সংক্রান্ত সনদ">ভোটার স্থানান্তর সংক্রান্ত সনদ</option>
+              <option value="অভিভাবক সম্মতিপত্র">অভিভাবক সম্মতিপত্র</option>
             </select>
+
+
           </div>
 
           <div>
