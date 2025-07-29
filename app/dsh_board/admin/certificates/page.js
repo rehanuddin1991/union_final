@@ -140,6 +140,13 @@ export default function CertificatesPage() {
     birthDate: "",
     address: "",
     issuedDate: today,
+
+    businessStartDate: today,
+    mobile: "",
+    tin: "",
+    passport: "",
+    nature: "",
+
     nid: "",
     birth_no: "",
     ward: "",
@@ -228,6 +235,12 @@ export default function CertificatesPage() {
       birthDate: "",
       address: "",
       issuedDate: today,
+      businessStartDate: today,
+    mobile: "",
+    tin: "",
+    passport: "",
+    nature: "",
+
       nid: "",
       birth_no: "", // ✅ birth_no
       ward: "",
@@ -332,6 +345,14 @@ const handleSubmit = async (e) => {
       birthDate: cert.birthDate ? cert.birthDate.substring(0, 10) : "",
       address: cert.address || "",
       issuedDate: cert.issuedDate ? cert.issuedDate.substring(0, 10) : today,
+
+      businessStartDate: cert.businessStartDate ? cert.businessStartDate.substring(0, 10) : today,
+    mobile: cert.mobile || "",
+    tin:  cert.tin || "",
+    passport: cert.passport || "",
+    nature:  cert.nature || "",
+
+
       nid: cert.nid || "",
       birth_no: cert.birth_no || "", // ✅ birth_no
       ward: cert.ward || "",
@@ -631,9 +652,18 @@ const handleSubmit = async (e) => {
       issue_month
     )}-${enToBnNumber(issue_year)}`;
 
+    const businessStDate = formatDate(cert.businessStartDate || new Date());
+    const [issue_day22, issue_month22, issue_year22] = businessStDate.split("-");
+    const bnStartDate = `${enToBnNumber(issue_day22)}-${enToBnNumber(
+      issue_month22
+    )}-${enToBnNumber(issue_year22)}`;
+
     const [startYear, endYear] = cert.fiscalYearEnd.split("_");
     const [fiscal_start, fiscal_end_bk] = cert.fiscalYear.split("_");
     const [fiscal_start_bk, fiscal_end] = cert.fiscalYearEnd.split("_");
+
+    const st_formt_date=cert.fiscalYear.replace(/^Y/, "");
+    const [fiscal_start_year, fiscal_end_year] = st_formt_date.split("_");
 
     const govtImg = `${origin}/images/govt.png`;
    const unionImg = settings?.imageUrl || `${origin}/images/union.png`;
@@ -686,18 +716,31 @@ const handleSubmit = async (e) => {
 
             
 
-            <div class="top-section"  style="margin-top:12px;">
+            <div class="top-section"  style="margin-top:3px;">
               <p>স্মারক নং: ${settings?.sarok_no}${enToBnNumber(
       cert?.letter_count
     )}</p>
               <p>তারিখ: ${bnIssueDate}</p>
             </div>
 
-           <div style="border: 1px solid green;margin:auto; background-color: #e6f4ea; padding: 5px; margin-top: 15px; border-radius: 7px;
+           <div style="border: 1px solid green;margin:auto; background-color: #e6f4ea; padding: 3px; margin-top: 2px; border-radius: 7px;
              width: 250px; text-align: center;">
-  <h1 style="font-size: 21px; color: #000080; margin: auto;">
+  <h1 style="font-size: 19px; color: #000080; margin: auto;">
     ${cert.type || "সার্টিফিকেট"}  
   </h1>
+</div>
+<div style="margin-top:-10px;">
+<h5>ট্রেড লাইসেন্স নম্বর: ${cert.autoGenNum}</h5>
+
+</div>
+
+<div>
+<h6> স্থানীয় সরকার (ইউনিয়ন পরিষদ) আইন, ২০০৯ (২০০৯ সনের ৬১ নং
+আইন) এর ধারা ৫৫ তে প্রদত্ত ক্ষমতাবলে সরকার প্রণীত আদর্শ কর
+তফসিল, ২০১৬ এর ৬ ও ১৭ নং অনুচ্ছেদ অনুযায়ী ব্যবসা, বৃত্তি, পেশা
+বা শিল্প প্রতিষ্ঠানের উপর আরোপিত কর আদায়ের লক্ষ্যে নির্ধারিত শর্তে
+নিম্নবর্ণিত ব্যক্তি/প্রতিষ্ঠানের অনুকূলে এই ট্রেড লাইসেন্সটি ইস্যু করা 
+হলো:</h6>
 </div>
 
 
@@ -705,14 +748,42 @@ const handleSubmit = async (e) => {
             
 
             <table>
+             
             <tr>
-    <td style="width: 30%;font-weight:bold;">প্রতিষ্ঠানের নাম</td>
+    <td style="width: 30%;font-weight:bold;">ব্যবসা প্রতিষ্ঠানের নাম</td>
     <td style="margin-left:20px;font-weight:bold;">: ${cert.trade_name}</td>
+  </tr>
+
+   <tr>
+    <td style="width: 30%;">মালিক/পরিচালক/স্বত্বাধিকারীর নাম</td>
+    <td style="margin-left:20px;">: ${cert.applicantName}</td>
+  </tr>
+
+  <tr>
+    <td style="width: 30%;">মাতার নাম</td>
+    <td style="margin-left:20px;">: ${cert.motherName}</td>
+  </tr>
+
+   
+
+  <tr>
+    <td style="width: 30%;">পিতার নাম</td>
+    <td style="margin-left:20px;">: ${cert.fatherName}</td>
+  </tr>
+
+   <tr>
+    <td style="width: 30%;">স্বামী/স্ত্রীর নাম (প্রযোজ্য ক্ষেত্রে)</td>
+    <td style="margin-left:20px;">: ${cert.spouse}</td>
+  </tr>
+
+  <tr>
+    <td style="width: 30%;">ব্যবসার প্রকৃতি (একক/যৌথ/অন্যান্য)</td>
+    <td style="margin-left:20px;">: ${cert.nature}</td>
   </tr>
 
 
    <tr>
-    <td style="width: 30%;">পেশা ও ব্যবসার ধরণ</td>
+    <td style="width: 30%;">ব্যবসার ধরণ</td>
     <td style="margin-left:20px;">: ${cert.trade_type}</td>
   </tr>
 
@@ -722,15 +793,44 @@ const handleSubmit = async (e) => {
     <td style="margin-left:20px;">: ${cert.trade_address}</td>
   </tr>
 
-
-  <tr>
-    <td style="width: 30%;">লাইসেন্সধারীর নাম</td>
-    <td style="margin-left:20px;">: ${cert.applicantName}</td>
+   <tr>
+    <td style="width: 30%;">জন্মনিবন্ধন/এনআইডি/পাসপোর্ট নং</td>
+    <td style="margin-left:20px;">: ${cert.nid} &nbsp; ${cert.birth_no} &nbsp; ${cert.passport}</td>
+    <td  >টি আই এন &nbsp; ${cert.tin}</td>
   </tr>
-  ${applicantInfoRows}
+    
+
+   <tr>
+    
+    <td style="margin-left:20px;">মোবাইল:   ${cert.mobile}</td>
+     <td>  ই-মেইল: &nbsp; ${cert.email ? cert.email : ""}</td>
+  </tr>
+
    
 
-  <hr>
+  <tr>
+    <td style="width: 30%;">মালিক/পরিচালক/স্বত্বাধিকারীর ঠিকানা</td>
+    <td style="margin-left:20px;">:   ${cert.address}</td>
+  </tr>
+
+  <tr>
+    <td style="width: 30%;">অর্থবছর</td>
+    <td style="margin-left:20px;">: ${convertToBanglaNumber(
+      fiscal_start_year
+    )}-${convertToBanglaNumber(
+      fiscal_end_year
+    )}     </td>
+    <td style="width: 30%;">ব্যবসা শুরু তারিখ: &nbsp; ${bnStartDate}</td>
+    
+  </tr>
+
+   
+
+ 
+ 
+   
+
+   
 
     
 
@@ -789,8 +889,9 @@ const handleSubmit = async (e) => {
 
 
 
-<div style="margin-top:5px;">
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; উল্লেখিত পেশা ও ব্যবসা বাণিজ্য পরিচালনার নিমিত্ত  আর্থিক বছর ${convertToBanglaNumber(
+<div style="margin-top:1px;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; উল্লেখিত পেশা ও ব্যবসা বাণিজ্য পরিচালনার নিমিত্ত  আর্থিক বছর 
+${convertToBanglaNumber(
       fiscal_start
     )}-${convertToBanglaNumber(
       fiscal_end
@@ -1222,6 +1323,24 @@ const handleSubmit = async (e) => {
 
               <div>
                 <label className="font-semibold text-indigo-700">
+                  ব্যবসায়ের প্রকৃতি<span className="text-red-600 text-xl ">*</span>
+                </label>
+                 
+
+                <select
+  value={form.nature}
+  onChange={(e) => setForm({ ...form, nature: e.target.value })}
+  className="border p-2 rounded w-full"
+>
+  <option value="">নির্বাচন করুন</option>
+  <option value="একক">একক</option>
+  <option value="যৌথ">যৌথ</option>
+  <option value="অন্যান্য">অন্যান্য</option>
+</select>
+              </div>
+
+              <div>
+                <label className="font-semibold text-indigo-700">
                   ট্রেডের ধরন<span className="text-red-600 text-xl ">*</span>
                 </label>
                 <input
@@ -1232,6 +1351,88 @@ const handleSubmit = async (e) => {
                   }
                   className="border p-2 rounded w-full"
                   placeholder="ট্রেডের ধরন"
+                />
+              </div>
+
+               <div>
+                <label className="font-semibold text-indigo-700">
+                  পাসপোর্ট
+                </label>
+                <input
+                  type="text"
+                  value={form.passport}
+                  onChange={(e) =>
+                    setForm({ ...form, passport: e.target.value })
+                  }
+                  className="border p-2 rounded w-full"
+                  
+                />
+              </div>
+
+              <div>
+                <label className="font-semibold text-indigo-700">
+                  মোবাইল
+                </label>
+                <input
+                  type="text"
+                  value={form.mobile}
+                  onChange={(e) =>
+                    setForm({ ...form, mobile: e.target.value })
+                  }
+                  className="border p-2 rounded w-full"
+                   
+                />
+              </div>
+
+              <div>
+                <label className="font-semibold text-indigo-700">
+                  ই-মেইল
+                </label>
+                <input
+                  type="text"
+                  value={form.email}
+                  onChange={(e) =>
+                    setForm({ ...form, email: e.target.value })
+                  }
+                  className="border p-2 rounded w-full"
+                   
+                />
+              </div>
+
+              <div>
+            <label className="font-semibold text-indigo-700">ব্যবসা শুরুর তারিখ<span className="text-red-600 text-xl ">*</span></label>
+            <br></br>
+             
+
+      <DatePicker
+          id="businessStartDate"
+          selected={form.businessStartDate ? new Date(form.businessStartDate) : null}
+          onChange={(date) =>
+            setForm({ ...form, businessStartDate: date?.toISOString().split("T")[0] || '' })
+          }
+          dateFormat="yyyy-MM-dd"
+           
+         className="border p-2 rounded w-full min-w-64"
+          required
+        />
+
+
+
+
+          </div>
+
+               <div>
+                <label className="font-semibold text-indigo-700">
+                  টি আই এন 
+                </label>
+                <input
+                  type="text"
+                  value={form.tin}
+                  onChange={(e) =>
+                    setForm({ ...form, tin: e.target.value })
+                  }
+                  className="border p-2 rounded w-full"
+                   
                 />
               </div>
 

@@ -42,7 +42,10 @@ export async function GET(req) {
   }
 }
 
-
+function convertToBengaliNumber(number) {
+  const bengaliDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+  return number.toString().split('').map(digit => bengaliDigits[parseInt(digit)]).join('');
+}
 
  export async function POST(req) {
   try {
@@ -63,6 +66,7 @@ export async function GET(req) {
 
     body.birthDate = new Date(body.birthDate);
     if (body.issuedDate) body.issuedDate = new Date(body.issuedDate);
+    if (body.businessStartDate) body.businessStartDate = new Date(body.businessStartDate);
 
     // ✅ Type wise total count বের করুন
     const existingCount = await prisma.certificate.count({
@@ -87,6 +91,16 @@ export async function GET(req) {
       data: { ...body },
     });
 
+    // ✅ Convert ID to Bengali number and concat
+    const bengaliId = convertToBengaliNumber(certificate.id);
+    const autoGenNum = "২৫৪৬১৮০৫৭০১০০০০" + bengaliId;
+
+    // ✅ Update with Bengali autoGenNum
+    const updatedCertificate = await prisma.certificate.update({
+      where: { id: certificate.id },
+      data: { autoGenNum },
+    });
+
     return Response.json({ success: true, certificate }, { status: 201 });
   } catch (error) {
     console.error("Certificate Insert Error:", error.message);
@@ -107,6 +121,7 @@ export async function PATCH(req) {
 
     if (body.birthDate) body.birthDate = new Date(body.birthDate)
     if (body.issuedDate) body.issuedDate = new Date(body.issuedDate)
+    if (body.businessStartDate) body.businessStartDate = new Date(body.businessStartDate)
 
     const certificate = await prisma.certificate.update({
       where: { id },

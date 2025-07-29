@@ -151,8 +151,13 @@ export const commonPrintStyles = `
 
 // ✅ শুধুমাত্র 2nd style এর জন্য অতিরিক্ত CSS
 export const taxTableStyles = `
+@page {
+    size: Legal;
+    margin: 0;
+  }
+
   .container2 {
-    margin-top: 0.1rem;
+    margin-top: 1px;
     display: flex;
     justify-content: center;
   }
@@ -193,7 +198,7 @@ export const taxTableStyles = `
   }
 
   .input-cell {
-    padding: 2px;
+    padding: 1px;
   }
 
   .input-cell input[type="text"] {
