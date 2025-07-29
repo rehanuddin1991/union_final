@@ -103,6 +103,11 @@ export default function AdminLayout({ children }) {
 
           </a>
 
+          <a href="/daily_collection" className="block py-2 rounded-lg hover:bg-green-600 transition-all duration-300">
+            📁 হোল্ডিং কালেকশন রিপোর্ট
+
+          </a>
+
           <a href="/dsh_board/admin/login-history" className="block py-2 rounded-lg hover:bg-green-600 transition-all duration-300">
             🔐 Login History
           </a>

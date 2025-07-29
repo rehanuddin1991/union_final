@@ -1,4 +1,4 @@
- 'use client'
+'use client'
 import { useEffect, useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 
@@ -29,32 +29,25 @@ export default function HoldingPage() {
     othersRent: 0,
     imposedTax: 0,
   })
-
   const [holdings, setHoldings] = useState([])
   const [editingId, setEditingId] = useState(null)
-  const [isSaving, setIsSaving] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isSaving, setIsSaving] = useState(false);
 
   const fetchHoldings = async () => {
-    setIsLoading(true)
-    try {
-      const res = await fetch('/api/holding')
-      const data = await res.json()
-      setHoldings(data.holdings || [])
-    } catch (err) {
-      toast.error('ডাটা লোড করতে সমস্যা হয়েছে।')
-    } finally {
-      setIsLoading(false)
-    }
+    const res = await fetch('/api/holding')
+    const data = await res.json()
+    setHoldings(data.holdings || [])
   }
 
   useEffect(() => {
     fetchHoldings()
   }, [])
 
+
+  
+
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setIsSaving(true)
     const method = editingId ? 'PATCH' : 'POST'
     const url = editingId ? `/api/holding?id=${editingId}` : '/api/holding'
 
@@ -101,22 +94,16 @@ export default function HoldingPage() {
       }
     } catch (err) {
       toast.error('Error')
-    } finally {
-      setIsSaving(false)
     }
   }
 
   const handleDelete = async (id) => {
     if (!confirm('Confirm delete?')) return
-    try {
-      const res = await fetch(`/api/holding?id=${id}`, { method: 'DELETE' })
-      const data = await res.json()
-      if (data.success) {
-        toast.success('Deleted')
-        fetchHoldings()
-      }
-    } catch (err) {
-      toast.error('Delete Error')
+    const res = await fetch(`/api/holding?id=${id}`, { method: 'DELETE' })
+    const data = await res.json()
+    if (data.success) {
+      toast.success('Deleted')
+      fetchHoldings()
     }
   }
 
@@ -550,18 +537,11 @@ export default function HoldingPage() {
   </div>
 
   <button
-  type="submit"
-  disabled={isSaving}
-  className={`mt-8 w-full font-bold py-3 rounded-xl shadow-lg transition-colors duration-300
-    ${isSaving ? 'bg-gray-400 cursor-not-allowed' : 'bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-teal-600 hover:to-cyan-600 text-white'}
-  `}
->
-  {isSaving
-    ? (editingId ? "⏳ আপডেট হচ্ছে..." : "⏳ সংরক্ষণ হচ্ছে...")
-    : (editingId ? "✅ আপডেট করুন" : "✅ সংরক্ষণ করুন")
-  }
-</button>
-
+    type="submit"
+    className="mt-8 w-full bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-teal-600 hover:to-cyan-600 text-white font-bold py-3 rounded-xl shadow-lg transition-colors duration-300"
+  >
+    {editingId ? "✅ আপডেট করুন" : "✅ সংরক্ষণ করুন"}
+  </button>
 </form>
 
 
@@ -596,7 +576,7 @@ export default function HoldingPage() {
         </table>
       </div>
 
-      <ToastContainer position="top-center" autoClose={1000} />
+      <ToastContainer position="top-center" autoClose={3000} />
     </div>
   )
 }
