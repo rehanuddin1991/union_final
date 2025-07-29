@@ -38,19 +38,21 @@ enum Designation {
   CHAIRMAN
   ADMINISTRATIVE_OFFICER
   ACCOUNTANT_COMPUTER_OPERATOR
-  UP_MEMBER 
+  UP_MEMBER
   GRAM_POLICE
   OTHERS
 }
 
 model User {
-  id         Int      @id @default(autoincrement())
-  name       String
-  email      String   @unique
-  password   String
-  role       Role     @default(USER)
-  is_deleted Boolean  @default(false) // ✅ added
-  createdAt  DateTime @default(now())
+  id             Int            @id @default(autoincrement())
+  name           String
+  email          String         @unique
+  password       String
+  role           Role           @default(USER)
+  is_deleted     Boolean        @default(false) // ✅ added
+  createdAt      DateTime       @default(now())
+  loginHistories LoginHistory[] // ✅ added this line
+
   @@map("user")
 }
 
@@ -86,7 +88,6 @@ model Holding_Information {
   updatedAt        DateTime            @updatedAt
 
   @@unique([ward, holdingNo])
-
   @@map("holding_information")
 }
 
@@ -103,11 +104,9 @@ model HoldingCollection {
 
   holdingInformation Holding_Information @relation(fields: [holdingInformationId], references: [id])
 
-  @@index([holdingInformationId]) 
-   @@map("holdingcollection") 
+  @@index([holdingInformationId])
+  @@map("holdingcollection")
 }
-
-
 
 model Employees {
   id          Int         @id @default(autoincrement())
@@ -120,8 +119,9 @@ model Employees {
   is_deleted  Boolean     @default(false) // ✅ added
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
-  imageUrl    String? 
-   @@map("employees")
+  imageUrl    String?
+
+  @@map("employees")
 }
 
 model OfficeSettings {
@@ -132,49 +132,48 @@ model OfficeSettings {
   letter_count String?
   notes        String?  @db.Text
   sarok_no     String?
-  imageUrl    String? 
+  imageUrl     String?
   is_deleted   Boolean  @default(false) // ✅ added
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-   @@map("officesettings")
+
+  @@map("officesettings")
 }
 
-
 model Poor {
-  id                Int        @id @default(autoincrement())   
-  name     String
-  father        String?
-  mother        String?   
-  nid               String?
-  mobile               String?
-  ward              String?   
-  address              String?   
-  comments             String?    @db.Text
-  is_deleted        Boolean    @default(false) // ✅ added
-  createdAt         DateTime   @default(now())
-  updatedAt         DateTime   @updatedAt
+  id         Int      @id @default(autoincrement())
+  name       String
+  father     String?
+  mother     String?
+  nid        String?
+  mobile     String?
+  ward       String?
+  address    String?
+  comments   String?  @db.Text
+  is_deleted Boolean  @default(false) // ✅ added
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
   @@map("poor")
 }
 
-
 model MasterRole {
-  id                Int        @id @default(autoincrement())   
-  type String?
-  name     String?
-  father        String?
-  mother        String?   
-  nid               String?
-  mobile               String?
-  ward              String?   
-  address              String?   
-  comments             String?    @db.Text
-  is_deleted        Boolean    @default(false) // ✅ added
-  createdAt         DateTime   @default(now())
-  updatedAt         DateTime   @updatedAt
+  id         Int      @id @default(autoincrement())
+  type       String?
+  name       String?
+  father     String?
+  mother     String?
+  nid        String?
+  mobile     String?
+  ward       String?
+  address    String?
+  comments   String?  @db.Text
+  is_deleted Boolean  @default(false) // ✅ added
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
   @@map("masterrole")
 }
-
-
 
 model Certificate {
   id                Int        @id @default(autoincrement())
@@ -193,14 +192,14 @@ model Certificate {
   trade_total_tax   String?
   trade_type        String?
   fiscalYear        FiscalYear @default(Y2025_2026)
-  fiscalYearEnd        FiscalYear @default(Y2025_2026)
+  fiscalYearEnd     FiscalYear @default(Y2025_2026)
   birthDate         DateTime?
   address           String?
   nid               String?
   ward              String?
   mouza             String?
   post_office       String?
-  entry_page       String?
+  entry_page        String?
   holding_no        String?
   letter_count      Int        @default(0)
   issuedDate        DateTime   @default(now())
@@ -209,41 +208,51 @@ model Certificate {
   is_approved       Boolean    @default(false) // ✅ added
   createdAt         DateTime   @default(now())
   updatedAt         DateTime   @updatedAt
+
   @@map("certificate")
 }
 
-
 model Daily_Collection {
-  id                Int        @id @default(autoincrement())
-  team              String // নাগরিক সনদ, জাতীয়তা সনদ, ইত্যাদি
+  id          Int       @id @default(autoincrement())
+  team        String // নাগরিক সনদ, জাতীয়তা সনদ, ইত্যাদি
   receipt     String
-  total_taka        String?
-  total_cost        String?   
-  date         DateTime?
-  area           String?
-  comments           String?
-  gram_police  String?   
-  is_deleted        Boolean    @default(false) // ✅ added
-  createdAt         DateTime   @default(now())
-  updatedAt         DateTime   @updatedAt
+  total_taka  String?
+  total_cost  String?
+  date        DateTime?
+  area        String?
+  comments    String?
+  gram_police String?
+  is_deleted  Boolean   @default(false) // ✅ added
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
   @@map("daily_collection")
 }
 
 model Institution {
-  id           Int      @id @default(autoincrement())
-  type         String
-  name         String
-  head         String
-  address      String
-  headMobile   String
-  comments     String?   @db.Text
-  is_deleted   Boolean   @default(false)
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  id         Int      @id @default(autoincrement())
+  type       String
+  name       String
+  head       String
+  address    String
+  headMobile String
+  comments   String?  @db.Text
+  is_deleted Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   @@map("institutions")
 }
 
+model LoginHistory {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  timestamp DateTime @default(now())
+  ipAddress String?
+  userAgent String?
+  status    String // "SUCCESS", "FAILURE"
+}
+
 //npx prisma migrate dev --name add_spouse_field
 //npx prisma generate
-

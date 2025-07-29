@@ -11,17 +11,9 @@ function signToken(payload) {
   return jwt.sign(payload, SECRET, { expiresIn: '7d' });
 }
 
-// ✅ IP ও UserAgent সংগ্রহের হেল্পার ফাংশন
-function extractClientInfo(req) {
-  const ip = req.headers.get('x-forwarded-for') || 'unknown';
-  const userAgent = req.headers.get('user-agent') || 'unknown';
-  return { ip, userAgent };
-}
-
 export async function POST(req) {
   try {
     const { email, password } = await req.json();
-    const { ip, userAgent } = extractClientInfo(req);
 
     if (!email || !password) {
       return NextResponse.json({ message: "Email and password required" }, { status: 400 });
@@ -29,60 +21,35 @@ export async function POST(req) {
 
     const user = await prisma.user.findUnique({ where: { email } });
 
-    // ❌ User না থাকলে Login History তে ব্যর্থতা সংরক্ষণ
     if (!user) {
-      await prisma.loginHistory.create({
-        data: {
-          status: 'FAILURE',
-          ipAddress: ip,
-          userAgent,
-        },
-      });
-
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
 
-    // ❌ পাসওয়ার্ড ভুল হলে ব্যর্থতা সংরক্ষণ
     if (!isMatch) {
-      await prisma.loginHistory.create({
-        data: {
-          userId: user.id,
-          status: 'FAILURE',
-          ipAddress: ip,
-          userAgent,
-        },
-      });
-
       return NextResponse.json({ message: "Invalid password" }, { status: 401 });
     }
 
-    // ✅ সফল লগইনের ইতিহাস সংরক্ষণ
-    await prisma.loginHistory.create({
-      data: {
-        userId: user.id,
-        status: 'SUCCESS',
-        ipAddress: ip,
-        userAgent,
-      },
-    });
-
     const token = signToken({ id: user.id, role: user.role });
+
+    console.log("✅ Generated Token:", token);
+    console.log("✅ User Role:", user.role);
 
     const res = NextResponse.json(
       { success: true, role: user.role },
       { status: 200 }
     );
 
+    // ✅ HttpOnly Cookie সেট করুন
     res.cookies.set({
       name: 'token',
       value: token,
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: process.env.NODE_ENV === 'production', // ✅ production এ true
       sameSite: 'lax',
       path: '/',
-      maxAge: 60 * 60 * 24 * 7,
+      maxAge: 60 * 60 * 24 * 7, // 7 দিন
     });
 
     return res;
