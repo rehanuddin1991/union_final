@@ -402,7 +402,9 @@ const handleSubmit = async (e) => {
     const bnDob = `${enToBnNumber(day)}-${enToBnNumber(month)}-${enToBnNumber(
       year
     )}`;
-    const applicantInfoRows = generateApplicantInfoRows(cert, bnDob);
+    const nid=enToBnNumber(cert.nid);
+    const birth_no=enToBnNumber(cert.birth_no);
+    const applicantInfoRows = generateApplicantInfoRows(cert, bnDob,nid,birth_no);
     const issue_date_format = formatDate(cert.issuedDate || new Date());
     const [issue_day, issue_month, issue_year] = issue_date_format.split("-");
     const bnIssueDate = `${enToBnNumber(issue_day)}-${enToBnNumber(
@@ -485,11 +487,11 @@ const handleSubmit = async (e) => {
    ${applicantInfoRows}
   <tr>
     <td>ওয়ার্ড</td>
-    <td>: ${cert.ward || "-"}</td>
+    <td>: ${enToBnNumber(cert.ward) || "-"}</td>
     </tr>
     <tr>
     <td>হোল্ডিং নং</td>
-    <td>: ${cert.holding_no || "-"}</td>
+    <td>: ${enToBnNumber(cert.holding_no) || "-"}</td>
   </tr>
    
     
@@ -1182,18 +1184,18 @@ ${convertToBanglaNumber(
               জাতীয় পরিচয়পত্র নম্বর
             </label>
             <input
-              type="text"
-              value={form.nid ?? ""}
-              onChange={(e) => {
-                const value = e.target.value;
-                // ✅ কেবল বাংলা সংখ্যা (০-৯) অনুমোদিত
-                if (/^[০-৯]*$/.test(value)) {
-                  setForm({ ...form, nid: value });
-                }
-              }}
-              className="border p-2 rounded w-full"
-              placeholder="NID (শুধু বাংলা সংখ্যা)"
-            />
+  type="text"
+  value={form.nid ?? ""}
+  onChange={(e) => {
+    const value = e.target.value;
+    // ✅ শুধু ইংরেজি সংখ্যা (0-9) ইনপুট অনুমোদিত
+    if (/^[0-9]*$/.test(value)) {
+      setForm({ ...form, nid: value });
+    }
+  }}
+  className="border p-2 rounded w-full"
+  placeholder="NID (শুধু ইংরেজি সংখ্যা লিখুন)"
+/>
           </div>
 
           <div>
@@ -1207,12 +1209,12 @@ ${convertToBanglaNumber(
               onChange={(e) => {
                 const value = e.target.value;
                 // ✅ কেবল বাংলা সংখ্যা (০-৯) অনুমোদিত
-                if (/^[০-৯]*$/.test(value)) {
+                 if (/^[0-9]*$/.test(value)) {
                   setForm({ ...form, birth_no: value });
                 }
               }}
               className="border p-2 rounded w-full"
-              placeholder="শুধু বাংলা সংখ্যা"
+              placeholder="ইংরেজি সংখ্যায় লিখুন"
             />
           </div>
 
@@ -1224,12 +1226,12 @@ ${convertToBanglaNumber(
               onChange={(e) => {
                 const value = e.target.value;
                 // ✅ কেবল বাংলা সংখ্যা (০-৯) অনুমোদিত
-                if (/^[০-৯]*$/.test(value)) {
+                 if (/^[0-9]*$/.test(value)) {
                   setForm({ ...form, ward: value });
                 }
               }}
               className="border p-2 rounded w-full"
-              placeholder="শুধু বাংলা সংখ্যা"
+              placeholder="ইংরেজি সংখ্যায় লিখুন"
             />
           </div>
 
@@ -1241,12 +1243,12 @@ ${convertToBanglaNumber(
               onChange={(e) => {
                 const value = e.target.value;
                 // ✅ কেবল বাংলা সংখ্যা (০-৯) অনুমোদিত
-                if (/^[০-৯]*$/.test(value)) {
+                 if (/^[0-9]*$/.test(value)) {
                   setForm({ ...form, holding_no: value });
                 }
               }}
               className="border p-2 rounded w-full"
-              placeholder="শুধু বাংলা সংখ্যা"
+              placeholder="ইংরেজি সংখ্যায় লিখুন"
             />
           </div>
 

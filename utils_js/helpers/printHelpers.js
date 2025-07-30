@@ -140,7 +140,7 @@ export function generateSignatureHTML(
  * @param {Function} formatDobDate - Function to format birthDate (must be passed)
  * @returns {String} - HTML table rows as string
  */
-export function generateApplicantInfoRows(cert, formatDobDate) {
+export function generateApplicantInfoRows(cert, formatDobDate,nid,birth_no) {
   return `
     <tr>
       <td>পিতার নাম</td>
@@ -169,14 +169,14 @@ export function generateApplicantInfoRows(cert, formatDobDate) {
      ${cert.nid ? `
 <tr>
   <td>জাতীয় পরিচয়পত্র নম্বর</td>
-  <td>: ${cert.nid}</td>
+  <td>: ${nid}</td>
 </tr>
 ` : ""}
 
 ${cert.birth_no ? `
 <tr>
   <td>জন্ম নিবন্ধন নম্বর</td>
-  <td>: ${cert.birth_no}</td>
+  <td>: ${birth_no}</td>
 </tr>
 ` : ""}
     
