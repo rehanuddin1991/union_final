@@ -44,7 +44,13 @@ export async function POST(req) {
     const body = await req.json()
     const dobDate = body.dob ? new Date(body.dob) : null
 
-     
+     const existing = await prisma.holding_Information.findUnique({
+  where: { nid: body.nid },
+});
+
+if (existing) {
+  return Response.json({ success: false, error: " এনআইডি নম্বরটি ইতোমধ্যে সংরক্ষণ করা হয়েছে" });
+}
 
     const holding = await prisma.holding_Information.create({
       data: {

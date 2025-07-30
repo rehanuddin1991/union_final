@@ -222,8 +222,8 @@ const holdingInfo = collection.holdingInformation;
 
              <tr>
     <td style="width: 30%;font-size:18px;font-weight:bold;">হোল্ডিং নম্বর</td>
-    <td style="margin-left:20px;font-size:18px;font-weight:bold;">: ${
-      cert.holdingNumber
+    <td style="margin-left:20px;font-size:18px;font-weight:bold;">: ${enToBnNumber(
+      cert.holdingNumber)
     }</td>
   </tr>
   <tr>
@@ -243,7 +243,7 @@ const holdingInfo = collection.holdingInformation;
   </tr> 
     <tr>
     <td>জাতীয় পরিচয়পত্র নম্বর</td>
-    <td>: ${holdingInfo.nid || "-"}</td>
+    <td>: ${enToBnNumber( holdingInfo.nid) || "-"}</td>
   </tr> 
 
   <tr>
@@ -255,17 +255,17 @@ const holdingInfo = collection.holdingInformation;
    
 <tr>
     <td>চলতি টাকার পরিমাণ</td>
-    <td>: ${cert.currentAmount || "-"}</td>
+    <td>: ${enToBnNumber(cert.currentAmount) || "-"}</td>
   </tr>
 
     <tr>
     <td>বকেয়া</td>
-    <td>: ${cert.dueAmount || "-"}</td>
+    <td>: ${enToBnNumber(cert.dueAmount) || "-"}</td>
   </tr>
 
   <tr>
     <td>মোট কর</td>
-    <td>: ${cert.amount}</td>
+    <td>: ${enToBnNumber(cert.amount)}</td>
   </tr>
    
      

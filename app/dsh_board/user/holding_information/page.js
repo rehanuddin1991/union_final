@@ -219,7 +219,7 @@ export default function HoldingPage() {
              <tr>
     <td style="width: 30%;font-size:18px;font-weight:bold;">হোল্ডিং নম্বর</td>
     <td style="margin-left:20px;font-size:18px;font-weight:bold;">: ${
-      cert.holdingNo
+      enToBnNumber(cert.holdingNo)
     }</td>
   </tr>
   <tr>
@@ -244,12 +244,12 @@ export default function HoldingPage() {
   </tr>
 <tr>
     <td>মোবাইল</td>
-    <td>: ${cert.mobile || "-"}</td>
+    <td>: ${enToBnNumber(cert.mobile) || "-"}</td>
   </tr>
 
     <tr>
     <td>জাতীয় পরিচয়পত্রের নম্বর</td>
-    <td>: ${cert.nid || "-"}</td>
+    <td>: ${enToBnNumber(cert.nid) || "-"}</td>
   </tr>
 
   <tr>
@@ -259,7 +259,7 @@ export default function HoldingPage() {
    
     <tr>
     <td>ওয়ার্ড</td>
-    <td>: ${cert.ward || "-"}</td>
+    <td>: ${enToBnNumber(cert.ward) || "-"}</td>
   </tr>
    
   <tr>
@@ -334,7 +334,8 @@ export default function HoldingPage() {
         setEditingId(null);
         fetchHoldings();
       } else {
-        toast.error("Failed");
+            toast.error(data.error || "failed");
+
       }
     } catch (err) {
       toast.error("Error");
@@ -575,7 +576,7 @@ export default function HoldingPage() {
               value={form.nid}
               onChange={(e) => {
                 const value = e.target.value;
-                if (/^\d*$/.test(value)) setForm({ ...form, nid: value });
+                if (/^[0-9]*$/.test(value)) setForm({ ...form, nid: value });
               }}
               className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
               required
@@ -594,7 +595,10 @@ export default function HoldingPage() {
               id="mobile"
               placeholder="মোবাইল"
               value={form.mobile}
-              onChange={(e) => setForm({ ...form, mobile: e.target.value })}
+             onChange={(e) => {
+                const value = e.target.value;
+                if (/^[0-9]*$/.test(value)) setForm({ ...form, mobile: value });
+              }}
               className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             />
           </div>
@@ -885,7 +889,7 @@ export default function HoldingPage() {
               value={form.imposedTax}
               onChange={(e) => {
                 const value = e.target.value;
-                if (/^\d*$/.test(value))
+                if (/^[0-9]*$/.test(value))
                   setForm({ ...form, imposedTax: value });
               }}
               className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
