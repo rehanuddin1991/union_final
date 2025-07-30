@@ -158,7 +158,7 @@ export default function HoldingPage() {
     const unionImg = settings?.imageUrl || `${origin}/images/union.png`;
 
     const qrImg = `${origin}/images/qr.png`;
-    const qrUrl = `${origin}/verify/certificate?id=${cert.id}`;
+    const qrUrl = `${origin}/verify/holding?id=${cert.id}`;
     const qrImg_with_link = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(
       qrUrl
     )}&size=100x100`;
