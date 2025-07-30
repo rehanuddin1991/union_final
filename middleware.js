@@ -25,6 +25,11 @@ export async function middleware(req) {
       return NextResponse.redirect(new URL('/secure-login', req.url));
     }
 
+    if (pathname.startsWith('/dsh_board/user') && payload.role !== 'USER') {
+      console.log('Unauthorized role for admin path. Redirecting to /secure-login');
+      return NextResponse.redirect(new URL('/secure-login', req.url));
+    }
+
     const res = NextResponse.next();
     res.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
 
