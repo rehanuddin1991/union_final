@@ -3,7 +3,78 @@ import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import {
+  commonPrintStyles,
+  taxTableStyles,
+} from "@/utils_js/helpers/printStyles";
+
+import {
+  getHeaderSection,
+  getHeaderSectionTrade,
+  preloadImage,
+  openPrintWindow,
+  generateSignatureHTML,
+  generateApplicantInfoRows,
+} from "@/utils_js/helpers/printHelpers";
+
+import dynamic from "next/dynamic";
+import {
+  enToBnNumber,
+  convertToBanglaNumber,
+  numberToBanglaWords,
+  bnToEnNumber,
+} from "@/utils_js/utils";
+
 export default function HoldingPage() {
+  const [employees, setEmployees] = useState([]);
+  const [settings, setSettings] = useState(null);
+
+   const fetchOfficeSettings = async () => {
+    const res = await fetch("/api/office_settings");
+    const data = await res.json();
+    if (data.success) {
+      setSettings(data.settings[0]);
+      //console.log("dddddd" + data.settings[0]);
+    } else toast.error("অফিস সেটিংস লোড করতে ব্যর্থ হয়েছে");
+  };
+   const fetchEmployees = async () => {
+    const res = await fetch("/api/employees");
+    const data = await res.json();
+    if (data.success) setEmployees(data.employees);
+    else toast.error("Failed to load employees");
+  };
+
+   useEffect(() => {
+     
+    fetchEmployees();
+    fetchOfficeSettings();
+     
+  }, []);
+
+  const signer2 = employees[1] || {
+    name: " ",
+    designation: "প্রশাসনিক কর্মকর্তা",
+    office1: "১নং রামগড় ইউনিয়ন পরিষদ",
+    office2: " ",
+    office3: " ",
+    office4: "রামগড়, খাগড়াছড়ি",
+  };
+
+  const signer = employees[0] || {
+    name: " ",
+    designation: "দায়িত্বপ্রাপ্ত কর্মকর্তা",
+    office1: "১নং রামগড় ইউনিয়ন পরিষদ",
+    office2: " ",
+    office3: " ",
+    office4: "রামগড়, খাগড়াছড়ি",
+  };
+
+  const designationText =
+    signer.designation === "OFFICER_IN_CHARGE"
+      ? "দায়িত্বপ্রাপ্ত কর্মকর্তা"
+      : "চেয়ারম্যান";
+
+  const designationText2 = "ইউপি প্রশাসনিক কর্মকর্তা";
     
   const [form, setForm] = useState({
     headName: "",
@@ -56,6 +127,164 @@ export default function HoldingPage() {
   useEffect(() => {
     fetchHoldings();
   }, []);
+
+   const formatDobDate = (date) => {
+    const data = date?.substring(0, 10).split("-");
+    return `${data[2]}-${data[1]}-${data[0]}`;
+    if (!date || date.length !== 8) return date; // 8 digit হলে মনে করব yyyymmdd
+    const year = date.slice(0, 4);
+    const month = date.slice(4, 6);
+    const day = date.slice(6, 8);
+    return `${day}-${month}-${year}`;
+  };
+
+
+  const handlePrint = async (cert) => {
+    const origin = window.location.origin;
+    const dob = formatDobDate(cert.dob?.substring(0, 10));
+    const [day, month, year] = dob.split("-");
+
+    const bnDob = `${enToBnNumber(day)}-${enToBnNumber(month)}-${enToBnNumber(
+      year
+    )}`;
+    const applicantInfoRows = generateApplicantInfoRows(cert, bnDob);
+    // const issue_date_format = formatDate(cert.issuedDate || new Date());
+    // const [issue_day, issue_month, issue_year] = issue_date_format.split("-");
+    // const bnIssueDate = `${enToBnNumber(issue_day)}-${enToBnNumber(
+    //   issue_month
+    // )}-${enToBnNumber(issue_year)}`;
+
+    const govtImg = `${origin}/images/govt.png`;
+    const unionImg = settings?.imageUrl || `${origin}/images/union.png`;
+
+    const qrImg = `${origin}/images/qr.png`;
+    const qrUrl = `${origin}/verify/holding?id=${cert.id}`;
+    const qrImg_with_link = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(
+      qrUrl
+    )}&size=100x100`;
+    //const qrImg_with_link = `https://api.qrserver.com/v1/create-qr-code/?data=https://google.com&size=150x150`;
+
+    // ✅ প্রিলোড ইমেজ
+    try {
+      await Promise.all([preloadImage(govtImg), preloadImage(unionImg)]);
+    } catch (err) {
+      console.error("Error preloading images:", err);
+    }
+
+    const signatureHTML = generateSignatureHTML(
+      signer,
+      signer2,
+      designationText,
+      designationText2,
+      settings,
+      qrImg_with_link
+    );
+
+    const headerHTML = getHeaderSection(settings, govtImg, unionImg);
+
+    const printContents = `
+    <!DOCTYPE html>
+    <html lang="bn">
+    <head>
+      <meta charset="UTF-8">
+      <title>${cert.type || "Certificate"}</title>
+       <style>
+        ${commonPrintStyles.replace("__UNION_IMG__", unionImg)}
+      </style>
+    </head>
+    <body>
+      <div class="outer-border">
+        <div class="middle-border">
+          <div class="inner-border">
+             
+
+            ${headerHTML}
+
+            <hr>
+
+             
+
+            <div style="border: 1px solid green;margin:auto; background-color: #e6f4ea; padding: 5px; margin-top: 15px; border-radius: 7px;
+             width: 250px; text-align: center;">
+  <h1 style="font-size: 21px; color: #000080; margin: auto;">  হোল্ডিং তথ্য
+  </h1>
+</div>
+
+
+
+            
+
+            <table>
+
+             <tr>
+    <td style="width: 30%;font-size:18px;font-weight:bold;">হোল্ডিং নম্বর</td>
+    <td style="margin-left:20px;font-size:18px;font-weight:bold;">: ${
+      cert.holdingNo
+    }</td>
+  </tr>
+  <tr>
+    <td style="width: 30%;font-size:18px;font-weight:bold;">নাম</td>
+    <td style="margin-left:20px;font-size:18px;font-weight:bold;">: ${
+      cert.headName
+    }</td>
+  </tr>
+    
+  <tr>
+    <td>পিতার নাম</td>
+    <td>: ${cert.father || "-"}</td>
+    </tr>
+    <tr>
+    <td>মাতার নাম</td>
+    <td>: ${cert.mother || "-"}</td>
+  </tr>
+
+  <tr>
+    <td>ধর্ম</td>
+    <td>: ${cert.religion || "-"}</td>
+  </tr>
+<tr>
+    <td>মোবাইল</td>
+    <td>: ${cert.mobile || "-"}</td>
+  </tr>
+
+    <tr>
+    <td>জাতীয় পরিচয়পত্রের নম্বর</td>
+    <td>: ${cert.nid || "-"}</td>
+  </tr>
+
+  <tr>
+    <td>জন্ম তারিখ</td>
+    <td>: ${bnDob}</td>
+  </tr>
+   
+    <tr>
+    <td>ওয়ার্ড</td>
+    <td>: ${cert.ward || "-"}</td>
+  </tr>
+   
+  <tr>
+    <td>ঠিকানা</td>
+    <td>: ${cert.address || "-"}</td>
+  </tr>
+
+   
+</table>
+ 
+ <br>
+        
+
+             ${signatureHTML}
+          </div>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+
+    openPrintWindow(printContents);
+  };
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -278,7 +507,7 @@ export default function HoldingPage() {
               htmlFor="religion"
               className="block mb-2 font-semibold text-darkcyan"
             >
-              লিঙ্গ
+              ধর্ম
             </label>
             <select
               id="religion"
@@ -594,7 +823,7 @@ export default function HoldingPage() {
             <input
               id="rawRoom"
               type="text"
-              placeholder="সেমি পাকা ঘরের কক্ষ"
+              placeholder="কাঁচা ঘরের কক্ষ"
               value={form.rawRoom}
               onChange={(e) => setForm({ ...form, rawRoom: e.target.value })}
               className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
@@ -722,16 +951,22 @@ export default function HoldingPage() {
                 <td className="border p-2">
                   <button
                     onClick={() => handleEdit(h)}
-                    className="text-blue-600 mr-2"
+                    className="text-blue-600 mr-2 text-xl"
                   >
                     ✏️
                   </button>
                   <button
                     onClick={() => handleDelete(h.id)}
-                    className="text-red-600"
+                    className="text-red-600 text-xl"
                   >
                     🗑
                   </button>
+                  <button
+                      onClick={() => handlePrint(h)}
+                      className="text-green-600 text-xl"
+                    >
+                      🖨️
+                    </button>
                 </td>
               </tr>
             ))}

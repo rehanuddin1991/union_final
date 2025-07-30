@@ -3,9 +3,90 @@ import { useEffect, useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+
+import {
+  commonPrintStyles,
+  taxTableStyles,
+} from "@/utils_js/helpers/printStyles";
+
+import {
+  getHeaderSection,
+  getHeaderSectionTrade,
+  preloadImage,
+  openPrintWindow,
+  generateSignatureHTML,
+  generateApplicantInfoRows,
+} from "@/utils_js/helpers/printHelpers";
+
+import dynamic from "next/dynamic";
+import {
+  enToBnNumber,
+  convertToBanglaNumber,
+  numberToBanglaWords,
+  bnToEnNumber,
+} from "@/utils_js/utils";
+
+
 export default function HoldingCollectionPage() {
   const today = new Date().toISOString().split("T")[0];
+const [employees, setEmployees] = useState([]);
+  const [settings, setSettings] = useState(null);
 
+   const fetchOfficeSettings = async () => {
+    const res = await fetch("/api/office_settings");
+    const data = await res.json();
+    if (data.success) {
+      setSettings(data.settings[0]);
+      //console.log("dddddd" + data.settings[0]);
+    } else toast.error("অফিস সেটিংস লোড করতে ব্যর্থ হয়েছে");
+  };
+   const fetchEmployees = async () => {
+    const res = await fetch("/api/employees");
+    const data = await res.json();
+    if (data.success) setEmployees(data.employees);
+    else toast.error("Failed to load employees");
+  };
+const formatPaymentDate = (date) => {
+    const data = date?.substring(0, 10).split("-");
+    return `${data[2]}-${data[1]}-${data[0]}`;
+    if (!date || date.length !== 8) return date; // 8 digit হলে মনে করব yyyymmdd
+    const year = date.slice(0, 4);
+    const month = date.slice(4, 6);
+    const day = date.slice(6, 8);
+    return `${day}-${month}-${year}`;
+  };
+
+   useEffect(() => {
+     
+    fetchEmployees();
+    fetchOfficeSettings();
+     
+  }, []);
+
+  const signer2 = employees[1] || {
+    name: " ",
+    designation: "প্রশাসনিক কর্মকর্তা",
+    office1: "১নং রামগড় ইউনিয়ন পরিষদ",
+    office2: " ",
+    office3: " ",
+    office4: "রামগড়, খাগড়াছড়ি",
+  };
+
+  const signer = employees[0] || {
+    name: " ",
+    designation: "দায়িত্বপ্রাপ্ত কর্মকর্তা",
+    office1: "১নং রামগড় ইউনিয়ন পরিষদ",
+    office2: " ",
+    office3: " ",
+    office4: "রামগড়, খাগড়াছড়ি",
+  };
+
+  const designationText =
+    signer.designation === "OFFICER_IN_CHARGE"
+      ? "দায়িত্বপ্রাপ্ত কর্মকর্তা"
+      : "চেয়ারম্যান";
+
+  const designationText2 = "ইউপি প্রশাসনিক কর্মকর্তা";
 
   const [form, setForm] = useState({
     holdingInformationId: '',
@@ -24,6 +105,197 @@ export default function HoldingCollectionPage() {
   const [holdingSearchTerm, setHoldingSearchTerm] = useState('')
 
   const [loading, setLoading] = useState(false)  // loading state
+
+
+  const handlePrint = async (cert) => {
+    const origin = window.location.origin;
+    const paymentDate = formatPaymentDate(cert.paymentDate?.substring(0, 10));
+    const [day, month, year] = paymentDate.split("-");
+
+    const res = await fetch(`/api/holding-with-collection?id=${cert.id}`);
+const json = await res.json();
+
+if (!json.success) {
+  toast.error("তথ্য পাওয়া যায়নি!");
+  return;
+}
+
+const collection = json.data;
+const holdingInfo = collection.holdingInformation;
+
+    const bnpaymentDate = `${enToBnNumber(day)}-${enToBnNumber(month)}-${enToBnNumber(
+      year
+    )}`;
+
+    const st_formt_date=cert.fiscalYear.replace(/^Y/, "");
+    const [fiscal_start_year, fiscal_end_year] = st_formt_date.split("_");
+
+   // const applicantInfoRows = generateApplicantInfoRows(cert, bnpaymentDate);
+    // const issue_date_format = formatDate(cert.issuedDate || new Date());
+    // const [issue_day, issue_month, issue_year] = issue_date_format.split("-");
+    // const bnIssueDate = `${enToBnNumber(issue_day)}-${enToBnNumber(
+    //   issue_month
+    // )}-${enToBnNumber(issue_year)}`;
+
+    const govtImg = `${origin}/images/govt.png`;
+    const unionImg = settings?.imageUrl || `${origin}/images/union.png`;
+
+    const qrImg = `${origin}/images/qr.png`;
+    const qrUrl = `${origin}/verify/collections?id=${cert.id}`;
+    const qrImg_with_link = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(
+      qrUrl
+    )}&size=100x100`;
+    //const qrImg_with_link = `https://api.qrserver.com/v1/create-qr-code/?data=https://google.com&size=150x150`;
+
+    // ✅ প্রিলোড ইমেজ
+    try {
+      await Promise.all([preloadImage(govtImg), preloadImage(unionImg)]);
+    } catch (err) {
+      console.error("Error preloading images:", err);
+    }
+
+    const signatureHTML = generateSignatureHTML(
+      signer,
+      signer2,
+      designationText,
+      designationText2,
+      settings,
+      qrImg_with_link
+    );
+
+    const headerHTML = getHeaderSection(settings, govtImg, unionImg);
+
+    const printContents = `
+    <!DOCTYPE html>
+    <html lang="bn">
+    <head>
+      <meta charset="UTF-8">
+      <title>${cert.type || "Certificate"}</title>
+       <style>
+        ${commonPrintStyles.replace("__UNION_IMG__", unionImg)}
+      </style>
+    </head>
+    <body>
+      <div class="outer-border">
+        <div class="middle-border">
+          <div class="inner-border">
+             
+
+            ${headerHTML}
+
+            <hr>
+
+             
+
+            <div style="border: 1px solid green;margin:auto; background-color: #e6f4ea; padding: 5px; margin-top: 15px; border-radius: 7px;
+             width: 250px; text-align: center;">
+  <h1 style="font-size: 21px; color: #000080; margin: auto;">  হোল্ডিং ট্যাক্সের তথ্য
+  </h1>
+</div>
+
+
+
+            
+
+            <table>
+
+            <tr>
+    <td style="width: 30%;font-size:18px;font-weight:bold;">ক্রমিক নং:</td>
+    <td style="margin-left:20px;font-size:18px;font-weight:bold;">........</td>
+  </tr>
+
+  
+
+             <tr>
+    <td style="width: 30%;font-size:18px;font-weight:bold;">জমার তারিখ</td>
+    <td style="margin-left:20px;font-size:18px; ">: ${
+       bnpaymentDate
+    }</td>
+    <td>  আর্থিক বছর:&nbsp;&nbsp; ${convertToBanglaNumber(
+      fiscal_start_year
+    )}-${convertToBanglaNumber(
+      fiscal_end_year
+    )}</td>
+     
+  </tr>
+
+
+             <tr>
+    <td style="width: 30%;font-size:18px;font-weight:bold;">হোল্ডিং নম্বর</td>
+    <td style="margin-left:20px;font-size:18px;font-weight:bold;">: ${
+      cert.holdingNumber
+    }</td>
+  </tr>
+  <tr>
+    <td style="width: 30%;font-size:18px;font-weight:bold;">নাম</td>
+    <td style="margin-left:20px;font-size:18px;font-weight:bold;">: ${
+      holdingInfo.headName 
+    }</td>
+  </tr>
+    
+  <tr>
+    <td>পিতার নাম</td>
+    <td>: ${holdingInfo.father || "-"}</td>
+    </tr>
+    <tr>
+    <td>মাতার নাম</td>
+    <td>: ${holdingInfo.mother || "-"}</td>
+  </tr> 
+    <tr>
+    <td>জাতীয় পরিচয়পত্র নম্বর</td>
+    <td>: ${holdingInfo.nid || "-"}</td>
+  </tr> 
+
+  <tr>
+    <td>ঠিকানা</td>
+    <td>: ${holdingInfo.address || "-"}</td>
+  </tr> 
+
+
+   
+<tr>
+    <td>চলতি টাকার পরিমাণ</td>
+    <td>: ${cert.currentAmount || "-"}</td>
+  </tr>
+
+    <tr>
+    <td>বকেয়া</td>
+    <td>: ${cert.dueAmount || "-"}</td>
+  </tr>
+
+  <tr>
+    <td>মোট কর</td>
+    <td>: ${cert.amount}</td>
+  </tr>
+   
+     
+   
+   
+
+   
+</table>
+ 
+ <br>
+ <div><img style="margin-top:10px;margin-left:350px;" src=${qrImg_with_link} class="qr-code" alt="QR Code" />
+
+ </div>
+ <div style="margin-top:130px; margin-left: 250px;">
+<h2>আদায়কারীর স্বাক্ষর ও তারিখ </h2>
+ </div>
+        
+
+             
+          </div>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+
+    openPrintWindow(printContents);
+  };
+
+
 
   const fetchCollections = async () => {
     setLoading(true)
@@ -390,7 +662,7 @@ export default function HoldingCollectionPage() {
                   <td className="border border-gray-300 p-2 text-center space-x-2">
                     <button
                       onClick={() => handleEdit(c)}
-                      className="text-blue-600 hover:text-blue-800"
+                      className="text-blue-600 hover:text-blue-800  text-xl"
                       aria-label="Edit"
                       title="Edit"
                     >
@@ -398,13 +670,22 @@ export default function HoldingCollectionPage() {
                     </button>
                     <button
                       onClick={() => handleDelete(c.id)}
-                      className="text-red-600 hover:text-red-800"
+                      className="text-red-600 hover:text-red-800 text-xl"
                       aria-label="Delete"
                       title="Delete"
                       disabled={loading}
                     >
                       🗑
                     </button>
+
+                    <button
+                      onClick={() => handlePrint(c)}
+                      className="text-green-600 text-xl"
+                    >
+                      🖨️
+                    </button>
+
+
                   </td>
                 </tr>
               ))}
