@@ -133,6 +133,7 @@ export const commonPrintStyles = `
     gap: 30px;
     z-index: 1;
   }
+     
 
   .signature-box {
   margin-top:10px;
