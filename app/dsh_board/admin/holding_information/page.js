@@ -823,7 +823,7 @@ export default function HoldingPage() {
             <input
               id="rawRoom"
               type="text"
-              placeholder="সেমি পাকা ঘরের কক্ষ"
+              placeholder="কাঁচা ঘরের কক্ষ"
               value={form.rawRoom}
               onChange={(e) => setForm({ ...form, rawRoom: e.target.value })}
               className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
