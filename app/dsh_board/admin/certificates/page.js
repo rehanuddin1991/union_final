@@ -123,6 +123,8 @@ export default function CertificatesPage() {
     }));
   };
 
+  
+
   const fetchEmployees = async () => {
     const res = await fetch("/api/employees");
     const data = await res.json();
@@ -146,7 +148,7 @@ export default function CertificatesPage() {
     tin: "",
     passport: "",
     nature: "",
-
+    email:"",
     nid: "",
     birth_no: "",
     ward: "",
@@ -167,6 +169,16 @@ export default function CertificatesPage() {
     fiscalYear: "Y2025_2026", // default
     fiscalYearEnd: "Y2025_2026", // default
   });
+useEffect(() => {
+  const fee = parseInt(form.trade_fee) || 0;
+  const capital = parseInt(form.trade_capital_tax) || 0;
+  const due = parseInt(form.trade_due) || 0;
+  const vat = parseInt(form.trade_vat) || 0;
+
+  const total = fee + capital + due + vat;
+
+  setForm(prev => ({ ...prev, trade_total_tax: total.toString() }));
+}, [form.trade_fee, form.trade_capital_tax, form.trade_due, form.trade_vat]);
 
   const printRef = useRef();
 
@@ -240,7 +252,7 @@ export default function CertificatesPage() {
     tin: "",
     passport: "",
     nature: "",
-
+email:"",
       nid: "",
       birth_no: "", // ✅ birth_no
       ward: "",
@@ -362,7 +374,7 @@ const handleSubmit = async (e) => {
       notes: cert.notes || "",
       trade_name: cert.trade_name || "",
       trade_address: cert.trade_address || "",
-
+      email:cert.email || "",
       trade_fee: cert.trade_fee || "",
       trade_capital_tax: cert.trade_capital_tax || "",
       trade_due: cert.trade_due || "",
@@ -498,11 +510,11 @@ const handleSubmit = async (e) => {
    
   <tr>
     <td>মৌজা</td>
-    <td>: ${cert.mouza || "-"}</td>
+    <td>: ${enToBnNumber(cert.mouza) || "-"}</td>
   </tr>
   <tr>
     <td>ডাকঘর</td>
-    <td>: ${cert.post_office || "-"}</td>
+    <td>: ${enToBnNumber(cert.post_office) || "-"}</td>
   </tr>
    
 </table>
@@ -797,14 +809,14 @@ const handleSubmit = async (e) => {
 
    <tr>
     <td style="width: 30%;">জন্মনিবন্ধন/এনআইডি/পাসপোর্ট নং</td>
-    <td style="margin-left:20px;">: ${cert.nid} &nbsp; ${cert.birth_no} &nbsp; ${cert.passport}</td>
-    <td  >টি আই এন &nbsp; ${cert.tin}</td>
+    <td style="margin-left:20px;">: ${enToBnNumber(cert.nid)} &nbsp; ${enToBnNumber(cert.birth_no)} &nbsp; ${enToBnNumber(cert.passport)}</td>
+    <td  >টি আই এন &nbsp; ${enToBnNumber(cert.tin)}</td>
   </tr>
     
 
    <tr>
     
-    <td style="margin-left:20px;">মোবাইল:   ${cert.mobile}</td>
+    <td style="margin-left:20px;">মোবাইল:   ${enToBnNumber(cert.mobile)}</td>
      <td>  ই-মেইল: &nbsp; ${cert.email ? cert.email : ""}</td>
   </tr>
 
@@ -852,35 +864,35 @@ const handleSubmit = async (e) => {
       <tr class="row">
         <td class="label-cell">ট্রেড লাইসেন্স ফি</td>
         <td class="input-cell">
-          <input type="text"  value=${cert.trade_fee || "০"} />
+          <input type="text"  value=${enToBnNumber(cert.trade_fee) || "০"} />
         </td>
       </tr>
 
       <tr class="row">
         <td class="label-cell">মুলধন কর</td>
         <td class="input-cell">
-          <input type="text" value=${cert.trade_capital_tax || "০"} />
+          <input type="text" value=${enToBnNumber(cert.trade_capital_tax) || "০"} />
         </td>
       </tr>
 
       <tr class="row">
         <td class="label-cell">বকেয়া</td>
         <td class="input-cell">
-          <input type="text"  value=${cert.trade_due || "০"} />
+          <input type="text"  value=${enToBnNumber(cert.trade_due) || "০"} />
         </td>
       </tr>
 
       <tr class="row">
         <td class="label-cell">ভ্যাট (%)</td>
         <td class="input-cell">
-          <input type="text"   value=${cert.trade_vat || "০"}  />
+          <input type="text"   value=${enToBnNumber(cert.trade_vat) || "০"}  />
         </td>
       </tr>
 
       <tr class="row">
         <td class="label-cell">সর্বমোট কর</td>
         <td class="input-cell">
-         <span>${cert.trade_total_tax} ( ${numberToBanglaWords(
+         <span>${enToBnNumber(cert.trade_total_tax)} ( ${numberToBanglaWords(
       bnToEnNumber(cert.trade_total_tax)
     )} টাকা মাত্র)</span>
         </td>
@@ -980,7 +992,7 @@ ${convertToBanglaNumber(
 
    <tr>
     <td>জাতীয় পরিচয়পত্র নম্বর:</td>
-    <td>: ${cert.nid || "-"}</td>
+    <td>: ${enToBnNumber(cert.nid) || "-"}</td>
   </tr>
 
     
@@ -1000,35 +1012,35 @@ ${convertToBanglaNumber(
       <tr class="row">
         <td class="label-cell">ট্রেড লাইসেন্স ফি</td>
         <td class="input-cell">
-          <input type="text"  value=${cert.trade_fee || "০"} />
+          <input type="text"  value=${enToBnNumber(cert.trade_fee) || "০"} />
         </td>
       </tr>
 
       <tr class="row">
         <td class="label-cell">মুলধন কর</td>
         <td class="input-cell">
-          <input type="text" value=${cert.trade_capital_tax || "০"} />
+          <input type="text" value=${enToBnNumber(cert.trade_capital_tax) || "০"} />
         </td>
       </tr>
 
       <tr class="row">
         <td class="label-cell">বকেয়া</td>
         <td class="input-cell">
-          <input type="text"  value=${cert.trade_due || "০"} />
+          <input type="text"  value=${enToBnNumber(cert.trade_due )|| "০"} />
         </td>
       </tr>
 
       <tr class="row">
         <td class="label-cell">ভ্যাট (%)</td>
         <td class="input-cell">
-          <input type="text"   value=${cert.trade_vat || "০"}  />
+          <input type="text"   value=${enToBnNumber(cert.trade_vat) || "০"}  />
         </td>
       </tr>
 
       <tr class="row">
         <td class="label-cell">সর্বমোট কর</td>
         <td class="input-cell">
-         <span>${cert.trade_total_tax} ( ${numberToBanglaWords(
+         <span>${enToBnNumber(cert.trade_total_tax)} ( ${numberToBanglaWords(
       bnToEnNumber(cert.trade_total_tax)
     )} টাকা মাত্র)</span>
         </td>
@@ -1068,7 +1080,7 @@ ${convertToBanglaNumber(
 
   return (
     <div className="max-w-5xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">ইউনিয়ন পরিষদ সকল সনদ</h1>
+      <h1 className="text-2xl font-bold mb-6">ইউনিয়ন পরিষদ সকল সনদ <span className="text-red-600">(***সকল সংখ্যা ইংরেজিতে লিখবেন)</span></h1>
 
       <form
         onSubmit={handleSubmit}
@@ -1378,6 +1390,7 @@ ${convertToBanglaNumber(
                 <input
                   type="text"
                   value={form.mobile}
+                  
                   onChange={(e) =>
                     setForm({ ...form, mobile: e.target.value })
                   }
@@ -1450,7 +1463,7 @@ ${convertToBanglaNumber(
                   onChange={(e) => {
                     const value = e.target.value;
                     // ✅ কেবল বাংলা সংখ্যা (০-৯) অনুমোদিত
-                    if (/^[০-৯]*$/.test(value)) {
+                   if (/^[0-9]*$/.test(value)) {
                       setForm({ ...form, trade_fee: value });
                     }
                   }}
@@ -1470,7 +1483,7 @@ ${convertToBanglaNumber(
                   onChange={(e) => {
                     const value = e.target.value;
                     // ✅ কেবল বাংলা সংখ্যা (০-৯) অনুমোদিত
-                    if (/^[০-৯]*$/.test(value)) {
+                    if (/^[0-9]*$/.test(value)) {
                       setForm({ ...form, trade_capital_tax: value });
                     }
                   }}
@@ -1487,8 +1500,7 @@ ${convertToBanglaNumber(
                   value={form.trade_due ?? ""}
                   onChange={(e) => {
                     const value = e.target.value;
-                    // ✅ কেবল বাংলা সংখ্যা (০-৯) অনুমোদিত
-                    if (/^[০-৯]*$/.test(value)) {
+                   if (/^[0-9]*$/.test(value)) {
                       setForm({ ...form, trade_due: value });
                     }
                   }}
@@ -1505,8 +1517,7 @@ ${convertToBanglaNumber(
                   value={form.trade_vat ?? ""}
                   onChange={(e) => {
                     const value = e.target.value;
-                    // ✅ কেবল বাংলা সংখ্যা (০-৯) অনুমোদিত
-                    if (/^[০-৯]*$/.test(value)) {
+                    if (/^[0-9]*$/.test(value)) {
                       setForm({ ...form, trade_vat: value });
                     }
                   }}
@@ -1525,8 +1536,7 @@ ${convertToBanglaNumber(
                   value={form.trade_total_tax ?? ""}
                   onChange={(e) => {
                     const value = e.target.value;
-                    // ✅ কেবল বাংলা সংখ্যা (০-৯) অনুমোদিত
-                    if (/^[০-৯]*$/.test(value)) {
+                    if (/^[0-9]*$/.test(value)) {
                       setForm({ ...form, trade_total_tax: value });
                     }
                   }}

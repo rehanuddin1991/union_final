@@ -59,8 +59,14 @@ export function getHeaderSectionTrade(settings, govtImg, unionImg) {
         <h1 class="header-title">${settings?.upazila},&nbsp;${settings?.district}</h1>
         <h1 class="header-title" style="font-size:16px;"> ${settings?.notes} </h1>
       </div>
-      <div style="width:300px">
-
+      <div style="width: 120px;
+  height: 140px;
+  border: 1px solid green;
+  text-align: center;
+  line-height: 140px;
+  font-size: 14px;
+  color: #888;">
+ছবি
       </div>
     </div>
   `;
