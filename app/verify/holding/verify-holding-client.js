@@ -9,22 +9,23 @@ export default function VerifyHoldingClient() {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    if (!id) return
-    const fetchCert = async () => {
-      try {
-        const res = await fetch(`/api/holding?id=${id}`)
-        const data = await res.json()
-        if (data.success && data.holdings.length > 0) {
-          setholding(data.holdings[0])
-        } else {
-          setError('সনদটি খুঁজে পাওয়া যায়নি বা এটি অবৈধ।')
-        }
-      } catch {
-        setError('সার্ভারে ত্রুটি হয়েছে।')
+  if (!id) return
+  const fetchCert = async () => {
+    try {
+      const res = await fetch(`/api/holding?id=${id}`)
+      const data = await res.json()
+      if (data.success && data.holding) {
+        setholding(data.holding)
+      } else {
+        setError('সনদটি খুঁজে পাওয়া যায়নি বা এটি অবৈধ।')
       }
+    } catch {
+      setError('সার্ভারে ত্রুটি হয়েছে।')
     }
-    fetchCert()
-  }, [id])
+  }
+  fetchCert()
+}, [id])
+
 
   const formatDobDate = (date) => {
     const data = date?.substring(0, 10).split("-");
