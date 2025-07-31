@@ -119,7 +119,7 @@ export function generateSignatureHTML(
     break-inside: avoid !important;" >
       <p>  ${
     settings?.union_name === "২নং পাতাছড়া ইউনিয়ন পরিষদ"
-      ? `<img src="/images/patachara_sign.png" alt="" style="width:100px;height:30px; margin-top:-50px;" />`
+      ? `<img src="/images/patachara_sign.png" alt="" style="width:210px;height:80px; margin-top:-50px;" />`
       : ""
   }</p>
       
@@ -169,10 +169,7 @@ export function generateApplicantInfoRows(cert, formatDobDate,nid,birth_no) {
       <td>জন্ম তারিখ</td>
       <td>: ${formatDobDate}</td>
     </tr>
-    <tr>
-      <td>গ্রাম</td>
-      <td>: ${cert.address || "-"}</td>
-    </tr>
+     
      
 
      ${cert.nid ? `
