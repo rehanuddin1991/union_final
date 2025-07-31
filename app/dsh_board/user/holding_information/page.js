@@ -468,17 +468,23 @@ export default function HoldingPage() {
             </label>
 
             <DatePicker
-    id="dob"
-    selected={form.dob ? new Date(form.dob) : null}
-    onChange={(date) =>
-      setForm({ ...form, dob: date?.toISOString().split("T")[0] || '' })
-    }
-    dateFormat="yyyy-MM-dd"
-    placeholderText="জন্ম তারিখ নির্বাচন করুন"
-    className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
-    required
-  />
-
+  id="dob"
+  selected={form.dob ? new Date(form.dob) : null}
+  onChange={(date) =>
+    setForm({
+      ...form,
+      dob: date
+        ? new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+            .toISOString()
+            .split("T")[0]
+        : "",
+    })
+  }
+  dateFormat="yyyy-MM-dd"
+  placeholderText="জন্ম তারিখ নির্বাচন করুন"
+  className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
+  required
+/>
 
             
           </div>

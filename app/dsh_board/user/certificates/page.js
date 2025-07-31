@@ -1197,17 +1197,27 @@ ${convertToBanglaNumber(
             <br></br>
              
 
-      <DatePicker
-          id="birthDate"
-          selected={form.birthDate ? new Date(form.birthDate) : null}
-          onChange={(date) =>
-            setForm({ ...form, birthDate: date?.toISOString().split("T")[0] || '' })
-          }
-          dateFormat="yyyy-MM-dd"
-          placeholderText="জন্ম তারিখ নির্বাচন করুন"
-         className="border p-2 rounded w-full min-w-64"
-          required
-        />
+    
+
+        <DatePicker
+  id="birthDate"
+  selected={form.birthDate ? new Date(form.birthDate) : null}
+  onChange={(date) =>
+    setForm({
+      ...form,
+      birthDate: date
+        ? new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+            .toISOString()
+            .split("T")[0]
+        : "",
+    })
+  }
+  dateFormat="yyyy-MM-dd"
+  placeholderText="জন্ম তারিখ নির্বাচন করুন"
+  className="border p-2 rounded w-full min-w-64"
+  required
+/>
+
 
 
 
