@@ -99,7 +99,7 @@ export function generateSignatureHTML(
     <div class="signature-area" style=" page-break-inside: avoid !important;
     break-inside: avoid !important;">
       ${
-  ["নাগরিকত্ব সনদ", "জাতীয়তা সনদ"].includes(type)
+  ["নাগরিকত্ব সনদ", "জাতীয়তা সনদ", "জাতীয়তা সনদ","ট্রেড লাইসেন্স"].includes(type)
     ? `<div class="signature-box"  >
         <p>${settings?.union_name === "২নং পাতাছড়া ইউনিয়ন পরিষদ" ? ". " : ""}</p>
         <p style="margin: 0; width: 200px; padding-top: 5px;font-size:19px;font-weight:bold;">
