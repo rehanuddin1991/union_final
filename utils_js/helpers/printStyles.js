@@ -8,7 +8,12 @@ export const commonPrintStyles = `
   font-family: 'Nikosh';
   src: url('/fonts/Nikosh.ttf') format('truetype');
 }
-  
+  @media print {
+  .signature-area {
+    page-break-inside: avoid;
+  }
+    .signature-box{ page-break-inside: avoid;}
+}
 
   body {
     font-family: 'Nikosh', 'SolaimanLipi', 'Kalpurush', 'Noto Serif Bengali', serif;
@@ -125,22 +130,38 @@ export const commonPrintStyles = `
     z-index: 1;
   }
 
-  .signature-area {
-    margin-top: 60px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 30px;
-    z-index: 1;
-  }
-     
+   .hidden-signature {
+  visibility: hidden;
+  height: 1px;
+}
+     .signature-area {
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 30px;
+  z-index: 1;
+
+  /* ✅ Prevent page break */
+   page-break-inside: avoid !important;
+    break-inside: avoid !important;
+}
+ .signature-box.empty {
+  min-height: 120px; /* একই উচ্চতা রাখবে */
+  width: 200px;
+  visibility: hidden; /* লুকানো থাকবে */
+}
+
 
   .signature-box {
+   min-height: 120px;
   margin-top:10px;
     text-align: center;
     line-height: 0.4;
     font-size:14px;
     font-weight:bold;
+     break-inside: avoid !important;
+    page-break-inside: avoid !important;
      
   }
 

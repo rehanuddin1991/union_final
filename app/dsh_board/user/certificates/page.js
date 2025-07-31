@@ -440,13 +440,16 @@ const handleSubmit = async (e) => {
       console.error("Error preloading images:", err);
     }
 
+    const cert_type=cert.type;
+
     const signatureHTML = generateSignatureHTML(
       signer,
       signer2,
       designationText,
       designationText2,
       settings,
-      qrImg_with_link
+      qrImg_with_link,
+      cert_type
     );
 
     const headerHTML = getHeaderSection(settings, govtImg, unionImg);
@@ -573,7 +576,8 @@ const handleSubmit = async (e) => {
       designationText,
       designationText2,
       settings,
-      qrImg_with_link
+      qrImg_with_link,
+      cert.type
     );
 
     const headerHTML = getHeaderSection(settings, govtImg, unionImg);
@@ -651,6 +655,7 @@ const handleSubmit = async (e) => {
 
   const handlePrint_trade = async (cert) => {
     const origin = window.location.origin;
+    
 
     const dob = formatDobDate(cert.birthDate?.substring(0, 10));
     const [day, month, year] = dob.split("-");
@@ -702,7 +707,8 @@ const handleSubmit = async (e) => {
       designationText,
       designationText2,
       settings,
-      qrImg_with_link
+      qrImg_with_link,
+      cert.type
     );
     const headerHTML = getHeaderSectionTrade(settings, govtImg, unionImg);
 

@@ -92,28 +92,31 @@ export function generateSignatureHTML(
   designationText,
   designationText2,
   settings,
-  qrImgWithLink
+  qrImgWithLink,
+  type
 ) {
   return `
-    <div class="signature-area">
-      <div class="signature-box">
-      <p>  ${
-    settings?.union_name === "২নং পাতাছড়া ইউনিয়ন পরিষদ"
-      ? ". "
-      : ""
-  }</p>
-     
+    <div class="signature-area" style=" page-break-inside: avoid !important;
+    break-inside: avoid !important;">
+      ${
+  ["নাগরিকত্ব সনদ", "জাতীয়তা সনদ"].includes(type)
+    ? `<div class="signature-box"  >
+        <p>${settings?.union_name === "২নং পাতাছড়া ইউনিয়ন পরিষদ" ? ". " : ""}</p>
         <p style="margin: 0; width: 200px; padding-top: 5px;font-size:19px;font-weight:bold;">
           ${signer2?.name || ""}
         </p>
         <p>${designationText2 || ""}</p>
         <p>${settings?.union_name || ""}</p>
         <p>${settings?.upazila || ""}, ${settings?.district || ""}</p>
-      </div>
+      </div>`
+    : `<div class="signature-box empty"></div>`
+}
+
 
       <img src="${qrImgWithLink}" class="qr-code" alt="QR Code" />
 
-      <div class="signature-box" >
+      <div class="signature-box" style=" margin:0;padding:0; page-break-inside: avoid !important;
+    break-inside: avoid !important;" >
       <p>  ${
     settings?.union_name === "২নং পাতাছড়া ইউনিয়ন পরিষদ"
       ? `<img src="/images/patachara_sign.png" alt="" style="width:100px;height:30px; margin-top:-50px;" />`
