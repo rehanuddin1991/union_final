@@ -332,17 +332,26 @@ const handleSubmit = async (e) => {
   }
 };
 
-
-  const handleDelete = async (id) => {
+ const handleDelete = async (id) => {
     if (!confirm("ডিলিট নিশ্চিত করবেন? ভুলে ডিলিট হলে ডেটা রিকভারি সম্ভব"))
       return;
-    const res = await fetch(`/api/certificates?id=${id}`, { method: "DELETE" });
-    const data = await res.json();
-    if (data.success) {
-      toast.success("Deleted Successfully");
-      fetchCertificates();
-    } else {
-      toast.error("Failed to delete");
+
+    setLoading(true); // ✅ পেজ ফ্রিজ শুরু
+
+    try {
+      const res = await fetch(`/api/certificates?id=${id}`, { method: "DELETE" });
+      const data = await res.json();
+
+      if (data.success) {
+        toast.success("Deleted Successfully");
+        fetchCertificates(); // ✅ ডেটা রিফ্রেশ
+      } else {
+        toast.error("Failed to delete");
+      }
+    } catch (error) {
+      toast.error("Error occurred");
+    } finally {
+      setLoading(false); // ✅ পেজ আনফ্রিজ
     }
   };
 
@@ -1790,105 +1799,99 @@ ${convertToBanglaNumber(
         )}
       </form>
 
-      <div className="bg-white border p-4 rounded-xl shadow">
+      <div className="relative bg-white border p-4 rounded-xl shadow">
 
-         {loading && (
-  <div className="text-center my-4 ">
-    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-    <p className="text-red-600 text-sm mt-2">loading...................................</p>
-  </div>
-)}
-        <h2 className="text-2xl font-semibold mb-3 text-[darkcyan]">সকল সনদ</h2>
-        <table className="w-full text-sm border">
-          <thead className="bg-blue-100">
-            <tr>
-              <th className="border p-2">সনদের ধরন</th>
-              <th className="border p-2">সিরিয়াল</th>
-              <th className="border p-2">নাম</th>
-              <th className="border p-2">পিতার নাম</th>
-              <th className="border p-2">মাতার নাম</th>
-              <th className="border p-2">জন্ম তারিখ</th>
-              <th className="border p-2">ঠিকানা</th>
+  {/* ✅ Loading Overlay */}
+  {loading && (
+    <div className="absolute inset-0 bg-white bg-opacity-70 z-50 flex flex-col items-center justify-center">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <p className="text-red-600 text-sm mt-2">লোড হচ্ছে...</p>
+    </div>
+  )}
 
-              <th className="border p-2">নোটস</th>
-              <th className="border p-2">অ্যাকশন</th>
-            </tr>
-          </thead>
-          <tbody>
-           
-
-
-            {certificates.length === 0 && (
-              <tr>
-                <td colSpan={9} className="text-center p-4">
-                  কোনো সনদ পাওয়া যায়নি।
-                </td>
-              </tr>
+  <h2 className="text-2xl font-semibold mb-3 text-[darkcyan]">সকল সনদ</h2>
+  <table className="w-full text-sm border">
+    <thead className="bg-blue-100">
+      <tr>
+        <th className="border p-2">সনদের ধরন</th>
+        <th className="border p-2">সিরিয়াল</th>
+        <th className="border p-2">নাম</th>
+        <th className="border p-2">পিতার নাম</th>
+        <th className="border p-2">মাতার নাম</th>
+        <th className="border p-2">জন্ম তারিখ</th>
+        <th className="border p-2">ঠিকানা</th>
+        <th className="border p-2">নোটস</th>
+        <th className="border p-2">অ্যাকশন</th>
+      </tr>
+    </thead>
+    <tbody>
+      {certificates.length === 0 && (
+        <tr>
+          <td colSpan={9} className="text-center p-4">
+            কোনো সনদ পাওয়া যায়নি।
+          </td>
+        </tr>
+      )}
+      {certificates.map((cert) => (
+        <tr key={cert.id}>
+          <td className="border p-2">{cert.type}</td>
+          <td className="border p-2">{cert.letter_count}</td>
+          <td className="border p-2">{cert.applicantName}</td>
+          <td className="border p-2">{cert.fatherName || "-"}</td>
+          <td className="border p-2">{cert.motherName || "-"}</td>
+          <td className="border p-2">
+            {cert.birthDate ? cert.birthDate.substring(0, 10) : "-"}
+          </td>
+          <td className="border p-2">{cert.address || "-"}</td>
+          <td className="border p-2">
+            <div dangerouslySetInnerHTML={{ __html: cert.notes || "-" }} />
+          </td>
+          <td className="border p-2 space-x-1 text-2xl">
+            <button
+              onClick={() => handleEdit(cert)}
+              className="text-blue-600"
+            >
+              ✏️
+            </button>
+            <button
+              onClick={() => handleDelete(cert.id)}
+              className="text-red-600"
+            >
+              🗑
+            </button>
+            {cert.type != "ট্রেড লাইসেন্স" && (
+              <button
+                onClick={() => handlePrint(cert)}
+                className="text-green-600"
+              >
+                🖨️
+              </button>
             )}
-            {certificates.map((cert) => (
-              <tr key={cert.id}>
-                <td className="border p-2">{cert.type}</td>
-                <td className="border p-2">{cert.letter_count}</td>
-                <td className="border p-2">{cert.applicantName}</td>
-                <td className="border p-2">{cert.fatherName || "-"}</td>
-                <td className="border p-2">{cert.motherName || "-"}</td>
-                <td className="border p-2">
-                  {cert.birthDate ? cert.birthDate.substring(0, 10) : "-"}
-                </td>
-                <td className="border p-2">{cert.address || "-"}</td>
+            {cert.type === "নাম সংক্রান্ত প্রত্যয়ন পত্র" && (
+              <button
+                onClick={() => handlePrintNameRelated(cert, settings)}
+                className="text-green-600"
+              >
+                নাম সংক্রান্ত
+              </button>
+            )}
+            {cert.type === "ট্রেড লাইসেন্স" && (
+              <button
+                onClick={() => handlePrint_trade(cert)}
+                className="text-green-600"
+              >
+                🖨️ Trade
+              </button>
+            )}
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
 
-                <td className="border p-2">
-                  <div
-                    dangerouslySetInnerHTML={{ __html: cert.notes || "-" }}
-                  />
-                </td>
-                <td className="border p-2 space-x-1 text-2xl">
-                  <button
-                    onClick={() => handleEdit(cert)}
-                    className="text-blue-600  "
-                  >
-                    ✏️
-                  </button>
-                  <button
-                    onClick={() => handleDelete(cert.id)}
-                    className="text-red-600"
-                  >
-                    🗑
-                  </button>
-                  {cert.type != "ট্রেড লাইসেন্স" && (
-                    <button
-                      onClick={() => handlePrint(cert)}
-                      className="text-green-600"
-                    >
-                      🖨️
-                    </button>
-                  )}
 
-                  {cert.type === "নাম সংক্রান্ত প্রত্যয়ন পত্র" && (
-                    <button
-                      onClick={() => handlePrintNameRelated(cert, settings)}
-                      className="text-green-600"
-                    >
-                      নাম সংক্রান্ত
-                    </button>
-                  )}
-
-                  {cert.type === "ট্রেড লাইসেন্স" && (
-                    <button
-                      onClick={() => handlePrint_trade(cert)}
-                      className="text-green-600"
-                    >
-                      🖨️ Trade
-                    </button>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <ToastContainer position="top-center" autoClose={2000} />
+      <ToastContainer position="top-center" autoClose={1000} />
     </div>
   );
 }
