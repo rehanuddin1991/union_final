@@ -524,7 +524,24 @@ const handleSubmit = async (e) => {
 <div style="text-align:justify; line-height:1.6">  
     ${cert.notes || "-"}
 </div>
- <br>
+${cert.type === "অভিভাবক সম্মতিপত্র" ? ` <br><br>
+  <div style="margin-left:500px;">   
+     অভিভাবকের স্বাক্ষর <br>
+  </div>
+` : ""}
+
+${cert.type === "নাগরিকত্ব সনদ" ? ` <br><br> 
+   
+` : ""}
+
+${cert.type === "জাতীয়তা সনদ" ? ` <br><br> 
+   
+` : ""}
+
+
+ 
+
+ 
         
 
              ${signatureHTML}
