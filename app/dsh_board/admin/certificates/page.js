@@ -498,7 +498,7 @@ export default function CertificatesPage() {
    
 </table>
 
-<table>
+<table style="margin-top:-15px;">
   <tr>
         <td style="width:30%;font-size:17px;">ওয়ার্ড</td>
         <td style="width:38%;text-align:left;font-size:17px;">: &nbsp;${
@@ -527,7 +527,7 @@ export default function CertificatesPage() {
               enToBnNumber(cert.post_office) || "-"
             }</td>        
          
-        <td colspan=2 style="width:32%;text-align:left;font-size:16px;">উপজেলা: ${settings?.upazila} ,
+        <td colspan=2 style="width:32%;text-align:left;font-size:16px;">উপজেলা: ${settings?.upazila},
         জেলা: &nbsp;${settings?.district}</td>        
 
   </tr>
