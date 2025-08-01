@@ -34,7 +34,8 @@ const Editor = dynamic(
 
 export default function CertificatesPage() {
   const [loading, setLoading] = useState(false);
-
+  const [filteredCollections, setFilteredCollections] = useState([]);
+  const [search, setSearch] = useState("");
   const [certificates, setCertificates] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [settings, setSettings] = useState(null);
@@ -170,6 +171,7 @@ export default function CertificatesPage() {
       const data = await res.json();
       if (data.success) {
         setCertificates(data.certificates);
+        setFilteredCollections(data.certificates);
       } else {
         toast.error("Failed to load certificates");
       }
@@ -186,6 +188,18 @@ export default function CertificatesPage() {
     fetchOfficeSettings();
     setNow(new Date().toLocaleDateString());
   }, []);
+
+    useEffect(() => {
+    const s = search.toLowerCase();
+    const filtered = certificates.filter(
+      (c) =>
+        (c.nid || "").toLowerCase().includes(s) ||
+        (c.birth_no || "").toString().includes(s)
+    );
+    setFilteredCollections(filtered);
+  }, [search, certificates]);
+
+
 
   const signer2 = employees[1] || {
     name: " ",
@@ -1840,96 +1854,113 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
       </form>
 
       <div className="relative bg-white border p-4 rounded-xl shadow">
-        {/* ✅ Loading Overlay */}
-        {loading && (
-          <div className="absolute inset-0 bg-white bg-opacity-70 z-50 flex flex-col items-center justify-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-            <p className="text-red-600 text-sm mt-2">লোড হচ্ছে...</p>
-          </div>
-        )}
-
-        <h2 className="text-2xl font-semibold mb-3 text-[darkcyan]">সকল সনদ</h2>
-        <table className="w-full text-sm border">
-          <thead className="bg-blue-100">
+  {/* ✅ Loading Overlay */}
+  {loading ? (
+    <div className="absolute inset-0 bg-white bg-opacity-70 z-50 flex flex-col items-center justify-center">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <p className="text-red-600 text-sm mt-2">লোড হচ্ছে...</p>
+    </div>
+  ) : (
+    <>
+      <input
+        type="text"
+        placeholder="🔍NID or Birth  নাম্বার দিয়ে খুঁজুন..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="w-full md:w-96 mb-4 px-4 py-2 border-2 border-[darkcyan] rounded-2xl bg-green-50 placeholder-green-700 text-green-900 focus:outline-none focus:ring-4 focus:ring-green-300 hover:bg-green-100 transition-all duration-200"
+      />
+      <h2 className="text-2xl font-semibold mb-3 text-[darkcyan]">সকল সনদ</h2>
+      <table className="w-full text-sm border">
+        <thead className="bg-blue-100">
+          <tr>
+            <th className="border p-1">সনদের ধরন</th>
+            <th className="border p-1">সিরিয়াল</th>
+            <th className="border p-1">নাম</th>
+            <th className="border p-1">পিতার নাম</th>
+             
+            <th className="border p-1">এনআইডি</th>
+            <th className="border p-1">জন্ম নিবন্ধন</th>
+            <th className="border p-1">ঠিকানা</th>
+            <th className="border p-1">নোটস</th>
+            <th className="border p-1">অ্যাকশন</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredCollections.length === 0 && (
             <tr>
-              <th className="border p-2">সনদের ধরন</th>
-              <th className="border p-2">সিরিয়াল</th>
-              <th className="border p-2">নাম</th>
-              <th className="border p-2">পিতার নাম</th>
-              <th className="border p-2">মাতার নাম</th>
-              <th className="border p-2">জন্ম তারিখ</th>
-              <th className="border p-2">ঠিকানা</th>
-              <th className="border p-2">নোটস</th>
-              <th className="border p-2">অ্যাকশন</th>
+              <td colSpan={9} className="text-center p-4">
+                কোনো সনদ পাওয়া যায়নি।
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {certificates.length === 0 && (
-              <tr>
-                <td colSpan={9} className="text-center p-4">
-                  কোনো সনদ পাওয়া যায়নি।
-                </td>
-              </tr>
-            )}
-            {certificates.map((cert) => (
-              <tr key={cert.id}>
-                <td className="border p-2">{cert.type}</td>
-                <td className="border p-2">{cert.letter_count}</td>
-                <td className="border p-2">{cert.applicantName}</td>
-                <td className="border p-2">{cert.fatherName || "-"}</td>
-                <td className="border p-2">{cert.motherName || "-"}</td>
-                <td className="border p-2">
-                  {cert.birthDate ? cert.birthDate.substring(0, 10) : "-"}
-                </td>
-                <td className="border p-2">{cert.address || "-"}</td>
-                <td className="border p-2">
-                  <div
-                    dangerouslySetInnerHTML={{ __html: cert.notes || "-" }}
-                  />
-                </td>
-                <td className="border p-2 space-x-1 text-2xl">
+          )}
+          {filteredCollections.map((cert) => (
+            <tr key={cert.id}>
+              <td className="border p-1">{cert.type}</td>
+              <td className="border p-1">{cert.letter_count}</td>
+              <td className="border p-1">{cert.applicantName}</td>
+              <td className="border p-1">{cert.fatherName || "-"}</td>
+              
+              <td className="border p-1">
+                {cert.nid }
+              </td>
+
+               <td className="border p-1">
+                {cert.birth_no }
+              </td>
+
+
+              <td className="border p-1">{cert.address || "-"}</td>
+              <td className="border p-1">
+                <div
+                  dangerouslySetInnerHTML={{ __html: cert.notes || "-" }}
+                />
+              </td>
+              <td className="border p-2 space-x-1 text-2xl">
+                <button
+                  onClick={() => handleEdit(cert)}
+                  className="text-blue-600"
+                >
+                  ✏️
+                </button>
+                <button
+                  onClick={() => handleDelete(cert.id)}
+                  className="text-red-600"
+                >
+                  🗑
+                </button>
+                {cert.type != "ট্রেড লাইসেন্স" && (
                   <button
-                    onClick={() => handleEdit(cert)}
-                    className="text-blue-600"
+                    onClick={() => handlePrint(cert)}
+                    className="text-green-600"
                   >
-                    ✏️
+                    🖨️
                   </button>
+                )}
+                {cert.type === "নাম সংক্রান্ত প্রত্যয়ন পত্র" && (
                   <button
-                    onClick={() => handleDelete(cert.id)}
-                    className="text-red-600"
+                    onClick={() => handlePrintNameRelated(cert, settings)}
+                    className="text-green-600"
                   >
-                    🗑
+                    নাম সংক্রান্ত
                   </button>
-                  {cert.type != "ট্রেড লাইসেন্স" && (
-                    <button
-                      onClick={() => handlePrint(cert)}
-                      className="text-green-600"
-                    >
-                      🖨️
-                    </button>
-                  )}
-                  {cert.type === "নাম সংক্রান্ত প্রত্যয়ন পত্র" && (
-                    <button
-                      onClick={() => handlePrintNameRelated(cert, settings)}
-                      className="text-green-600"
-                    >
-                      নাম সংক্রান্ত
-                    </button>
-                  )}
-                  {cert.type === "ট্রেড লাইসেন্স" && (
-                    <button
-                      onClick={() => handlePrint_trade(cert)}
-                      className="text-green-600"
-                    >
-                      🖨️ Trade
-                    </button>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                )}
+                {cert.type === "ট্রেড লাইসেন্স" && (
+                  <button
+                    onClick={() => handlePrint_trade(cert)}
+                    className="text-green-600"
+                  >
+                    🖨️ Trade
+                  </button>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
+  )}
+</div>
+
 
       <ToastContainer position="top-center" autoClose={2000} />
     </div>

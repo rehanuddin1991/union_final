@@ -88,7 +88,7 @@ export default function HoldingPage() {
     mobile: "",
     dob: "",
     gender: "MALE",
-    religion: "ISLAM",
+    religion: "ইসলাম",
     comments: "",
     rawRoom: "",
     occupation: "",
@@ -112,13 +112,15 @@ export default function HoldingPage() {
   const [editingId, setEditingId] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
+ const [filteredCollections, setFilteredCollections] = useState([]);
+  const [search, setSearch] = useState("");
   const fetchHoldings = async () => {
     setIsLoading(true);
     try {
       const res = await fetch("/api/holding");
       const data = await res.json();
       setHoldings(data.holdings || []);
+      setFilteredCollections(data.holdings || []);
     } catch (err) {
       toast.error("ডাটা লোড করতে সমস্যা হয়েছে।");
     } finally {
@@ -129,6 +131,17 @@ export default function HoldingPage() {
   useEffect(() => {
     fetchHoldings();
   }, []);
+
+  useEffect(() => {
+  const s = search.toLowerCase();
+  const filtered = holdings.filter(
+    (c) =>
+      (c.headName || "").toLowerCase().includes(s) ||
+      (c.holdingNo || "").toString().includes(s)
+  );
+  setFilteredCollections(filtered);
+}, [search, holdings]);
+
 
    const formatDobDate = (date) => {
     const data = date?.substring(0, 10).split("-");
@@ -324,7 +337,7 @@ export default function HoldingPage() {
           mobile: "",
           dob: "",
           gender: "MALE",
-          religion: "ISLAM",
+          religion: "ইসলাম",
           comments: "",
           rawRoom: "",
           occupation: "",
@@ -358,17 +371,25 @@ export default function HoldingPage() {
 
   const handleDelete = async (id) => {
     if (!confirm("Confirm delete?")) return;
+
+    setIsLoading(true); // ✅ লোডিং শুরু
+
     try {
       const res = await fetch(`/api/holding?id=${id}`, { method: "DELETE" });
       const data = await res.json();
       if (data.success) {
         toast.success("Deleted");
-        fetchHoldings();
+        fetchHoldings(); // Assuming this refreshes the list
+      } else {
+        toast.error("Delete Failed");
       }
     } catch (err) {
       toast.error("Delete Error");
+    } finally {
+      setIsLoading(false); // ✅ লোডিং শেষ
     }
   };
+
 
   const handleEdit = (h) => {
     setForm({ ...h, dob: h.dob?.substring(0, 10) }); // format dob
@@ -534,11 +555,11 @@ export default function HoldingPage() {
               onChange={(e) => setForm({ ...form, religion: e.target.value })}
               className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             >
-              <option value="ISLAM">ইসলাম</option>
-              <option value="HINDU">হিন্দু</option>
-              <option value="CHRISTIAN">খ্রিস্টান</option>
-              <option value="BUDDHIST">বৌদ্ধ</option>
-              <option value="OTHER">অন্যান্য</option>
+              <option value="ইসলাম">ইসলাম</option>
+              <option value="হিন্দু">হিন্দু</option>
+              <option value="খ্রিস্টান">খ্রিস্টান</option>
+              <option value="বৌদ্ধ">বৌদ্ধ</option>
+              <option value="অন্যান্য">অন্যান্য</option>
             </select>
           </div>
 
@@ -959,6 +980,15 @@ export default function HoldingPage() {
     </div>
   ) : (
     <>
+     <input
+  type="text"
+  placeholder="🔍 নাম / হোল্ডিং নাম্বার দিয়ে খুঁজুন..."
+  value={search}
+  onChange={(e) => setSearch(e.target.value)}
+  className="w-full md:w-96 mb-4 px-4 py-2 border-2 border-[darkcyan] rounded-2xl bg-green-50 placeholder-green-700 text-green-900 focus:outline-none focus:ring-4 focus:ring-green-300 hover:bg-green-100 transition-all duration-200"
+/>
+
+
       <h2 className="text-xl font-semibold mb-3">📋 হোল্ডিং তালিকা</h2>
       <table className="w-full text-sm border">
         <thead className="bg-blue-100">
@@ -971,7 +1001,7 @@ export default function HoldingPage() {
           </tr>
         </thead>
         <tbody>
-          {holdings.map((h) => (
+          {filteredCollections.map((h) => (
             <tr key={h.id}>
               <td className="border p-2">{h.headName}</td>
               <td className="border p-2">{h.ward}</td>
@@ -980,13 +1010,13 @@ export default function HoldingPage() {
               <td className="border p-2">
                 <button
                   onClick={() => handleEdit(h)}
-                  className="text-blue-600 mr-2 text-xl"
+                  className="text-blue-600 mr-2 text-2xl"
                 >
                   ✏️
                 </button>
                 <button
                   onClick={() => handleDelete(h.id)}
-                  className="text-red-600 text-xl"
+                  className="text-red-600 text-2xl"
                 >
                   🗑
                 </button>

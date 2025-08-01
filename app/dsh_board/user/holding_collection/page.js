@@ -100,6 +100,9 @@ const formatPaymentDate = (date) => {
   })
 
   const [collections, setCollections] = useState([])
+    const [filteredCollections, setFilteredCollections] = useState([]);
+  const [search, setSearch] = useState("");
+
   const [holdings, setHoldings] = useState([])
   const [editingId, setEditingId] = useState(null)
   const [holdingSearchTerm, setHoldingSearchTerm] = useState('')
@@ -302,18 +305,34 @@ const holdingInfo = collection.holdingInformation;
 
 
 
-  const fetchCollections = async () => {
-    setLoading(true)
+  // const fetchCollections = async () => {
+  //   setLoading(true)
+  //   try {
+  //     const res = await fetch('/api/holding_collection')
+  //     const data = await res.json()
+  //     if (data.success) setCollections(data.collections)
+  //     else toast.error('Failed to load collections')
+  //   } catch {
+  //     toast.error('Failed to load collections')
+  //   }
+  //   setLoading(false)
+  // }
+
+
+   const fetchCollections = async () => {
+    setLoading(true);
     try {
-      const res = await fetch('/api/holding_collection')
-      const data = await res.json()
-      if (data.success) setCollections(data.collections)
-      else toast.error('Failed to load collections')
-    } catch {
-      toast.error('Failed to load collections')
+      const res = await fetch("/api/holding_collection");
+      const data = await res.json();
+      setCollections(data.collections);
+      setFilteredCollections(data.collections);
+    } catch (err) {
+      toast.error("ডেটা লোড করতে সমস্যা হয়েছে");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false)
-  }
+  };
+
 
   const fetchHoldings = async () => {
     try {
@@ -349,6 +368,18 @@ const holdingInfo = collection.holdingInformation;
       h.holdingNo.toLowerCase().includes(term)
     )
   })
+
+  useEffect(() => {
+    const s = search.toLowerCase();
+    const filtered = collections.filter(
+      (c) =>
+        (c.holdingInformation?.headName || "")
+          .toLowerCase()
+          .includes(s) ||
+        (c.holdingNumber || "").toString().includes(s)
+    );
+    setFilteredCollections(filtered);
+  }, [search, collections]);
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -401,20 +432,43 @@ const holdingInfo = collection.holdingInformation;
   }
 
   const handleDelete = async (id) => {
-    if (!confirm('Confirm delete?')) return
-    setLoading(true)
+    if (!confirm("আপনি কি নিশ্চিতভাবে মুছে ফেলতে চান?")) return;
     try {
-      const res = await fetch(`/api/holding_collection?id=${id}`, { method: 'DELETE' })
-      const data = await res.json()
+      setLoading(true);
+      const res = await fetch(`/api/holding_collection?id=${id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
       if (data.success) {
-        toast.success('Deleted')
-        fetchCollections()
+        toast.success("ডিলিট সফল হয়েছে");
+        fetchCollections();
+      } else {
+        toast.error("ডিলিট ব্যর্থ");
       }
-    } catch {
-      toast.error('Failed to delete')
+    } catch (err) {
+      toast.error("ডিলিট করার সময় সমস্যা হয়েছে");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false)
-  }
+  };
+
+
+
+  // const handleDelete = async (id) => {
+  //   if (!confirm('Confirm delete?')) return
+  //   setLoading(true)
+  //   try {
+  //     const res = await fetch(`/api/holding_collection?id=${id}`, { method: 'DELETE' })
+  //     const data = await res.json()
+  //     if (data.success) {
+  //       toast.success('Deleted')
+  //       fetchCollections()
+  //     }
+  //   } catch {
+  //     toast.error('Failed to delete')
+  //   }
+  //   setLoading(false)
+  // }
 
   const handleEdit = (c) => {
     setForm({
@@ -638,68 +692,83 @@ const holdingInfo = collection.holdingInformation;
         {loading ? (
           <div className="text-center py-12 text-gray-600">লোড হচ্ছে...</div>
         ) : (
-          <table className="w-full text-sm border-collapse border border-gray-200">
-            <thead className="bg-green-100">
-              <tr>
-                <th className="border border-gray-300 p-2 text-left">হোল্ডিং মালিক</th>
-                <th className="border border-gray-300 p-2 text-left">হোল্ডিং নাম্বার</th>
-                <th className="border border-gray-300 p-2 text-left">আর্থিক বছর</th>
-                <th className="border border-gray-300 p-2 text-right">পরিমাণ</th>
-                <th className="border border-gray-300 p-2 text-left">পেমেন্ট তারিখ</th>
-                <th className="border border-gray-300 p-2 text-center">অ্যাকশন</th>
+          <>
+          
+           <input
+  type="text"
+  placeholder="🔍 নাম / হোল্ডিং নাম্বার দিয়ে খুঁজুন..."
+  value={search}
+  onChange={(e) => setSearch(e.target.value)}
+  className="w-full md:w-96 mb-4 px-4 py-2 border-2 border-[darkcyan] rounded-2xl bg-green-50 placeholder-green-700 text-green-900 focus:outline-none focus:ring-4 focus:ring-green-300 hover:bg-green-100 transition-all duration-200"
+/>
+
+      {/* ✅ Actual Table */}
+      <table className="w-full  text-sm border-collapse border border-gray-200">
+        <thead className="bg-green-100">
+          <tr>
+            <th className="border border-gray-300 p-2 text-left">মালিক</th>
+            <th className="border border-gray-300 p-2 text-left">হোল্ডিং</th>
+            <th className="border border-gray-300 p-2 text-left">আর্থিক বছর</th>
+            <th className="border border-gray-300 p-2 text-right">পরিমাণ</th>
+            <th className="border border-gray-300 p-2 text-left">পেমেন্ট তারিখ</th>
+            <th className="border border-gray-300 p-2 text-center">অ্যাকশন</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredCollections.length === 0 ? (
+            <tr>
+              <td colSpan={6} className="text-center p-4 text-gray-600">
+                কোনো কালেকশন পাওয়া যায়নি।
+              </td>
+            </tr>
+          ) : (
+            filteredCollections.map((c) => (
+              <tr key={c.id} className="hover:bg-green-50 transition">
+                <td className="border border-gray-300 p-2">
+                  {c.holdingInformation?.headName || '---'}
+                </td>
+                <td className="border border-gray-300 p-2">{c.holdingNumber}</td>
+                <td className="border border-gray-300 p-2">
+                  {c.fiscalYear.replace('Y', '').replace('_', '-')}
+                </td>
+                <td className="border border-gray-300 p-2 text-right">{c.amount}</td>
+                <td className="border border-gray-300 p-2">
+                  {c.paymentDate ? c.paymentDate.substring(0, 10) : ''}
+                </td>
+                <td className="border border-gray-300 p-2 text-center space-x-2">
+                  <button
+                    onClick={() => handleEdit(c)}
+                    className="text-blue-600 hover:text-blue-800 text-xl"
+                    title="Edit"
+                  >
+                    ✏️
+                  </button>
+                  <button
+                    onClick={() => handleDelete(c.id)}
+                    className="text-red-600 hover:text-red-800 text-xl"
+                    title="Delete"
+                    disabled={loading}
+                  >
+                    🗑
+                  </button>
+                  <button
+                    onClick={() => handlePrint(c)}
+                    className="text-green-600 text-xl"
+                    title="Print"
+                  >
+                    🖨️
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {collections.length === 0 && (
-                <tr>
-                  <td colSpan={6} className="text-center p-4 text-gray-600">
-                    কোনো কালেকশন পাওয়া যায়নি।
-                  </td>
-                </tr>
-              )}
-              {collections.map(c => (
-                <tr key={c.id} className="hover:bg-green-50 transition">
-                  <td className="border border-gray-300 p-2">{c.holdingInformation?.headName || '---'}</td>
-                  <td className="border border-gray-300 p-2">{c.holdingNumber}</td>
-                  <td className="border border-gray-300 p-2">{c.fiscalYear.replace('Y', '').replace('_', '-')}</td>
-                  <td className="border border-gray-300 p-2 text-right">{c.amount}</td>
-                  <td className="border border-gray-300 p-2">{c.paymentDate ? c.paymentDate.substring(0, 10) : ''}</td>
-                  <td className="border border-gray-300 p-2 text-center space-x-2">
-                    <button
-                      onClick={() => handleEdit(c)}
-                      className="text-blue-600 hover:text-blue-800  text-xl"
-                      aria-label="Edit"
-                      title="Edit"
-                    >
-                      ✏️
-                    </button>
-                    <button
-                      onClick={() => handleDelete(c.id)}
-                      className="text-red-600 hover:text-red-800 text-xl"
-                      aria-label="Delete"
-                      title="Delete"
-                      disabled={loading}
-                    >
-                      🗑
-                    </button>
-
-                    <button
-                      onClick={() => handlePrint(c)}
-                      className="text-green-600 text-xl"
-                    >
-                      🖨️
-                    </button>
-
-
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+            ))
+          )}
+        </tbody>
+      </table>
+    </>
         )}
       </div>
 
-      <ToastContainer position="top-center" autoClose={3000} />
+      <ToastContainer position="top-center" autoClose={2000} />
     </div>
   )
 }

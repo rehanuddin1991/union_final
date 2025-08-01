@@ -45,7 +45,7 @@ export async function POST(req) {
     const dobDate = body.dob ? new Date(body.dob) : null
 
      const existing = await prisma.holding_Information.findUnique({
-  where: { nid: body.nid },
+  where: { nid: body.nid, is_deleted:false },
 });
 
 if (existing) {
