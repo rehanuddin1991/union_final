@@ -389,6 +389,9 @@ export default function CertificatesPage() {
   };
 
   const handlePrint = async (cert) => {
+
+    setLoading(true); // ⬅️ লোডিং শুরু
+  try {
     const origin = window.location.origin;
     const dob = formatDobDate(cert.birthDate?.substring(0, 10));
     const [day, month, year] = dob.split("-");
@@ -588,6 +591,16 @@ ${
   `;
 
     openPrintWindow(printContents);
+
+}
+
+catch (error) {
+    console.error("Printing failed:", error);
+    toast.error("Printing failed");
+  } finally {
+    setLoading(false); // ⬅️ লোডিং বন্ধ
+  }
+
   };
 
   const handlePrintNameRelated = async (cert, settings) => {
