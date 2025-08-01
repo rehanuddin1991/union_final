@@ -108,6 +108,8 @@ const formatPaymentDate = (date) => {
 
 
   const handlePrint = async (cert) => {
+    setLoading(true); // ⬅️ লোডিং শুরু
+  try {
     const origin = window.location.origin;
     const paymentDate = formatPaymentDate(cert.paymentDate?.substring(0, 10));
     const [day, month, year] = paymentDate.split("-");
@@ -129,13 +131,6 @@ const holdingInfo = collection.holdingInformation;
 
     const st_formt_date=cert.fiscalYear.replace(/^Y/, "");
     const [fiscal_start_year, fiscal_end_year] = st_formt_date.split("_");
-
-   // const applicantInfoRows = generateApplicantInfoRows(cert, bnpaymentDate);
-    // const issue_date_format = formatDate(cert.issuedDate || new Date());
-    // const [issue_day, issue_month, issue_year] = issue_date_format.split("-");
-    // const bnIssueDate = `${enToBnNumber(issue_day)}-${enToBnNumber(
-    //   issue_month
-    // )}-${enToBnNumber(issue_year)}`;
 
     const govtImg = `${origin}/images/govt.png`;
     const unionImg = settings?.imageUrl || `${origin}/images/union.png`;
@@ -293,6 +288,16 @@ const holdingInfo = collection.holdingInformation;
   `;
 
     openPrintWindow(printContents);
+  }
+
+  catch (error) {
+    console.error("Printing failed:", error);
+    toast.error("Printing failed");
+  } finally {
+    setLoading(false); // ⬅️ লোডিং বন্ধ
+  }
+  
+
   };
 
 

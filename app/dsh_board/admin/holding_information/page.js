@@ -26,6 +26,8 @@ import {
 } from "@/utils_js/utils";
 
 export default function HoldingPage() {
+   
+  
   const [employees, setEmployees] = useState([]);
   const [settings, setSettings] = useState(null);
 
@@ -140,6 +142,8 @@ export default function HoldingPage() {
 
 
   const handlePrint = async (cert) => {
+     setIsLoading(true); // ⬅️ লোডিং শুরু
+  try {
     const origin = window.location.origin;
     const dob = formatDobDate(cert.dob?.substring(0, 10));
     const [day, month, year] = dob.split("-");
@@ -282,6 +286,14 @@ export default function HoldingPage() {
   `;
 
     openPrintWindow(printContents);
+  }
+  catch (error) {
+    console.error("Printing failed:", error);
+    toast.error("Printing failed");
+  } finally {
+    setIsLoading(false); // ⬅️ লোডিং বন্ধ
+  }
+
   };
 
 
@@ -939,50 +951,60 @@ export default function HoldingPage() {
       </form>
 
       {/* টেবিল */}
-      <div className="bg-white border p-4 rounded-xl shadow">
-        <h2 className="text-xl font-semibold mb-3">📋 হোল্ডিং তালিকা</h2>
-        <table className="w-full text-sm border">
-          <thead className="bg-blue-100">
-            <tr>
-              <th className="border p-2">নাম</th>
-              <th className="border p-2">ওয়ার্ড</th>
-              <th className="border p-2">হোল্ডিং</th>
-              <th className="border p-2">মোবাইল</th>
-              <th className="border p-2">অ্যাকশন</th>
+      <div className="bg-white border p-4 rounded-xl shadow relative">
+  {isLoading ? (
+    <div className="absolute inset-0 bg-white bg-opacity-70 z-50 flex flex-col items-center justify-center">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <p className="text-red-600 text-sm mt-2">লোড হচ্ছে...</p>
+    </div>
+  ) : (
+    <>
+      <h2 className="text-xl font-semibold mb-3">📋 হোল্ডিং তালিকা</h2>
+      <table className="w-full text-sm border">
+        <thead className="bg-blue-100">
+          <tr>
+            <th className="border p-2">নাম</th>
+            <th className="border p-2">ওয়ার্ড</th>
+            <th className="border p-2">হোল্ডিং</th>
+            <th className="border p-2">মোবাইল</th>
+            <th className="border p-2">অ্যাকশন</th>
+          </tr>
+        </thead>
+        <tbody>
+          {holdings.map((h) => (
+            <tr key={h.id}>
+              <td className="border p-2">{h.headName}</td>
+              <td className="border p-2">{h.ward}</td>
+              <td className="border p-2">{h.holdingNo}</td>
+              <td className="border p-2">{h.mobile}</td>
+              <td className="border p-2">
+                <button
+                  onClick={() => handleEdit(h)}
+                  className="text-blue-600 mr-2 text-xl"
+                >
+                  ✏️
+                </button>
+                <button
+                  onClick={() => handleDelete(h.id)}
+                  className="text-red-600 text-xl"
+                >
+                  🗑
+                </button>
+                <button
+                  onClick={() => handlePrint(h)}
+                  className="text-green-600 text-xl"
+                >
+                  🖨️
+                </button>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {holdings.map((h) => (
-              <tr key={h.id}>
-                <td className="border p-2">{h.headName}</td>
-                <td className="border p-2">{h.ward}</td>
-                <td className="border p-2">{h.holdingNo}</td>
-                <td className="border p-2">{h.mobile}</td>
-                <td className="border p-2">
-                  <button
-                    onClick={() => handleEdit(h)}
-                    className="text-blue-600 mr-2 text-xl"
-                  >
-                    ✏️
-                  </button>
-                  <button
-                    onClick={() => handleDelete(h.id)}
-                    className="text-red-600 text-xl"
-                  >
-                    🗑
-                  </button>
-                  <button
-                      onClick={() => handlePrint(h)}
-                      className="text-green-600 text-xl"
-                    >
-                      🖨️
-                    </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </table>
+    </>
+  )}
+</div>
+
 
       <ToastContainer position="top-center" autoClose={1000} />
     </div>
