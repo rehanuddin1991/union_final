@@ -119,7 +119,7 @@ export function generateSignatureHTML(
     break-inside: avoid !important;" >
       <p>  ${
     settings?.union_name === "২নং পাতাছড়া ইউনিয়ন পরিষদ"
-      ? `<img src="/images/patachara_sign.png" alt="" style="width:210px;height:80px; margin-top:-50px;" />`
+      ? `<img src="/images/patachara_sign.png" alt="" style="width:110px;height:45px; margin-top:-50px;" />`
       : ""
   }</p>
       
