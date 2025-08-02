@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 export default function InstitutionsPage() {
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     type: "",
     name: "",
@@ -15,71 +16,99 @@ export default function InstitutionsPage() {
   const [editingId, setEditingId] = useState(null);
 
   const fetchInstitutions = async () => {
-    try {
-      const res = await fetch("/api/institutions");
-      const json = await res.json();
-      if (Array.isArray(json)) {
-        setInstitutions(json);
-      } else {
-        toast.error("ডেটা লোড ব্যর্থ হয়েছে");
-        console.error("Unexpected response:", json);
-      }
-    } catch (err) {
+  setLoading(true);
+  try {
+    const res = await fetch("/api/institutions");
+    const json = await res.json();
+    if (Array.isArray(json)) {
+      setInstitutions(json);
+    } else {
       toast.error("ডেটা লোড ব্যর্থ হয়েছে");
+      console.error("Unexpected response:", json);
     }
-  };
+  } catch (err) {
+    toast.error("ডেটা লোড ব্যর্থ হয়েছে");
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+ 
 
   useEffect(() => {
     fetchInstitutions();
   }, []);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const method = editingId ? "PATCH" : "POST";
-    const url = editingId ? `/api/institutions?id=${editingId}` : "/api/institutions";
+  e.preventDefault();
+   if (!form.name.trim() || !form.head.trim()) {
+    toast.error("প্রতিষ্ঠানের নাম এবং প্রতিষ্ঠান প্রধানের নাম অবশ্যই দিতে হবে");
+    return;
+  }
+  setLoading(true);
+  const method = editingId ? "PATCH" : "POST";
+  const url = editingId ? `/api/institutions?id=${editingId}` : "/api/institutions";
 
-    try {
-      const res = await fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-      const data = await res.json();
+  try {
+    const res = await fetch(url, {
+      method,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
+    });
+    const data = await res.json();
 
-      if (data.success) {
-        toast.success(editingId ? "আপডেট সফল" : "সংরক্ষণ সফল");
-        setForm({ type: "", name: "", head: "", address: "", headMobile: "", comments: "" });
-        setEditingId(null);
-        fetchInstitutions();
-      } else {
-        toast.error("ব্যর্থ হয়েছে");
-      }
-    } catch (err) {
-      toast.error("এরর হয়েছে");
+    if (data.success) {
+      toast.success(editingId ? "আপডেট সফল" : "সংরক্ষণ সফল");
+      setForm({ type: "", name: "", head: "", address: "", headMobile: "", comments: "" });
+      setEditingId(null);
+      fetchInstitutions();
+    } else {
+      toast.error("ব্যর্থ হয়েছে");
     }
+  } catch (err) {
+    toast.error("এরর হয়েছে");
+  } finally {
+    setLoading(false);
+  }
+};
+
+const handleEdit = (cert) => {
+   setForm({ type: "", name: "", head: "", address: "", headMobile: "", comments: "" });
+
+    setForm({
+      id: cert.id,
+      type: cert.type,
+      name: cert.name,
+      head: cert.head,
+      address: cert.address || "",
+      headMobile: cert.headMobile || "",
+      comments: cert.comments || "",
+       
+    });
+
+     setEditingId(cert.id);
   };
 
+  
+
   const handleDelete = async (id) => {
-    if (!confirm("আপনি কি মুছে ফেলতে চান?")) return;
+  if (!confirm("আপনি কি মুছে ফেলতে চান?")) return;
+  setLoading(true);
+  try {
     const res = await fetch(`/api/institutions?id=${id}`, { method: "DELETE" });
     const data = await res.json();
     if (data.success) {
       toast.success("মুছে ফেলা হয়েছে");
       fetchInstitutions();
     }
-  };
+  } catch (err) {
+    toast.error("ডিলিট করতে সমস্যা হয়েছে");
+  } finally {
+    setLoading(false);
+  }
+};
 
-  const handleEdit = (item) => {
-    setForm({
-      type: item.type,
-      name: item.name,
-      head: item.head,
-      address: item.address,
-      headMobile: item.headMobile,
-      comments: item.comments || "",
-    });
-    setEditingId(item.id);
-  };
 
   return (
     <div className="max-w-3xl mx-auto p-6">
@@ -109,6 +138,7 @@ export default function InstitutionsPage() {
     <option value="বৌদ্ধ বিহার">বৌদ্ধ বিহার</option>
     <option value="প্যাগোডা">প্যাগোডা</option>
     <option value="কিন্ডারগার্টেন">কিন্ডারগার্টেন</option>
+    <option value="গ্রাম">গ্রাম</option>
     <option value="অন্যান্য">অন্যান্য</option>
   </select>
 
@@ -153,43 +183,51 @@ export default function InstitutionsPage() {
         ></textarea>
 
         <button
-          type="submit"
-          className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded"
-        >
-          {editingId ? "✅ আপডেট করুন" : "✅ সংরক্ষণ করুন"}
-        </button>
+  type="submit"
+  disabled={loading}
+  className={`w-full py-2 rounded text-white ${
+    loading
+      ? "bg-gray-400 cursor-not-allowed"
+      : "bg-green-600 hover:bg-green-700"
+  }`}
+>
+  {loading ? "⏳ দয়া করে অপেক্ষা করুন..." : editingId ? "✅ আপডেট করুন" : "✅ সংরক্ষণ করুন"}
+</button>
+
       </form>
 
-      <div className="bg-white p-4 shadow rounded-xl">
-        <h2 className="text-xl font-semibold mb-3">📋 সকল প্রতিষ্ঠানের তালিকা</h2>
-        <table className="w-full text-sm border">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="border p-2">প্রতিষ্ঠানের নাম</th>
-              <th className="border p-2">প্রধান</th>
-              <th className="border p-2">মোবাইল</th>
-              <th className="border p-2">অ্যাকশন</th>
-            </tr>
-          </thead>
-          <tbody>
-            {institutions.map((item) => (
-              <tr key={item.id}>
-                <td className="border p-2">{item.name}</td>
-                <td className="border p-2">{item.head}</td>
-                <td className="border p-2">{item.headMobile}</td>
-                <td className="border p-2">
-                  <button onClick={() => handleEdit(item)} className="text-blue-600 mr-2">
-                    ✏️
-                  </button>
-                  <button onClick={() => handleDelete(item.id)} className="text-red-600">
-                    🗑
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {!loading && (
+  <div className="bg-white p-4 shadow rounded-xl">
+    <h2 className="text-xl font-semibold mb-3">📋 সকল প্রতিষ্ঠানের তালিকা</h2>
+    <table className="w-full text-sm border">
+      <thead className="bg-gray-100">
+        <tr>
+          <th className="border p-2">প্রতিষ্ঠানের নাম</th>
+          <th className="border p-2">প্রধান</th>
+          <th className="border p-2">মোবাইল</th>
+          <th className="border p-2">অ্যাকশন</th>
+        </tr>
+      </thead>
+      <tbody>
+        {institutions.map((item) => (
+          <tr key={item.id}>
+            <td className="border p-2">{item.name}</td>
+            <td className="border p-2">{item.head}</td>
+            <td className="border p-2">{item.headMobile}</td>
+            <td className="border p-2">
+              <button onClick={() => handleEdit(item)} className="text-blue-600 mr-2">
+                ✏️
+              </button>
+              <button onClick={() => handleDelete(item.id)} className="text-red-600">
+                🗑
+              </button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+)}
     </div>
   );
 }
