@@ -7,6 +7,7 @@ export const dynamic = 'force-dynamic';
 
 export default function OfficeSettingsPage() {
   const [settings, setSettings] = useState([])
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     id: null,
     sarok_no: '',
@@ -21,11 +22,21 @@ export default function OfficeSettingsPage() {
   const [uploading, setUploading] = useState(false)
 
   const fetchSettings = async () => {
-    const res = await fetch('/api/office_settings')
-    const data = await res.json()
-    if (data.success) setSettings(data.settings)
-    else toast.error('ডেটা লোড করতে ব্যর্থ হয়েছে')
+  setLoading(true); // লোডিং শুরু
+  try {
+    const res = await fetch('/api/office_settings');
+    const data = await res.json();
+    if (data.success) {
+      setSettings(data.settings);
+    } else {
+      toast.error('ডেটা লোড করতে ব্যর্থ হয়েছে');
+    }
+  } catch (error) {
+    toast.error('এরর হয়েছে');
+  } finally {
+    setLoading(false); // লোডিং শেষ
   }
+};
 
   useEffect(() => {
     fetchSettings()
@@ -71,54 +82,81 @@ export default function OfficeSettingsPage() {
     }
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    const method = form.id ? 'PATCH' : 'POST'
-    const url = form.id ? `/api/office_settings?id=${form.id}` : '/api/office_settings'
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true); // ⬅️ লোডিং শুরু
 
-    let imageUrl = form.imageUrl
-    if (imageFile) {
-      const uploaded = await uploadImage()
-      if (!uploaded) return
-      imageUrl = uploaded
-    }
+  const method = form.id ? 'PATCH' : 'POST';
+  const url = form.id ? `/api/office_settings?id=${form.id}` : '/api/office_settings';
 
-    try {
-      const res = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, imageUrl }),
-      })
-      const data = await res.json()
-      if (data.success) {
-        toast.success('সফলভাবে সংরক্ষণ হয়েছে')
-        fetchSettings()
-        setForm({
-          id: null,
-          sarok_no: '',
-          notes: '',
-          union_name: '',
-          upazila: '',
-          district: '',
-          imageUrl: '',
-        })
-        setImageFile(null)
-        setPreview(null)
-      } else toast.error('সেভ করতে সমস্যা হয়েছে')
-    } catch {
-      toast.error('এরর হয়েছে')
+  let imageUrl = form.imageUrl;
+  if (imageFile) {
+    const uploaded = await uploadImage();
+    if (!uploaded) {
+      setLoading(false); // ⬅️ আপলোড ব্যর্থ হলে লোডিং বন্ধ
+      return;
     }
+    imageUrl = uploaded;
   }
 
-  const handleDelete = async (id) => {
-    if (!confirm('ডিলিট নিশ্চিত করবেন?')) return
-    const res = await fetch(`/api/office_settings?id=${id}`, { method: 'DELETE' })
-    const data = await res.json()
+  try {
+    const res = await fetch(url, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...form, imageUrl }),
+    });
+
+    const data = await res.json();
     if (data.success) {
-      toast.success('সফলভাবে ডিলিট হয়েছে')
-      fetchSettings()
-    } else toast.error('ডিলিট করতে ব্যর্থ')
+      toast.success('সফলভাবে সংরক্ষণ হয়েছে');
+      fetchSettings();
+      setForm({
+        id: null,
+        sarok_no: '',
+        notes: '',
+        union_name: '',
+        upazila: '',
+        district: '',
+        imageUrl: '',
+      });
+      setImageFile(null);
+      setPreview(null);
+    } else {
+      toast.error('সেভ করতে সমস্যা হয়েছে');
+    }
+  } catch {
+    toast.error('এরর হয়েছে');
+  } finally {
+    setLoading(false); // ⬅️ যেকোনো অবস্থায় লোডিং বন্ধ
   }
+};
+
+
+ const handleDelete = async (id) => {
+  if (!confirm('ডিলিট নিশ্চিত করবেন?')) return;
+
+  setLoading(true); // ✅ লোডিং শুরু
+
+  try {
+    const res = await fetch(`/api/office_settings?id=${id}`, {
+      method: 'DELETE',
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      toast.success('সফলভাবে ডিলিট হয়েছে');
+      fetchSettings(); // ডেটা রিফ্রেশ
+    } else {
+      toast.error('ডিলিট করতে ব্যর্থ');
+    }
+  } catch (error) {
+    toast.error('সার্ভার এরর');
+  } finally {
+    setLoading(false); // ✅ লোডিং শেষ
+  }
+};
+
 
   const handleEdit = (s) => {
     setForm({
@@ -203,8 +241,9 @@ export default function OfficeSettingsPage() {
 
         {/* ছবি আপলোড */}
         <div>
-          <label className="font-semibold">লোগো / সিল</label>
+          <label className="font-semibold">সিল <span className="text-red-600 text-sm ">(গোল সিল)*</span> </label>
           <input
+          required={!form.id}
             type="file"
             accept="image/*"
             onChange={handleImageChange}
@@ -225,9 +264,20 @@ export default function OfficeSettingsPage() {
           )}
         </div>
 
-        <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded">
-          {form.id ? 'আপডেট করুন' : 'সেভ করুন'}
-        </button>
+        <button
+  type="submit"
+  className="w-full bg-blue-600 text-white py-2 rounded flex items-center justify-center"
+  disabled={loading}
+>
+  {loading ? (
+    <>
+      <div className="animate-spin h-5 w-5 mr-2 border-2 border-white border-t-transparent rounded-full"></div>
+      সেভ হচ্ছে...
+    </>
+  ) : (
+    form.id ? 'আপডেট করুন' : 'সেভ করুন'
+  )}
+</button>
         {form.id && (
           <button
             type="button"
@@ -248,28 +298,35 @@ export default function OfficeSettingsPage() {
       </form>
 
       <div className="bg-white border p-4 rounded-xl shadow">
-        <h3 className="text-xl font-semibold mb-3">সেটিং তালিকা</h3>
-        <table className="w-full text-sm border">
-          <thead className="bg-blue-100">
+  {loading ? (
+    <div className="text-center my-6">
+      <div className="animate-spin h-8 w-8 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-2"></div>
+      <p className="text-blue-600 font-medium">লোড হচ্ছে...</p>
+    </div>
+  ) : (
+    <>
+      <h3 className="text-xl font-semibold mb-3">সেটিং তালিকা</h3>
+      <table className="w-full text-sm border">
+        <thead className="bg-blue-100">
+          <tr>
+            <th className="border p-2">স্মারক নং</th>
+            <th className="border p-2">ইউনিয়ন</th>
+            <th className="border p-2">উপজেলা</th>
+            <th className="border p-2">জেলা</th>
+            <th className="border p-2">চিঠি সংখ্যা</th>
+            <th className="border p-2">নোটস</th>
+            <th className="border p-2">অ্যাকশন</th>
+          </tr>
+        </thead>
+        <tbody>
+          {settings.length === 0 ? (
             <tr>
-              <th className="border p-2">স্মারক নং</th>
-              <th className="border p-2">ইউনিয়ন</th>
-              <th className="border p-2">উপজেলা</th>
-              <th className="border p-2">জেলা</th>
-              <th className="border p-2">চিঠি সংখ্যা</th>
-              <th className="border p-2">নোটস</th>
-              <th className="border p-2">অ্যাকশন</th>
+              <td colSpan={7} className="text-center p-4">
+                কোনো তথ্য পাওয়া যায়নি।
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {settings.length === 0 && (
-              <tr>
-                <td colSpan={7} className="text-center p-4">
-                  কোনো তথ্য পাওয়া যায়নি।
-                </td>
-              </tr>
-            )}
-            {settings.map((s) => (
+          ) : (
+            settings.map((s) => (
               <tr key={s.id}>
                 <td className="border p-2">{s.sarok_no || '-'}</td>
                 <td className="border p-2">{s.union_name || '-'}</td>
@@ -280,16 +337,20 @@ export default function OfficeSettingsPage() {
                   <div dangerouslySetInnerHTML={{ __html: s.notes || '-' }} />
                 </td>
                 <td className="border p-2 space-x-2">
-                  <button onClick={() => handleEdit(s)} className="text-blue-600">✏️</button>
-                  <button onClick={() => handleDelete(s.id)} className="text-red-600">🗑</button>
+                  <button onClick={() => handleEdit(s)} className="text-blue-600 text-2xl ">✏️</button>
+                  <button onClick={() => handleDelete(s.id)} className="text-red-600 text-2xl">🗑</button>
                 </td>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            ))
+          )}
+        </tbody>
+      </table>
+    </>
+  )}
+</div>
 
-      <ToastContainer position="top-center" autoClose={3000} />
+
+      <ToastContainer position="top-center" autoClose={2000} />
     </div>
   )
 }

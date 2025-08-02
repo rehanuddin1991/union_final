@@ -246,7 +246,8 @@ export default function EmployeesPage() {
   </select>
 
   {/* ক্রম */}
-  <label className="block mb-1 font-medium text-green-700">ক্রম<span className="text-red-600 text-sm "> *(ইংরেজি সংখ্যা)</span></label>
+  <label className="block mb-1 font-medium text-green-700">ক্রম
+    <span className="text-red-600 text-sm "> *(ইংরেজি সংখ্যা)</span></label>
   <input
   type="text" // ✅ number না, text ব্যবহার করব
   value={form.order}
@@ -262,15 +263,16 @@ export default function EmployeesPage() {
 />
 
   {/* নোটস */}
-  <label className="block mb-1 font-medium text-green-700">নোটস</label>
-  <textarea
+  <label className="block mb-1 font-medium text-green-700">মন্তব্য (Optional)  <span className="text-red-600 text-sm "> ( যেমন: প্রশাসকের অন্য পদবী থাকলে তা দিতে হবে, যেমন উপজেলা আইসিটি অফিসার) </span></label>
+  <textarea 
+  placeholder="উপজেলা আইসিটি অফিসার"
     value={form.notes}
     onChange={(e) => setForm({ ...form, notes: e.target.value })}
     className="w-full p-3 mb-4 border border-green-200 rounded-xl h-28 focus:ring-2 focus:ring-green-400 focus:outline-none shadow-sm transition-all duration-200"
   ></textarea>
 
   {/* ছবি আপলোড */}
-  <label className="block mb-1 font-medium text-green-700">ছবি আপলোড</label>
+  <label className="block mb-1 font-medium text-green-700">ছবি আপলোড <span className="text-red-600 text-sm "> *</span></label>
   <input
     type="file"
     accept="image/*"
