@@ -23,11 +23,11 @@ export default function InstitutionsPage() {
     if (Array.isArray(json)) {
       setInstitutions(json);
     } else {
-      toast.error("ডেটা লোড ব্যর্থ হয়েছে");
+      toast.error("failed to load data");
       console.error("Unexpected response:", json);
     }
   } catch (err) {
-    toast.error("ডেটা লোড ব্যর্থ হয়েছে");
+    toast.error("failed to load data");
   } finally {
     setLoading(false);
   }
@@ -64,10 +64,10 @@ export default function InstitutionsPage() {
       setEditingId(null);
       fetchInstitutions();
     } else {
-      toast.error("ব্যর্থ হয়েছে");
+      toast.error("failed");
     }
   } catch (err) {
-    toast.error("এরর হয়েছে");
+    toast.error("failed");
   } finally {
     setLoading(false);
   }
@@ -99,7 +99,16 @@ const handleEdit = (cert) => {
     const res = await fetch(`/api/institutions?id=${id}`, { method: "DELETE" });
     const data = await res.json();
     if (data.success) {
-      toast.success("মুছে ফেলা হয়েছে");
+      toast.success("successfully deleted");
+      setForm({
+    type: "",
+    name: "",
+    head: "",
+    address: "",
+    headMobile: "",
+    comments: "",
+  })
+  setEditingId(null);
       fetchInstitutions();
     }
   } catch (err) {
@@ -191,7 +200,7 @@ const handleEdit = (cert) => {
       : "bg-green-600 hover:bg-green-700"
   }`}
 >
-  {loading ? "⏳ দয়া করে অপেক্ষা করুন..." : editingId ? "✅ আপডেট করুন" : "✅ সংরক্ষণ করুন"}
+  {loading ? "⏳ Please wait..." : editingId ? "✅ আপডেট করুন" : "✅ সংরক্ষণ করুন"}
 </button>
 
       </form>

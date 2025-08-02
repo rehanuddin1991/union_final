@@ -102,6 +102,18 @@ export default function MasterRolePage() {
     const data = await res.json();
     if (data.success) {
       toast.success("ডিলিট হয়েছে");
+      setForm({
+      type: "",
+      name: "",
+      father: "",
+      mother: "",
+      nid: "",
+      mobile: "",
+      ward: "",
+      address: "",
+      comments: "",
+    });
+    setEditingId(null);
       fetchRoles();
     }
   };
@@ -215,12 +227,13 @@ export default function MasterRolePage() {
       </form>
 
       <div className="bg-white border p-4 rounded-xl shadow">
-         {loading && (
+         {loading ? (
   <div className="text-center my-4 ">
     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
     <p className="text-red-600 text-sm mt-2">loading...................................</p>
   </div>
-)}
+) : (
+  <> 
         <h2 className="text-xl font-semibold mb-3">📋 Master Role তালিকা</h2>
         <table className="w-full text-sm border">
           <thead className="bg-green-100">
@@ -257,9 +270,11 @@ export default function MasterRolePage() {
             )}
           </tbody>
         </table>
+        </>
+)}
       </div>
 
-      <ToastContainer position="top-center" autoClose={3000} />
+      <ToastContainer position="top-center" autoClose={2000} />
     </div>
   );
 }
