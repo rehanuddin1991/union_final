@@ -379,6 +379,36 @@ export default function HoldingPage() {
       const data = await res.json();
       if (data.success) {
         toast.success("Deleted");
+        setForm({
+    headName: "",
+    ward: "1",
+    holdingNo: "",
+    father: "",
+    mother: "",
+    nid: "",
+    mobile: "",
+    dob: "",
+    gender: "MALE",
+    religion: "ইসলাম",
+    comments: "",
+    rawRoom: "",
+    occupation: "",
+    maleMembers: "",
+    femaleMembers: "",
+    othersMembers: "",
+    maleBaby: "",
+    femaleBaby: "",
+    othersBaby: "",
+    address: "",
+    area: "",
+    multiStoriedRoom: "",
+    buildingRoom: "",
+    semiBuildingRoom: "",
+    ownHouseRent: "",
+    othersRent: "",
+    imposedTax: "",
+  });
+  setEditingId(null)
         fetchHoldings(); // Assuming this refreshes the list
       } else {
         toast.error("Delete Failed");

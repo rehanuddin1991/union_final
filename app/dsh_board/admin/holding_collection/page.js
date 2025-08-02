@@ -303,20 +303,7 @@ const holdingInfo = collection.holdingInformation;
 
   };
 
-
-
-  // const fetchCollections = async () => {
-  //   setLoading(true)
-  //   try {
-  //     const res = await fetch('/api/holding_collection')
-  //     const data = await res.json()
-  //     if (data.success) setCollections(data.collections)
-  //     else toast.error('Failed to load collections')
-  //   } catch {
-  //     toast.error('Failed to load collections')
-  //   }
-  //   setLoading(false)
-  // }
+ 
 
 
    const fetchCollections = async () => {
@@ -441,6 +428,17 @@ const holdingInfo = collection.holdingInformation;
       const data = await res.json();
       if (data.success) {
         toast.success("ডিলিট সফল হয়েছে");
+        setForm({
+    holdingInformationId: '',
+    holdingNumber: '',
+    fiscalYear: 'Y2025_2026',
+    amount: '',
+    currentAmount: '',
+    dueAmount: '',
+    comments: '',
+    paymentDate: today,
+  })
+  setEditingId(null)
         fetchCollections();
       } else {
         toast.error("ডিলিট ব্যর্থ");
@@ -454,21 +452,7 @@ const holdingInfo = collection.holdingInformation;
 
 
 
-  // const handleDelete = async (id) => {
-  //   if (!confirm('Confirm delete?')) return
-  //   setLoading(true)
-  //   try {
-  //     const res = await fetch(`/api/holding_collection?id=${id}`, { method: 'DELETE' })
-  //     const data = await res.json()
-  //     if (data.success) {
-  //       toast.success('Deleted')
-  //       fetchCollections()
-  //     }
-  //   } catch {
-  //     toast.error('Failed to delete')
-  //   }
-  //   setLoading(false)
-  // }
+   
 
   const handleEdit = (c) => {
     setForm({
