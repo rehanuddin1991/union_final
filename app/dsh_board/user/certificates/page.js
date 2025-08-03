@@ -866,14 +866,14 @@ catch (error) {
 
             
 
-            <div class="top-section"  style="margin-top:3px;">
+            <div class="top-section"  style="margin-top:1px;">
               <p>স্মারক নং: ${settings?.sarok_no}${enToBnNumber(
       cert?.letter_count
     )}</p>
               <p>তারিখ: ${bnIssueDate}</p>
             </div>
 
-           <div style="border: 1px solid green;margin:auto; background-color: #e6f4ea; padding: 3px; margin-top: 2px; border-radius: 7px;
+           <div style="border: 1px solid green;margin:auto; background-color: #e6f4ea; padding: 3px; margin-top: 1px; border-radius: 7px;
              width: 250px; text-align: center;">
   <h1 style="font-size: 19px; color: #000080; margin: auto;">
     ${cert.type || "সার্টিফিকেট"}  
@@ -884,20 +884,20 @@ catch (error) {
 
 </div>
 
-<div>
-<h6> স্থানীয় সরকার (ইউনিয়ন পরিষদ) আইন, ২০০৯ (২০০৯ সনের ৬১ নং
+<div style="margin-top:-7px;" >
+<h5> স্থানীয় সরকার (ইউনিয়ন পরিষদ) আইন, ২০০৯ (২০০৯ সনের ৬১ নং
 আইন) এর ধারা ৫৫ তে প্রদত্ত ক্ষমতাবলে সরকার প্রণীত আদর্শ কর
 তফসিল, ২০১৬ এর ৬ ও ১৭ নং অনুচ্ছেদ অনুযায়ী ব্যবসা, বৃত্তি, পেশা
 বা শিল্প প্রতিষ্ঠানের উপর আরোপিত কর আদায়ের লক্ষ্যে নির্ধারিত শর্তে
 নিম্নবর্ণিত ব্যক্তি/প্রতিষ্ঠানের অনুকূলে এই ট্রেড লাইসেন্সটি ইস্যু করা 
-হলো:</h6>
+হলো:</h5>
 </div>
 
 
 
             
 
-            <table>
+            <table style="margin-top:-5px;">
              
             <tr>
     <td style="width: 30%;font-weight:bold;">ব্যবসা প্রতিষ্ঠানের নাম</td>
@@ -991,7 +991,7 @@ catch (error) {
    
 </table>
 <div class="container2">
-  <table class="tax-table">
+  <table class="tax-table" style="margin-top:-9px;">
     <tbody>
       <tr class="header-row">
         <td colspan="2" class="header-cell">

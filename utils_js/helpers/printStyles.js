@@ -84,7 +84,7 @@ export const commonPrintStyles = `
 
   .header-title {
   font-family: "Nikosh","SolaimanLipi",  "Roboto", "Arial", sans-serif;
-  font-size: 20px;          /* অফিসিয়াল লুকের জন্য সামান্য বড় */
+  font-size: 19px;          /* অফিসিয়াল লুকের জন্য সামান্য বড় */
   font-weight: 600;         /* Semi-bold, অফিসিয়াল ফিল */
   text-align: center;
   flex: 1;
