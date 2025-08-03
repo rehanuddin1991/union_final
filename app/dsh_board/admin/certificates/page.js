@@ -1246,7 +1246,7 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
               <option value="">-- সনদের ধরন নির্বাচন করুন --</option>
               <option value="নাগরিকত্ব সনদ">নাগরিকত্ব সনদ</option>
               <option value="জাতীয়তা সনদ">জাতীয়তা সনদ</option>
-              <option value="ওয়ারিশ সনদ">ওয়ারিশ সনদ</option>
+               
               <option value="বার্ষিক আয়ের সনদ">বার্ষিক আয়ের সনদ</option>
               <option value="ট্রেড লাইসেন্স">ট্রেড লাইসেন্স</option>
               <option value="নাম সংক্রান্ত প্রত্যয়ন পত্র">

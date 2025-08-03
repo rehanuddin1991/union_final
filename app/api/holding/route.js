@@ -108,7 +108,7 @@ export async function DELETE(req) {
     const url = new URL(req.url)
     const id = parseInt(url.searchParams.get('id'))
 
-    // সরাসরি ডিলিট না করে is_deleted true করে দিচ্ছি
+    
     const token = req.cookies.get('token')?.value;
     const { payload } = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET));
     const userId = parseInt(payload.id);

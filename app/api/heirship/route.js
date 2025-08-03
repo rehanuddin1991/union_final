@@ -30,7 +30,11 @@ export async function GET(req) {
     // যদি ID না থাকে, তাহলে সব রেকর্ড রিটার্ন করো
     const records = await prisma.inheritance.findMany({
       include: { children: true },
+      where:{is_deleted:false},
+      orderBy: { id: "desc" },
     });
+
+    
 
     return new Response(
       JSON.stringify({ success: true, records }),

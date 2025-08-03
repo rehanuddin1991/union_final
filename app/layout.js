@@ -44,11 +44,11 @@ export default function RootLayout({ children }) {
         {children}
 
         <footer className="bg-gray-100 text-gray-700 py-4 mt-6 border-t border-gray-300 shadow-inner">
-          <div className="max-w-4xl mx-auto text-center text-sm sm:text-base">
+          <div className="max-w-4xl mx-auto text-center text-xl sm:text-base">
             <p className="font-medium">
               ©2025 —
-              <span className="text-green-700 font-semibold"> Rehan Uddin</span>
-              , Upazila ICT Officer, DoICT. All rights reserved.
+              <span className="text-[darkcyan] font-semibold"> Rehan Uddin</span>
+              , Upazila ICT Officer, <span className="text-[blue] font-semibold">DoICT</span> . All rights reserved.
             </p>
           </div>
         </footer>
