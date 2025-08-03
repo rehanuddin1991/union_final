@@ -68,7 +68,7 @@ export default function AdminLayout({ children }) {
           <a href="/dsh_board/user/certificates" className="block py-2 rounded-lg hover:bg-green-600 transition-all duration-300">
             📜 সকল সনদ
           </a>
- <a href="/dsh_board/admin/heirship" className="block py-2 rounded-lg hover:bg-green-600 transition-all duration-300">
+ <a href="/dsh_board/user/heirship" className="block py-2 rounded-lg hover:bg-green-600 transition-all duration-300">
             📜 ওয়ারিশ সনদ
           </a>
           
