@@ -1,6 +1,8 @@
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 export const dynamic = "force-dynamic"; // ✅ Vercel এ build time এ প্রি-রেন্ডার করবে না
+import { jwtVerify } from 'jose';
+import { useId } from 'react';
 
 export async function GET(req) {
   try {
@@ -52,10 +54,15 @@ if (existing) {
   return Response.json({ success: false, error: " এনআইডি নম্বরটি ইতোমধ্যে সংরক্ষণ করা হয়েছে" });
 }
 
+const token = req.cookies.get('token')?.value;
+    const { payload } = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET));
+    const userId = parseInt(payload.id);
+
     const holding = await prisma.holding_Information.create({
       data: {
         ...body,
         dob: dobDate,
+        insertedBy:userId,
          
         is_deleted: false,   // নতুন ডাটা তৈরি হলে ডিফল্ট false
       },
@@ -76,12 +83,15 @@ export async function PATCH(req) {
     const dobDate = body.dob ? new Date(body.dob) : null
 
      
-
+const token = req.cookies.get('token')?.value;
+    const { payload } = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET));
+    const userId = parseInt(payload.id);
     const holding = await prisma.holding_Information.update({
       where: { id },
       data: {
         ...body,
         dob: dobDate,
+        updatedBy:userId,
          
       },
     })
@@ -99,9 +109,13 @@ export async function DELETE(req) {
     const id = parseInt(url.searchParams.get('id'))
 
     // সরাসরি ডিলিট না করে is_deleted true করে দিচ্ছি
+    const token = req.cookies.get('token')?.value;
+    const { payload } = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET));
+    const userId = parseInt(payload.id);
+
     await prisma.holding_Information.update({
       where: { id },
-      data: { is_deleted: true },
+      data: { is_deleted: true,deletedBy:userId },
     })
 
     return Response.json({ success: true })

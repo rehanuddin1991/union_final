@@ -6,6 +6,7 @@ const prisma = new PrismaClient();
 export async function GET() {
   try {
     const employees = await prisma.employees.findMany({
+      where: { is_deleted: false },      // ✅ Soft deleted বাদ
       orderBy: { order: "asc" },
     });
     return new Response(JSON.stringify({ success: true, employees }), {
@@ -53,7 +54,7 @@ export async function POST(req) {
         order: body.order ? Number(body.order) : null,
         notes: body.notes || null,
         imageUrl: body.imageUrl || null,
-        userId: userId, // ✅ From token
+        insertedBy: userId, // ✅ From token
       },
     });
 
@@ -78,6 +79,11 @@ export async function PATCH(req) {
     const id = parseInt(url.searchParams.get("id"));
     const body = await req.json();
 
+     const token = req.cookies.get('token')?.value;
+    const { payload } = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET));
+    const userId = parseInt(payload.id);
+
+
     const employee = await prisma.employees.update({
       where: { id },
       data: {
@@ -88,6 +94,7 @@ export async function PATCH(req) {
         order: body.order ? Number(body.order) : null,
         notes: body.notes || null,
         imageUrl: body.imageUrl || null, // ✅ আপডেটের সময়ও নতুন URL সেভ হবে
+        updatedBy:userId,
       },
     });
 
@@ -103,12 +110,28 @@ export async function PATCH(req) {
   }
 }
 
+ 
 export async function DELETE(req) {
   try {
     const url = new URL(req.url);
     const id = parseInt(url.searchParams.get("id"));
 
-    await prisma.employees.delete({ where: { id } });
+    // 🔐 token থেকে userId বের করি
+    const token = req.cookies.get("token")?.value;
+    const { payload } = await jwtVerify(
+      token,
+      new TextEncoder().encode(process.env.JWT_SECRET)
+    );
+    const userId = parseInt(payload.id);
+
+    // 🔄 Soft delete + কে ডিলিট করলো সেটা সেভ
+    await prisma.employees.update({
+      where: { id },
+      data: {
+        is_deleted: true,
+        deletedBy: userId,
+      },
+    });
 
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
@@ -121,3 +144,4 @@ export async function DELETE(req) {
     );
   }
 }
+

@@ -53,7 +53,9 @@ model User {
   is_deleted     Boolean        @default(false) // ✅ added
   createdAt      DateTime       @default(now())
   loginHistories LoginHistory[] // ✅ added this line
-
+ insertedBy     Int  @default(0)
+    updatedBy     Int  @default(0)
+    deletedBy     Int  @default(0)
   @@map("user")
 }
 
@@ -91,6 +93,9 @@ model Holding_Information {
   is_deleted       Boolean             @default(false) // ✅ added
   createdAt        DateTime            @default(now())
   updatedAt        DateTime            @updatedAt
+   insertedBy     Int  @default(0)
+    updatedBy     Int  @default(0)
+    deletedBy     Int  @default(0)
 
   @@unique([ward, holdingNo])
   @@map("holding_information")
@@ -109,6 +114,9 @@ model HoldingCollection {
   comments          String?
   currentAmount String?
   dueAmount String?
+  insertedBy     Int  @default(0)
+    updatedBy     Int  @default(0)
+    deletedBy     Int  @default(0)
 
   holdingInformation Holding_Information @relation(fields: [holdingInformationId], references: [id])
 
@@ -129,6 +137,9 @@ model Employees {
   updatedAt   DateTime    @updatedAt
   imageUrl    String?
     userId     Int  @default(0)
+    insertedBy     Int  @default(0)
+    updatedBy     Int  @default(0)
+    deletedBy     Int  @default(0)
 
 
   @@map("employees")
@@ -163,6 +174,9 @@ model Poor {
   is_deleted Boolean  @default(false) // ✅ added
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+   insertedBy     Int  @default(0)
+    updatedBy     Int  @default(0)
+    deletedBy     Int  @default(0)
 
   @@map("poor")
 }
@@ -181,6 +195,9 @@ model MasterRole {
   is_deleted Boolean  @default(false) // ✅ added
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+   insertedBy     Int  @default(0)
+    updatedBy     Int  @default(0)
+    deletedBy     Int  @default(0)
 
   @@map("masterrole")
 }
@@ -226,6 +243,9 @@ model Certificate {
   is_approved       Boolean    @default(false) // ✅ added
   createdAt         DateTime   @default(now())
   updatedAt         DateTime   @updatedAt
+   insertedBy     Int  @default(0)
+    updatedBy     Int  @default(0)
+    deletedBy     Int  @default(0)
 
   @@map("certificate")
 }
@@ -258,6 +278,9 @@ model Institution {
   is_deleted Boolean  @default(false)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+   insertedBy     Int  @default(0)
+    updatedBy     Int  @default(0)
+    deletedBy     Int  @default(0)
 
   @@map("institutions")
 }
@@ -284,6 +307,9 @@ model Project {
   is_deleted   Boolean        @default(false)
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
+   insertedBy     Int  @default(0)
+    updatedBy     Int  @default(0)
+    deletedBy     Int  @default(0)
 }
 
 enum ProjectStatus {
@@ -307,6 +333,9 @@ model Inheritance {
   createdAt        DateTime        @default(now())
   is_deleted       Boolean         @default(false)
   letter_count String?
+   insertedBy     Int  @default(0)
+    updatedBy     Int  @default(0)
+    deletedBy     Int  @default(0)
   children         ChildRelation[]
 }
 

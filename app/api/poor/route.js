@@ -1,5 +1,6 @@
  import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
+import { jwtVerify } from 'jose';
 
 
 // GET: সব poor ডেটা রিটার্ন করবে
@@ -24,6 +25,10 @@ export async function GET() {
 export async function POST(req) {
   try {
     const body = await req.json();
+    const token = req.cookies.get('token')?.value;
+    const { payload } = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET));
+    const userId = parseInt(payload.id);
+
     const newPoor = await prisma.poor.create({
       data: {
         name: body.name,
@@ -34,6 +39,7 @@ export async function POST(req) {
         ward: body.ward || null,
         address: body.address || null,
         comments: body.comments || null,
+        insertedBy:userId ,
       },
     });
     return new Response(JSON.stringify({ success: true, data: newPoor }), {
@@ -51,6 +57,9 @@ export async function POST(req) {
 export async function PATCH(req) {
   try {
     const body = await req.json();
+    const token = req.cookies.get('token')?.value;
+    const { payload } = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET));
+    const userId = parseInt(payload.id);
     const updatedPoor = await prisma.poor.update({
       where: { id: body.id },
       data: {
@@ -62,6 +71,7 @@ export async function PATCH(req) {
         ward: body.ward || null,
         address: body.address || null,
         comments: body.comments || null,
+        updatedBy:userId,
       },
     });
     return new Response(
@@ -80,9 +90,12 @@ export async function PATCH(req) {
 export async function DELETE(req) {
   try {
     const body = await req.json();
+    const token = req.cookies.get('token')?.value;
+    const { payload } = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET));
+    const userId = parseInt(payload.id);
     await prisma.poor.update({
       where: { id: body.id },
-      data: { is_deleted: true },
+      data: { is_deleted: true,deletedBy:userId },
     });
     return new Response(JSON.stringify({ success: true }), { status: 200 });
   } catch (error) {

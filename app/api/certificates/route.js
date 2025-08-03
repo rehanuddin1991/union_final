@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
+import { jwtVerify } from 'jose';
 
 import { NextResponse } from 'next/server'
 //import { prisma } from '@/lib/prisma'
@@ -86,9 +87,15 @@ function convertToBengaliNumber(number) {
       body.letter_count = (maxLetterCount._max.letter_count || 0) + 1;
     }
 
+    const token = req.cookies.get('token')?.value;
+        const { payload } = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET));
+        const userId = parseInt(payload.id);
+
+
+
     // ✅ ডাটা Insert
     const certificate = await prisma.certificate.create({
-      data: { ...body },
+      data: { ...body,insertedBy:userId },
     });
 
     // ✅ Convert ID to Bengali number and concat
@@ -122,11 +129,14 @@ export async function PATCH(req) {
     if (body.birthDate) body.birthDate = new Date(body.birthDate)
     if (body.issuedDate) body.issuedDate = new Date(body.issuedDate)
     if (body.businessStartDate) body.businessStartDate = new Date(body.businessStartDate)
-
+const token = req.cookies.get('token')?.value;
+        const { payload } = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET));
+        const userId = parseInt(payload.id);
     const certificate = await prisma.certificate.update({
       where: { id },
       data: {
         ...body,
+        updatedBy:userId,
       },
     })
 
@@ -141,6 +151,10 @@ export async function DELETE(req) {
   try {
     const url = new URL(req.url);
     const id = parseInt(url.searchParams.get("id"));
+    const token = req.cookies.get('token')?.value;
+        const { payload } = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET));
+        const userId = parseInt(payload.id);
+
     if (!id)
       return Response.json(
         { success: false, error: "ID missing" },
@@ -150,7 +164,7 @@ export async function DELETE(req) {
     // Soft delete (update is_deleted = true)
     await prisma.certificate.update({
       where: { id },
-      data: { is_deleted: true },
+      data: { is_deleted: true,deletedBy:userId },
     });
 
     return Response.json({ success: true });

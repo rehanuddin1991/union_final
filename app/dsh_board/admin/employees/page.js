@@ -386,7 +386,7 @@ export default function EmployeesPage() {
         </table>
       </div>
 
-      <ToastContainer position="top-center" autoClose={3000} />
+      <ToastContainer position="top-center" autoClose={2000} />
     </div>
   );
 }

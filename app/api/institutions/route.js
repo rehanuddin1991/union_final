@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
+import { jwtVerify } from 'jose';
 
 import { NextResponse } from 'next/server'
 //import { prisma } from '@/lib/prisma'
@@ -43,10 +44,12 @@ export async function GET() {
     
 
      
-
+const token = req.cookies.get('token')?.value;
+    const { payload } = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET));
+    const userId = parseInt(payload.id);
     // ✅ ডাটা Insert
     const institute = await prisma.institution.create({
-      data: { ...body },
+      data: { ...body,insertedBy:userId },
     });
 
     return Response.json({ success: true, institute }, { status: 201 });
@@ -70,11 +73,14 @@ export async function PATCH(req) {
     if ('id' in body) delete body.id
 
     
-
+const token = req.cookies.get('token')?.value;
+    const { payload } = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET));
+    const userId = parseInt(payload.id);
     const institute = await prisma.institution.update({
       where: { id },
       data: {
         ...body,
+        updatedBy:userId,
       },
     })
 
@@ -96,9 +102,12 @@ export async function DELETE(req) {
       );
 
     // Soft delete (update is_deleted = true)
+    const token = req.cookies.get('token')?.value;
+    const { payload } = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET));
+    const userId = parseInt(payload.id);
     await prisma.institution.update({
       where: { id },
-      data: { is_deleted: true },
+      data: { is_deleted: true,deletedBy:userId, },
     });
 
     return Response.json({ success: true });

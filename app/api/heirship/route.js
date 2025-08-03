@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
+import { jwtVerify } from 'jose';
 
 export async function GET(req) {
   try {
@@ -65,6 +66,10 @@ export async function POST(req) {
     } = body;
 
     const issuedDateIso = new Date(issuedDate).toISOString();
+    const token = req.cookies.get('token')?.value;
+    const { payload } = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET));
+    const userId = parseInt(payload.id);
+
 
     // ✅ নতুন ভ্যারিয়েবল: let letterCount
     let letterCount;
@@ -96,6 +101,7 @@ export async function POST(req) {
         applicantName,
         applicantAddress,
             letter_count: letterCount.toString(), // ✅ fixed here
+            insertedBy:userId,
 
         issuedDate: issuedDateIso,
         children: {
@@ -159,6 +165,9 @@ export async function PATCH(req) {
     } = body;
 
     const issuedDateIso = new Date(issuedDate).toISOString(); // ✅ Ensure ISO DateTime
+    const token = req.cookies.get('token')?.value;
+    const { payload } = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET));
+    const userId = parseInt(payload.id);
 
     await prisma.childRelation.deleteMany({ where: { inheritanceId: id } });
 
@@ -174,6 +183,7 @@ export async function PATCH(req) {
         applicantName,
         applicantAddress,
         issuedDate: issuedDateIso, // ✅ Fixed here
+        updatedBy: userId, // ✅ Fixed here
         children: {
           create: children,
         },
