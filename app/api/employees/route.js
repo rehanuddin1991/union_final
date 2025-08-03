@@ -1,4 +1,6 @@
 import { PrismaClient } from "@prisma/client";
+import { jwtVerify } from 'jose';
+
 const prisma = new PrismaClient();
 
 export async function GET() {
@@ -21,7 +23,26 @@ export async function GET() {
 export async function POST(req) {
   try {
     const body = await req.json();
-    // body এর মধ্যে অবশ্যই imageUrl থাকবে যদি ফর্ম থেকে পাঠানো হয়
+
+    const token = req.cookies.get('token')?.value; // ✅ get JWT token
+    console.log("Tokenssss:", token);
+
+    if (!token) {
+      return new Response(
+        JSON.stringify({ success: false, error: 'Missing token' }),
+        { status: 401, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const { payload } = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET));
+    const userId = parseInt(payload.id);
+
+    if (!userId) {
+      return new Response(
+        JSON.stringify({ success: false, error: 'Invalid token or userId' }),
+        { status: 401, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
 
     const employee = await prisma.employees.create({
       data: {
@@ -31,7 +52,8 @@ export async function POST(req) {
         designation: body.designation,
         order: body.order ? Number(body.order) : null,
         notes: body.notes || null,
-        imageUrl: body.imageUrl || null, // ✅ imgbb থেকে আসা URL
+        imageUrl: body.imageUrl || null,
+        userId: userId, // ✅ From token
       },
     });
 
@@ -42,7 +64,7 @@ export async function POST(req) {
   } catch (error) {
     return new Response(
       JSON.stringify({ success: false, error: error.message }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
   }
 }

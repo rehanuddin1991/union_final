@@ -31,6 +31,7 @@ export async function middleware(req) {
     }
 
     const res = NextResponse.next();
+     //res.headers.set('x-user-id', String(payload.userId));  // <-- Add this line
     res.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
 
     console.log('Access granted. Continuing request.');

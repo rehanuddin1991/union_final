@@ -944,7 +944,7 @@ catch (error) {
   </tr>
 
    <tr>
-    <td style="width: 30%;">জন্মনিবন্ধন/এনআইডি/পাসপোর্ট নং</td>
+    <td style="width: 30%;">জন্মনিবন্ধন/এনআইডি/পাসপোর্ট</td>
     <td style="margin-left:20px;">: ${enToBnNumber(
       cert.nid
     )} &nbsp; ${enToBnNumber(cert.birth_no)} &nbsp; ${enToBnNumber(
@@ -952,13 +952,18 @@ catch (error) {
     )}</td>
     <td  >টি আই এন &nbsp; ${enToBnNumber(cert.tin)}</td>
   </tr>
-    
 
-   <tr>
-    
-    <td style="margin-left:20px;">মোবাইল:   ${enToBnNumber(cert.mobile)}</td>
-     <td>  ই-মেইল: &nbsp; ${cert.email ? cert.email : ""}</td>
+  <tr>
+    <td style="width: 30%;">মোবাইল</td>
+    <td style="margin-left:20px;">: ${enToBnNumber(
+      cert.mobile
+    )} 
+   </td>
+    <td   >ই-মেইল: &nbsp; <span style="font-size:9px;">${cert.email}</span></td>
   </tr>
+
+    
+ 
 
    
 
