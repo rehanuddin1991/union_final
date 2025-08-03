@@ -244,7 +244,7 @@ const formatDate = (date) => {
     const govtImg = `${origin}/images/govt.png`;
     const unionImg = settings?.imageUrl || `${origin}/images/union.png`;
 
-    const qrUrl = `${origin}/verify/certificate?id=${cert.id}`;
+    const qrUrl = `${origin}/verify/heirship?id=${cert.id}`;
     const qrImg_with_link = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(qrUrl)}&size=100x100`;
 
     await Promise.all([preloadImage(govtImg), preloadImage(unionImg)]).catch(console.error);
