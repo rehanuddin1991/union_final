@@ -90,7 +90,7 @@ export default function CertificatesPage() {
     `;
     } else if (type === 8) {
       defaultNote = `
-      <p> সংশ্লিষ্ট ওয়ার্ড সদস্যের প্রত্যয়ন সূত্রে জানতে পারি, তিনি উল্লিখিত ঠিকানার একজন স্থায়ী বাসিন্দা এবং জন্মসূত্রে বাংলাদেশী নাগরিক। তিনি রাষ্ট্র ও সমাজবিরোধী কোনো কার্যকলাপে জড়িত নন। তিনি একজন দিনমজুর এবং তাঁর বার্ষিক আয় ৬০০০০/- (ষাট হাজার টাকা) মাত্র। <br> আমি তাঁর সর্বাঙ্গীন মঙ্গল ও উন্নতি কামনা করি।</p>
+      <p> সংশ্লিষ্ট ওয়ার্ড সদস্যের প্রত্যয়ন সূত্রে জানতে পারি, তিনি উল্লিখিত ঠিকানার একজন স্থায়ী বাসিন্দা এবং জন্মসূত্রে বাংলাদেশী নাগরিক। তিনি রাষ্ট্র ও সমাজবিরোধী কোনো কার্যকলাপে জড়িত নন।  তিনি একজন দিনমজুর এবং তাঁর বার্ষিক আয় ৬০০০০/- (ষাট হাজার টাকা) মাত্র। <br> আমি তাঁর সর্বাঙ্গীন মঙ্গল ও উন্নতি কামনা করি।</p>
     `;
     } else if (type === 9) {
       defaultNote = `
@@ -98,6 +98,20 @@ export default function CertificatesPage() {
       </p>
     `;
     }
+
+    else if (type === 10) {
+      defaultNote = `
+      <p> সংশ্লিষ্ট ওয়ার্ড সদস্যের প্রত্যয়ন সূত্রে জানতে পারি, তিনি উল্লিখিত ঠিকানার একজন স্থায়ী বাসিন্দা এবং জন্মসূত্রে বাংলাদেশী নাগরিক। তিনি রাষ্ট্র ও সমাজবিরোধী কোনো কার্যকলাপে জড়িত নন এবং তিনি একজন ভূমিহীন। <br> আমি তাঁর সর্বাঙ্গীন মঙ্গল ও উন্নতি কামনা করি।</p>
+    `;
+    }
+
+
+    else if (type === 11) {
+      defaultNote = `
+      <p> সংশ্লিষ্ট ওয়ার্ড সদস্যের প্রত্যয়ন সূত্রে জানতে পারি, তিনি উল্লিখিত ঠিকানার একজন স্থায়ী বাসিন্দা এবং জন্মসূত্রে বাংলাদেশী নাগরিক। তিনি রাষ্ট্র ও সমাজবিরোধী কোনো কার্যকলাপে জড়িত নন এবং তিনি একজন বেকার। <br> আমি তাঁর সর্বাঙ্গীন মঙ্গল ও উন্নতি কামনা করি।</p>
+    `;
+    }
+
 
     setForm((prevForm) => ({
       ...prevForm,
@@ -1236,6 +1250,8 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
               <option value="বিবিধ সনদ">বিবিধ সনদ</option>
               <option value="চারিত্রিক সনদ">চারিত্রিক সনদ</option>
               <option value="অবিবাহিত সনদ">অবিবাহিত সনদ</option>
+              <option value="ভূমিহীন সনদ">ভূমিহীন সনদ</option>
+              <option value="বেকারত্ব সনদ">বেকারত্ব সনদ</option>
               <option value="স্বামী পরিত্যক্তা সনদ">
                 স্বামী পরিত্যক্তা সনদ
               </option>
@@ -1835,6 +1851,25 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
           >
             Load Default(অভিভাবক সম্মতিপত্র)
           </button>
+
+          <button
+            type="button"
+            onClick={() => handleLoadDefaultNote(10)}
+            className="bg-[blue] text-white mx-4 my-2 px-3 py-1 text-sm rounded-2xl shadow hover:bg-green-600"
+          >
+            Load Default(ভূমিহীন সনদ)
+          </button>
+
+
+          <button
+            type="button"
+            onClick={() => handleLoadDefaultNote(11)}
+            className="bg-[blue] text-white mx-4 my-2 px-3 py-1 text-sm rounded-2xl shadow hover:bg-green-600"
+          >
+            Load Default(বেকারত্ব সনদ)
+          </button>
+
+
 
           {/* <Editor
             apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}

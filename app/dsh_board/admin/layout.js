@@ -63,9 +63,9 @@ export default function AdminLayout({ children }) {
             📋 Holding Tax Collection
           </a>
 
-          <a href="/dsh_board/admin/holding_cards" className="block py-2 rounded-lg hover:bg-green-600 transition-all duration-300">
+          {/* <a href="/dsh_board/admin/holding_cards" className="block py-2 rounded-lg hover:bg-green-600 transition-all duration-300">
             📋 All Holdings Cards
-          </a>
+          </a> */}
 
 
             <a href="/api/generate-card" className="block py-2 rounded-lg hover:bg-green-600 transition-all duration-300">
@@ -77,6 +77,11 @@ export default function AdminLayout({ children }) {
           <a href="/dsh_board/admin/certificates" className="block py-2 rounded-lg hover:bg-green-600 transition-all duration-300">
             📜 সকল সনদ
           </a>
+
+          <a href="/dsh_board/admin/heirship" className="block py-2 rounded-lg hover:bg-green-600 transition-all duration-300">
+            📜 ওয়ারিশ সনদ
+          </a>
+
 
           <a href="/dsh_board/admin/approval" className="block py-2 rounded-lg hover:bg-green-600 transition-all duration-300">
             📜 Open Certificate Approval

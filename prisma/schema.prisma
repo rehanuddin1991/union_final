@@ -290,5 +290,37 @@ enum ProjectStatus {
   COMPLETE
   OTHERS
 }
+
+model Inheritance {
+  id               Int             @id @default(autoincrement())
+  name             String
+  fatherName       String
+  motherName       String
+  nidOrBirth       String
+  permanentAddress String
+  presentAddress   String
+  applicantName    String
+  applicantAddress String
+  issuedDate        DateTime   @default(now())
+  createdAt        DateTime        @default(now())
+  is_deleted       Boolean         @default(false)
+  letter_count String?
+  children         ChildRelation[]
+}
+
+model ChildRelation {
+  id                 Int         @id @default(autoincrement())
+  inheritance        Inheritance @relation(fields: [inheritanceId], references: [id])
+  inheritanceId      Int
+  name               String
+  fatherOrHusbandName String
+  village            String
+  relation           String
+  age                String
+  notes              String?
+}
+
+
+
 //npx prisma migrate dev --name add_spouse_field
 //npx prisma generate

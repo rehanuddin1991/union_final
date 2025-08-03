@@ -19,8 +19,12 @@ export function bnToEnNumber(bnNumStr) {
     .join('');
 }
 
+ 
+
+
 
 export function enToBnNumber(enNum) {
+  if (enNum === undefined || enNum === null) return '';
   const bnDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
   return enNum
     .toString()
@@ -28,6 +32,7 @@ export function enToBnNumber(enNum) {
     .map(digit => (/\d/.test(digit) ? bnDigits[digit] : digit))
     .join('');
 }
+
 
 export function enToBnNumberWithFormat(enNum) {
   const bnDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];

@@ -118,6 +118,14 @@ page.drawImage(titleImg, { x: 80, y: 125, width: 260, height: 20 });
       page.drawImage(nidImg, { x: 10, y: currentY, width: 260, height: 15  });
       currentY -= 15;
 
+      const mobileImg = await pdfDoc.embedPng(
+        await textToImage(`মোবাইল: ${holding.mobile || "NA"}`, 11, 260, 15,"#4B0082")
+      );
+      page.drawImage(mobileImg, { x: 10, y: currentY, width: 260, height: 15  });
+      currentY -= 15;
+
+
+
       const wardImg = await pdfDoc.embedPng(
         await textToImage(`ওয়ার্ড: ${holding.ward}`, 11, 260, 15,"#4B0082")
       );
