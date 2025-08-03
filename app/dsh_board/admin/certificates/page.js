@@ -1227,7 +1227,7 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
 
       <form
         onSubmit={handleSubmit}
-        className="bg-white border p-6 rounded-xl shadow mb-8 space-y-4"
+        className="bg-white text-black border p-6 rounded-xl shadow mb-8 space-y-4"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
