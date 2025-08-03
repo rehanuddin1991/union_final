@@ -112,6 +112,12 @@ export default function CertificatesPage() {
     `;
     }
 
+    else if (type === 12) {
+      defaultNote = `
+      <p> সংশ্লিষ্ট ওয়ার্ড সদস্যের প্রত্যয়ন সূত্রে জানতে পারি, তিনি উল্লিখিত ঠিকানার একজন স্থায়ী বাসিন্দা এবং জন্মসূত্রে বাংলাদেশী নাগরিক। তিনি রাষ্ট্র ও সমাজবিরোধী কোনো কার্যকলাপে জড়িত নন এবং তিনি সনাতন হিন্দু/বৌদ্ধ / খ্রিস্টান সম্প্রদায়ের অন্তর্ভুক্ত। <br> আমি তাঁর সর্বাঙ্গীন মঙ্গল ও উন্নতি কামনা করি।</p>
+    `;
+    }
+
 
     setForm((prevForm) => ({
       ...prevForm,
@@ -1261,6 +1267,7 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
                 স্বামী পরিত্যক্তা সনদ
               </option>
               <option value="বিধবা সনদ">বিধবা সনদ</option>
+              <option value="সম্প্রদায় সনদ">সম্প্রদায় সনদ</option>
               <option value="বার্ষিক আয়ের সনদ">বার্ষিক আয়ের সনদ</option>
               <option value="ভোটার স্থানান্তর সংক্রান্ত সনদ">
                 ভোটার স্থানান্তর সংক্রান্ত সনদ
@@ -1872,6 +1879,14 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
             className="bg-[blue] text-white mx-4 my-2 px-3 py-1 text-sm rounded-2xl shadow hover:bg-green-600"
           >
             Load Default(বেকারত্ব সনদ)
+          </button>
+
+           <button
+            type="button"
+            onClick={() => handleLoadDefaultNote(12)}
+            className="bg-[blue] text-white mx-4 my-2 px-3 py-1 text-sm rounded-2xl shadow hover:bg-green-600"
+          >
+            Load Default(সম্প্রদায় সনদ)
           </button>
 
 
