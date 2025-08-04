@@ -2014,7 +2014,7 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
         <td className="border p-3">{cert.nid}</td>
         <td className="border p-3">{cert.birth_no}</td>
         <td className="border p-3">{cert.address || "-"}</td>
-        <td className="border p-2 space-x-1 text-2xl">
+        <td className="border p-4 space-x-1 text-2xl">
           <button
             onClick={() => handleEdit(cert)}
             className="text-blue-600"
@@ -2023,7 +2023,7 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
           </button>
           <button
             onClick={() => handleDelete(cert.id)}
-            className="text-red-500"
+            className=" text-2xl"
           >
             🗑
           </button>
@@ -2046,7 +2046,7 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
           {cert.type === "ট্রেড লাইসেন্স" && (
             <button
               onClick={() => handlePrint_trade(cert)}
-              className="text-green-600 text-xl"
+              className="text-green-600 text-2xl"
             >
               Trade(P)
             </button>
