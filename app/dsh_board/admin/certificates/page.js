@@ -40,6 +40,8 @@ export default function CertificatesPage() {
   const [employees, setEmployees] = useState([]);
   const [settings, setSettings] = useState(null);
   const [now, setNow] = useState(null);
+  const [isEditingType, setIsEditingType] = useState(false); // নতুন state
+
 
   const fetchOfficeSettings = async () => {
     const res = await fetch("/api/office_settings");
@@ -287,6 +289,7 @@ export default function CertificatesPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true); // ✅ লোডিং শুরু
+    setIsEditingType(false)
 
     // Required validation
     if (!form.applicantName || form.applicantName.trim() === "") {
@@ -401,6 +404,7 @@ export default function CertificatesPage() {
   };
 
   const handleEdit = (cert) => {
+    setIsEditingType(true);
     setForm({
       id: cert.id,
       type: cert.type,
@@ -1248,6 +1252,7 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
               value={form.type}
               onChange={(e) => setForm({ ...form, type: e.target.value })}
               className="border p-2 rounded w-full"
+               disabled={isEditingType}
             >
               <option value="">-- সনদের ধরন নির্বাচন করুন --</option>
               <option value="নাগরিকত্ব সনদ">নাগরিকত্ব সনদ</option>
@@ -1974,89 +1979,84 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
       <table className="w-full text-sm border">
         <thead className="bg-blue-100">
           <tr>
-            <th className="border p-1">সনদের ধরন</th>
-            <th className="border p-1">সিরিয়াল</th>
-            <th className="border p-1">নাম</th>
-            <th className="border p-1">পিতার নাম</th>
+            <th className="border p-3">সনদের ধরন</th>
+            <th className="border p-3">সিরিয়াল</th>
+            <th className="border p-3">নাম</th>
+            <th className="border p-3">পিতার নাম</th>
              
-            <th className="border p-1">এনআইডি</th>
-            <th className="border p-1">জন্ম নিবন্ধন</th>
-            <th className="border p-1">ঠিকানা</th>
-            <th className="border p-1">নোটস</th>
-            <th className="border p-1">অ্যাকশন</th>
+            <th className="border p-3">এনআইডি</th>
+            <th className="border p-3">জন্ম নিবন্ধন</th>
+            <th className="border p-3">ঠিকানা</th>
+            
+            <th className="border p-3">অ্যাকশন</th>
           </tr>
         </thead>
         <tbody>
-          {filteredCollections.length === 0 && (
-            <tr>
-              <td colSpan={9} className="text-center p-4">
-                কোনো সনদ পাওয়া যায়নি।
-              </td>
-            </tr>
+  {filteredCollections.length === 0 && (
+    <tr>
+      <td colSpan={9} className="text-center p-4">
+        কোনো সনদ পাওয়া যায়নি।
+      </td>
+    </tr>
+  )}
+  {filteredCollections.map((cert, index) => {
+    let rowClass = index % 2 === 0 ? "bg-blue-50" : "bg-blue-100";
+    if (cert.type === "নাগরিকত্ব সনদ") {
+      rowClass = "bg-green-600 text-white";
+    }
+
+    return (
+      <tr key={cert.id} className={rowClass}>
+        <td className="border p-3">{cert.type}</td>
+        <td className="border p-3">{cert.letter_count}</td>
+        <td className="border p-3">{cert.applicantName}</td>
+        <td className="border p-3">{cert.fatherName || "-"}</td>
+        <td className="border p-3">{cert.nid}</td>
+        <td className="border p-3">{cert.birth_no}</td>
+        <td className="border p-3">{cert.address || "-"}</td>
+        <td className="border p-2 space-x-1 text-2xl">
+          <button
+            onClick={() => handleEdit(cert)}
+            className="text-blue-600"
+          >
+            ✏️
+          </button>
+          <button
+            onClick={() => handleDelete(cert.id)}
+            className="text-red-500"
+          >
+            🗑
+          </button>
+          {cert.type !== "ট্রেড লাইসেন্স" && (
+            <button
+              onClick={() => handlePrint(cert)}
+              className="text-green-600"
+            >
+              🖨️
+            </button>
           )}
-          {filteredCollections.map((cert) => (
-            <tr key={cert.id}>
-              <td className="border p-1">{cert.type}</td>
-              <td className="border p-1">{cert.letter_count}</td>
-              <td className="border p-1">{cert.applicantName}</td>
-              <td className="border p-1">{cert.fatherName || "-"}</td>
-              
-              <td className="border p-1">
-                {cert.nid }
-              </td>
+          {cert.type === "নাম সংক্রান্ত প্রত্যয়ন পত্র" && (
+            <button
+              onClick={() => handlePrintNameRelated(cert, settings)}
+              className="text-green-600"
+            >
+              নাম সংক্রান্ত
+            </button>
+          )}
+          {cert.type === "ট্রেড লাইসেন্স" && (
+            <button
+              onClick={() => handlePrint_trade(cert)}
+              className="text-green-600 text-xl"
+            >
+              Trade(P)
+            </button>
+          )}
+        </td>
+      </tr>
+    );
+  })}
+</tbody>
 
-               <td className="border p-1">
-                {cert.birth_no }
-              </td>
-
-
-              <td className="border p-1">{cert.address || "-"}</td>
-              <td className="border p-1">
-                <div
-                  dangerouslySetInnerHTML={{ __html: cert.notes || "-" }}
-                />
-              </td>
-              <td className="border p-2 space-x-1 text-2xl">
-                <button
-                  onClick={() => handleEdit(cert)}
-                  className="text-blue-600"
-                >
-                  ✏️
-                </button>
-                <button
-                  onClick={() => handleDelete(cert.id)}
-                  className="text-red-600"
-                >
-                  🗑
-                </button>
-                {cert.type != "ট্রেড লাইসেন্স" && (
-                  <button
-                    onClick={() => handlePrint(cert)}
-                    className="text-green-600"
-                  >
-                    🖨️
-                  </button>
-                )}
-                {cert.type === "নাম সংক্রান্ত প্রত্যয়ন পত্র" && (
-                  <button
-                    onClick={() => handlePrintNameRelated(cert, settings)}
-                    className="text-green-600"
-                  >
-                    নাম সংক্রান্ত
-                  </button>
-                )}
-                {cert.type === "ট্রেড লাইসেন্স" && (
-                  <button
-                    onClick={() => handlePrint_trade(cert)}
-                    className="text-green-600"
-                  >
-                    🖨️ Trade
-                  </button>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
       </table>
     </>
   )}
