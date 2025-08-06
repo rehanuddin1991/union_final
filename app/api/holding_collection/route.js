@@ -23,6 +23,21 @@ export async function POST(req) {
      const token = req.cookies.get('token')?.value;
     const { payload } = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET));
     const userId = parseInt(payload.id);
+
+    const lastEntry = await prisma.holdingCollection.findFirst({
+  where: { is_deleted: false },
+  orderBy: { id: 'desc' },
+});
+
+// ✅ পরবর্তী সিরিয়াল নাম্বার জেনারেট করো (যেমন HLD-0001)
+let nextNumber = 1;
+
+if (lastEntry && lastEntry.serial) {
+  const lastNumber = parseInt(lastEntry.serial.replace("HLC-", ""));
+  nextNumber = lastNumber + 1;
+}
+
+const nextSerial = `HLC-${String(nextNumber).padStart(4, "0")}`; // eg: HLD-0001
     
 
     const collection = await prisma.holdingCollection.create({
@@ -30,6 +45,8 @@ export async function POST(req) {
         ...body,
         paymentDate,
         insertedBy:userId,
+            serial: nextSerial, 
+
       },
     })
 

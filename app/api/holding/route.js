@@ -54,16 +54,50 @@ if (existing) {
   return Response.json({ success: false, error: " এনআইডি নম্বরটি ইতোমধ্যে সংরক্ষণ করা হয়েছে" });
 }
 
+
+    // ✅ ডুপ্লিকেট চেক (Ward + Holding No)
+    const existingByWardHolding = await prisma.holding_Information.findFirst({
+      where: {
+        ward: body.ward,
+        holdingNo: body.holdingNo,
+        is_deleted: false,
+      },
+    });
+
+    if (existingByWardHolding) {
+      return Response.json(
+        { success: false, error: `${body.ward}  ওয়ার্ডের  ${body.holdingNo}  হোল্ডিং নং আগে থেকেই সংরক্ষিত আছে।` },
+        { status: 400 }
+      );
+    }
+
+
 const token = req.cookies.get('token')?.value;
     const { payload } = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET));
     const userId = parseInt(payload.id);
+
+    const lastEntry = await prisma.holding_Information.findFirst({
+  where: { is_deleted: false },
+  orderBy: { id: 'desc' },
+});
+
+// ✅ পরবর্তী সিরিয়াল নাম্বার জেনারেট করো (যেমন HLD-0001)
+let nextNumber = 1;
+
+if (lastEntry && lastEntry.serial) {
+  const lastNumber = parseInt(lastEntry.serial.replace("HLD-", ""));
+  nextNumber = lastNumber + 1;
+}
+
+const nextSerial = `HLD-${String(nextNumber).padStart(4, "0")}`; // eg: HLD-0001
+
 
     const holding = await prisma.holding_Information.create({
       data: {
         ...body,
         dob: dobDate,
         insertedBy:userId,
-         
+         serial: nextSerial,
         is_deleted: false,   // নতুন ডাটা তৈরি হলে ডিফল্ট false
       },
     })

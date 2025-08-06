@@ -42,16 +42,20 @@ export default function RootLayout({ children }) {
      <HeadComponents />
 
         {children}
+<footer className="bg-gradient-to-r from-blue-100 via-cyan-100 to-blue-50 text-gray-800 py-6 mt-6 border-t border-gray-300 shadow-inner">
+  <div className="max-w-5xl mx-auto text-center px-4">
+    <p className="text-lg sm:text-base font-medium">
+      © 2025 — 
+      <span className="text-cyan-700 font-semibold mx-1">Rehan Uddin</span>
+      <span className="text-sm text-gray-600">|</span>
+      <span className="text-blue-700 font-semibold mx-1">Upazila ICT Officer,</span>
+      <span className="text-sm text-gray-600">|</span>
+      <span className="text-indigo-700 font-semibold mx-1">DoICT, Ramgarh, Khagrachari</span>
+    </p>
+    <p className="text-xl text-gray-500 mt-2">All rights reserved. Crafted with ❤️ for digital governance.</p>
+  </div>
+</footer>
 
-        <footer className="bg-gray-100 text-gray-700 py-4 mt-6 border-t border-gray-300 shadow-inner">
-          <div className="max-w-4xl mx-auto text-center text-xl sm:text-base">
-            <p className="font-medium">
-              ©2025 —
-              <span className="text-[darkcyan] font-semibold"> Rehan Uddin</span>
-              , Upazila ICT Officer, <span className="text-[blue] font-semibold">DoICT</span> . All rights reserved.
-            </p>
-          </div>
-        </footer>
       </body>
     </html>
   );

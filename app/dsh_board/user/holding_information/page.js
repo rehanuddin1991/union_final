@@ -27,7 +27,8 @@ import {
 
 export default function HoldingPage() {
    
-  
+  const [currentPage, setCurrentPage] = useState(1); // ✅ পেজ নম্বর
+  const itemsPerPage = 10;
   const [employees, setEmployees] = useState([]);
   const [settings, setSettings] = useState(null);
 
@@ -153,6 +154,11 @@ export default function HoldingPage() {
     return `${day}-${month}-${year}`;
   };
 
+  const indexOfLastItem = currentPage * itemsPerPage;
+const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+const currentItems = filteredCollections.slice(indexOfFirstItem, indexOfLastItem);
+
+
 
   const handlePrint = async (cert) => {
      setIsLoading(true); // ⬅️ লোডিং শুরু
@@ -223,7 +229,7 @@ export default function HoldingPage() {
 
             <div style="border: 1px solid green;margin:auto; background-color: #e6f4ea; padding: 5px; margin-top: 15px; border-radius: 7px;
              width: 250px; text-align: center;">
-  <h1 style="font-size: 21px; color: #000080; margin: auto;">  হোল্ডিং তথ্য
+  <h1 style="font-size: 21px; color: #000080; margin: auto;">  হোল্ডিংয়ের তথ্য
   </h1>
 </div>
 
@@ -232,6 +238,12 @@ export default function HoldingPage() {
             
 
             <table>
+            <tr>
+    <td style="width: 30%;font-size:18px;font-weight:bold;">ক্রম</td>
+    <td style="margin-left:20px;font-size:18px;font-weight:bold;">: ${
+      cert.serial
+    }</td>
+  </tr>
 
              <tr>
     <td style="width: 30%;font-size:18px;font-weight:bold;">হোল্ডিং নম্বর</td>
@@ -248,25 +260,25 @@ export default function HoldingPage() {
     
   <tr>
     <td>পিতার নাম</td>
-    <td>: ${cert.father || "-"}</td>
+    <td>: ${cert.father || ""}</td>
     </tr>
     <tr>
     <td>মাতার নাম</td>
-    <td>: ${cert.mother || "-"}</td>
+    <td>: ${cert.mother || ""}</td>
   </tr>
 
   <tr>
     <td>ধর্ম</td>
-    <td>: ${cert.religion || "-"}</td>
+    <td>: ${cert.religion || ""}</td>
   </tr>
 <tr>
     <td>মোবাইল</td>
-    <td>: ${enToBnNumber(cert.mobile) || "-"}</td>
+    <td>: ${enToBnNumber(cert.mobile) || ""}</td>
   </tr>
 
     <tr>
     <td>জাতীয় পরিচয়পত্রের নম্বর</td>
-    <td>: ${enToBnNumber(cert.nid) || "-"}</td>
+    <td>: ${enToBnNumber(cert.nid) || ""}</td>
   </tr>
 
   <tr>
@@ -276,12 +288,22 @@ export default function HoldingPage() {
    
     <tr>
     <td>ওয়ার্ড</td>
-    <td>: ${enToBnNumber(cert.ward) || "-"}</td>
+    <td>: ${enToBnNumber(cert.ward) || ""}</td>
   </tr>
    
   <tr>
     <td>ঠিকানা</td>
-    <td>: ${cert.address || "-"}</td>
+    <td>: ${cert.address || ""}</td>
+  </tr>
+
+  <tr>
+    <td>পুরুষ সদস্য</td>
+    <td>: ${cert.maleMembers || ""} &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; পুরুষ শিশু: &nbsp;${cert.maleBaby || ""}</td>
+  </tr>
+
+  <tr>
+    <td>মহিলা সদস্য</td>
+    <td>: ${cert.femaleMembers || ""}&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; মহিলা শিশু: &nbsp;${cert.femaleBaby || ""}</td>
   </tr>
 
    
@@ -453,7 +475,7 @@ export default function HoldingPage() {
               placeholder="মালিকের নাম"
               value={form.headName}
               onChange={(e) => setForm({ ...form, headName: e.target.value })}
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
+              className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
               required
             />
           </div>
@@ -470,7 +492,7 @@ export default function HoldingPage() {
               id="ward"
               value={form.ward}
               onChange={(e) => setForm({ ...form, ward: e.target.value })}
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
+              className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             >
               <option value="1">1</option>
               <option value="2">2</option>
@@ -498,7 +520,7 @@ export default function HoldingPage() {
               placeholder="পিতা"
               value={form.father}
               onChange={(e) => setForm({ ...form, father: e.target.value })}
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
+              className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
               required
             />
           </div>
@@ -516,7 +538,7 @@ export default function HoldingPage() {
               placeholder="মাতা"
               value={form.mother}
               onChange={(e) => setForm({ ...form, mother: e.target.value })}
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
+              className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
               required
             />
           </div>
@@ -545,7 +567,7 @@ export default function HoldingPage() {
   }
   dateFormat="yyyy-MM-dd"
   placeholderText="জন্ম তারিখ নির্বাচন করুন"
-  className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
+  className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
   required
 />
 
@@ -564,7 +586,7 @@ export default function HoldingPage() {
               id="gender"
               value={form.gender}
               onChange={(e) => setForm({ ...form, gender: e.target.value })}
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
+              className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             >
               <option value="MALE">পুরুষ</option>
               <option value="FEMALE">মহিলা</option>
@@ -583,7 +605,7 @@ export default function HoldingPage() {
               id="religion"
               value={form.religion}
               onChange={(e) => setForm({ ...form, religion: e.target.value })}
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
+              className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             >
               <option value="ইসলাম">ইসলাম</option>
               <option value="হিন্দু">হিন্দু</option>
@@ -606,7 +628,7 @@ export default function HoldingPage() {
               placeholder="পেশা"
               value={form.occupation}
               onChange={(e) => setForm({ ...form, occupation: e.target.value })}
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
+              className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             />
           </div>
 
@@ -626,7 +648,7 @@ export default function HoldingPage() {
                 const value = e.target.value;
                 if (/^\d*$/.test(value)) setForm({ ...form, holdingNo: value });
               }}
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
+              className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
               required
             />
           </div>
@@ -647,7 +669,7 @@ export default function HoldingPage() {
                 const value = e.target.value;
                 if (/^[0-9]*$/.test(value)) setForm({ ...form, nid: value });
               }}
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
+              className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
               required
             />
           </div>
@@ -668,7 +690,7 @@ export default function HoldingPage() {
                 const value = e.target.value;
                 if (/^[0-9]*$/.test(value)) setForm({ ...form, mobile: value });
               }}
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
+              className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             />
           </div>
 
@@ -688,7 +710,7 @@ export default function HoldingPage() {
               onChange={(e) =>
                 setForm({ ...form, maleMembers: e.target.value })
               }
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
+              className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             />
           </div>
 
@@ -708,7 +730,7 @@ export default function HoldingPage() {
               onChange={(e) =>
                 setForm({ ...form, femaleMembers: e.target.value })
               }
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
+              className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             />
           </div>
 
@@ -728,7 +750,7 @@ export default function HoldingPage() {
               onChange={(e) =>
                 setForm({ ...form, othersMembers: e.target.value })
               }
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
+              className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             />
           </div>
 
@@ -746,7 +768,7 @@ export default function HoldingPage() {
               placeholder="পুরুষ শিশু"
               value={form.maleBaby}
               onChange={(e) => setForm({ ...form, maleBaby: e.target.value })}
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
+              className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             />
           </div>
 
@@ -766,7 +788,7 @@ export default function HoldingPage() {
               onChange={(e) =>
                 setForm({ ...form, femaleBaby: e.target.value })
               }
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
+              className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             />
           </div>
 
@@ -786,7 +808,7 @@ export default function HoldingPage() {
               onChange={(e) =>
                 setForm({ ...form, othersBaby: e.target.value })
               }
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
+              className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             />
           </div>
 
@@ -803,7 +825,7 @@ export default function HoldingPage() {
               placeholder="ঠিকানা"
               value={form.address}
               onChange={(e) => setForm({ ...form, address: e.target.value })}
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
+              className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
               required
             />
           </div>
@@ -821,7 +843,7 @@ export default function HoldingPage() {
               placeholder="বর্গফুট"
               value={form.area}
               onChange={(e) => setForm({ ...form, area: e.target.value })}
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
+              className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             />
           </div>
 
@@ -841,7 +863,7 @@ export default function HoldingPage() {
               onChange={(e) =>
                 setForm({ ...form, multiStoriedRoom: e.target.value })
               }
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
+              className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             />
           </div>
 
@@ -861,7 +883,7 @@ export default function HoldingPage() {
               onChange={(e) =>
                 setForm({ ...form, buildingRoom: e.target.value })
               }
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
+              className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             />
           </div>
 
@@ -881,7 +903,7 @@ export default function HoldingPage() {
               onChange={(e) =>
                 setForm({ ...form, semiBuildingRoom: e.target.value })
               }
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
+              className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             />
           </div>
 
@@ -899,7 +921,7 @@ export default function HoldingPage() {
               placeholder="কাঁচা ঘরের কক্ষ"
               value={form.rawRoom}
               onChange={(e) => setForm({ ...form, rawRoom: e.target.value })}
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
+              className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             />
           </div>
 
@@ -919,7 +941,7 @@ export default function HoldingPage() {
               onChange={(e) =>
                 setForm({ ...form, ownHouseRent: e.target.value })
               }
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
+              className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             />
           </div>
 
@@ -939,7 +961,7 @@ export default function HoldingPage() {
               onChange={(e) =>
                 setForm({ ...form, othersRent: e.target.value })
               }
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
+              className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             />
           </div>
 
@@ -961,7 +983,7 @@ export default function HoldingPage() {
                 if (/^[0-9]*$/.test(value))
                   setForm({ ...form, imposedTax: value });
               }}
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
+              className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             />
           </div>
 
@@ -975,7 +997,7 @@ export default function HoldingPage() {
             <textarea
               value={form.comments}
               onChange={(e) => setForm({ ...form, comments: e.target.value })}
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
+              className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             ></textarea>
           </div>
         </div>
@@ -1031,7 +1053,7 @@ export default function HoldingPage() {
           </tr>
         </thead>
         <tbody>
-          {filteredCollections.map((h) => (
+          {currentItems.map((h) => (
             <tr key={h.id}>
               <td className="border p-2">{h.headName}</td>
               <td className="border p-2">{h.ward}</td>
@@ -1061,6 +1083,25 @@ export default function HoldingPage() {
           ))}
         </tbody>
       </table>
+      {/* ✅ Pagination UI */}
+<div className="flex justify-center mt-4 space-x-2">
+  {Array.from({ length: Math.ceil(filteredCollections.length / itemsPerPage) }, (_, i) => (
+    <button
+      key={i + 1}
+      onClick={() => setCurrentPage(i + 1)}
+      className={`px-4 py-2 rounded-lg text-green font-semibold ${
+        currentPage === i + 1 ? 'bg-blue-500 text-white' : 'bg-gray-100'
+      } hover:bg-red-700 transition`}
+    >
+      {i + 1}
+    </button>
+  ))}
+</div>
+
+ 
+
+
+
     </>
   )}
 </div>

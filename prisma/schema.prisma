@@ -97,6 +97,8 @@ model Holding_Information {
     updatedBy     Int  @default(0)
     deletedBy     Int  @default(0)
 
+     serial         String   @unique // ✅ এখন এটা স্ট্রিং
+
   @@unique([ward, holdingNo])
   @@map("holding_information")
 }
@@ -119,7 +121,7 @@ model HoldingCollection {
     deletedBy     Int  @default(0)
 
   holdingInformation Holding_Information @relation(fields: [holdingInformationId], references: [id])
-
+serial         String   @unique // ✅ এখন এটা স্ট্রিং
   @@index([holdingInformationId])
   @@map("holdingcollection")
 }

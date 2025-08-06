@@ -28,6 +28,9 @@ import {
 
 
 export default function HoldingCollectionPage() {
+   const [currentPage, setCurrentPage] = useState(1);  
+    const itemsPerPage = 10;
+
   const today = new Date().toISOString().split("T")[0];
 const [employees, setEmployees] = useState([]);
   const [settings, setSettings] = useState(null);
@@ -199,7 +202,7 @@ const holdingInfo = collection.holdingInformation;
 
             <tr>
     <td style="width: 30%;font-size:18px;font-weight:bold;">ক্রমিক নং:</td>
-    <td style="margin-left:20px;font-size:18px;font-weight:bold;">........</td>
+    <td style="margin-left:20px;font-size:18px;font-weight:bold;">${cert.serial}</td>
   </tr>
 
   
@@ -368,6 +371,10 @@ const holdingInfo = collection.holdingInformation;
     setFilteredCollections(filtered);
   }, [search, collections]);
 
+   const indexOfLastItem = currentPage * itemsPerPage;
+const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+const currentItems = filteredCollections.slice(indexOfFirstItem, indexOfLastItem);
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
@@ -482,193 +489,178 @@ const holdingInfo = collection.holdingInformation;
 
   return (
     <div className="max-w-5xl mx-auto p-6">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white border border-gray-300 p-6 rounded-xl shadow-md mb-8"
-      >
-        <h2 className="text-2xl font-semibold mb-6 text-gray-800">
-          {editingId ? '✏️ আপডেট হোল্ডিং কালেকশন' : '📝 নতুন হোল্ডিং কালেকশন'}
-        </h2>
+     <form
+  onSubmit={handleSubmit}
+  className="bg-gradient-to-br from-white to-blue-50 border border-blue-200 p-8 rounded-3xl shadow-xl mb-10 transition-all duration-300"
+>
+  <h2 className="text-3xl font-bold text-darkcyan mb-6">
+    {editingId ? '✏️ আপডেট হোল্ডিং কালেকশন' : '📝 নতুন হোল্ডিং কালেকশন'}
+  </h2>
 
-        {/* Search input */}
-        <input
-          type="text"
-          placeholder="হোল্ডিং অনুসন্ধান করুন (নাম, ওয়ার্ড, নং)"
-          value={holdingSearchTerm}
-          onChange={e => setHoldingSearchTerm(e.target.value)}
-          className="mb-4 w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
-        />
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
-          <div>
-            <label htmlFor="holdingInformationId" className="block mb-1 font-medium text-gray-700">
-              হোল্ডিং নির্বাচন করুন
-            </label>
-            <select
-              id="holdingInformationId"
-              value={form.holdingInformationId}
-              // onChange={e => setForm({ ...form, holdingInformationId: +e.target.value })}
-              onChange={handleHoldingChange}
-              className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
-              required
-            >
-              <option value="">হোল্ডিং নির্বাচন করুন</option>
-              {filteredHoldings.map(h => (
-                <option key={h.id} value={h.id}>
-                  {h.headName} - ওয়ার্ড {h.ward} - হোল্ডিং নং {h.holdingNo}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label htmlFor="holdingNumber" className="block mb-1 font-medium text-gray-700">
-              হোল্ডিং নাম্বার<span className="text-red-600 text-xl ">*</span>
-            </label>
-            <input readOnly disabled
-              id="holdingNumber"
-              
-              value={form.holdingNumber}
-              onChange={e => setForm({ ...form, holdingNumber: e.target.value })}
-              className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
-              required
-            />
-          </div>
-
-          <div>
-            <label htmlFor="fiscalYear" className="block mb-1 font-medium text-gray-700">
-              আর্থিক বছর<span className="text-red-600 text-xl ">*</span>
-            </label>
-            <select
-              id="fiscalYear"
-              value={form.fiscalYear}
-              onChange={e => setForm({ ...form, fiscalYear: e.target.value })}
-              className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
-              required
-            >
-              <option value="Y2022_2023">২০২২-২০২৩</option>
-              <option value="Y2023_2024">২০২৩-২০২৪</option>
-              <option value="Y2024_2025">২০২৪-২০২৫</option>
-              <option value="Y2025_2026">২০২৫-২০২৬</option>
-              <option value="Y2026_2027">২০২৬-২০২৭</option>
-              <option value="Y2027_2028">২০২৭-২০২৮</option>
-              <option value="Y2028_2029">২০২৮-২০২৯</option>
-              <option value="Y2029_2030">২০২৯-২০৩০</option>
-            </select>
-          </div>
-
-          <div>
-            <label htmlFor="currentAmount" className="block mb-1 font-medium text-gray-700">
-              চলতি ট্যাক্স<span className="text-red-600 text-xl ">*</span>
-            </label>
-            <input
-              id="currentAmount"
-              type="number"
-              placeholder="পরিমাণ"
-              value={form.currentAmount}
-              onChange={e => setForm({ ...form, currentAmount: e.target.value })}
-              className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
-              required
-            />
-          </div>
-
-          <div>
-            <label htmlFor="dueAmount" className="block mb-1 font-medium text-gray-700">
-              বকেয়া (যদি থাকে)
-            </label>
-            <input
-              id="dueAmount"
-              type="number"
-              placeholder="পরিমাণ"
-              value={form.dueAmount}
-              onChange={e => setForm({ ...form, dueAmount: e.target.value })}
-              className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
-               
-            />
-          </div>
-
-          <div>
-            <label htmlFor="amount" className="block mb-1 font-medium text-gray-700">
-              মোট টাকা
-            </label>
-            <input readOnly disabled
-              id="amount"
-              type="number"
-              placeholder="পরিমাণ"
-              value={form.amount}
-              onChange={e => setForm({ ...form, amount: e.target.value })}
-              className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
-              required
-            />
-          </div>
-
-          <div>
-            <label htmlFor="paymentDate" className="block mb-1 font-medium text-gray-700">
-              পেমেন্ট তারিখ<span className="text-red-600 text-xl ">*</span>
-            </label>
-
-            <DatePicker
-    id="paymentDate"
-    selected={form.paymentDate ? new Date(form.paymentDate) : null}
-    onChange={(date) =>
-      setForm({ ...form, paymentDate: date?.toISOString().split("T")[0] || '' })
-    }
-    dateFormat="yyyy-MM-dd"
-    placeholderText="তারিখ নির্বাচন করুন"
-    className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
-    required
+  {/* 🔍 Search Field */}
+  <input
+    type="text"
+    placeholder="🔍 হোল্ডিং অনুসন্ধান করুন (নাম, ওয়ার্ড, নং)"
+    value={holdingSearchTerm}
+    onChange={e => setHoldingSearchTerm(e.target.value)}
+    className="mb-6 w-full rounded-xl px-4 py-3 bg-white border-2 border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition"
   />
 
+  {/* ✅ Grid Layout */}
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
 
-             
-          </div>
+    {/* Dropdown: Holding Selection */}
+    <div>
+      <label className="block mb-2 text-sm font-semibold text-gray-700">হোল্ডিং নির্বাচন করুন <span className="text-red-500">*</span></label>
+      <select
+        value={form.holdingInformationId}
+        onChange={handleHoldingChange}
+        className="w-full p-3 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-cyan-500 focus:outline-none transition"
+        required
+      >
+        <option value="">হোল্ডিং নির্বাচন করুন</option>
+        {filteredHoldings.map(h => (
+          <option key={h.id} value={h.id}>
+            {h.headName} - ওয়ার্ড {h.ward} - হোল্ডিং নং {h.holdingNo}
+          </option>
+        ))}
+      </select>
+    </div>
 
-          <div className="md:col-span-2">
-            <label htmlFor="comments" className="block mb-1 font-medium text-gray-700">
-              মন্তব্য (যদি থাকে)
-            </label>
-            <input
-              id="comments"
-              type="text"
-              value={form.comments}
-              onChange={e => setForm({ ...form, comments: e.target.value })}
-              className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
-            />
-          </div>
-        </div>
+    {/* Holding Number */}
+    <div>
+      <label className="block mb-2 text-sm font-semibold text-gray-700">হোল্ডিং নাম্বার</label>
+      <input
+        value={form.holdingNumber}
+        readOnly disabled
+        className="w-full p-3 rounded-lg border border-gray-200 bg-gray-100 text-gray-500"
+      />
+    </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className={`w-full py-3 rounded text-white font-semibold transition ${
-            loading ? 'bg-green-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'
-          } flex justify-center items-center gap-2`}
+    {/* Fiscal Year */}
+    <div>
+      <label className="block mb-2 text-sm font-semibold text-gray-700">আর্থিক বছর <span className="text-red-500">*</span></label>
+      <select
+        value={form.fiscalYear}
+        onChange={e => setForm({ ...form, fiscalYear: e.target.value })}
+        className="w-full p-3 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-cyan-500 focus:outline-none"
+        required
+      >
+        <option value="">-- নির্বাচন করুন --</option>
+        <option value="Y2022_2023">২০২২-২০২৩</option>
+        <option value="Y2023_2024">২০২৩-২০২৪</option>
+        <option value="Y2024_2025">২০২৪-২০২৫</option>
+        <option value="Y2025_2026">২০২৫-২০২৬</option>
+        <option value="Y2026_2027">২০২৬-২০২৭</option>
+        <option value="Y2027_2028">২০২৭-২০২৮</option>
+        <option value="Y2028_2029">২০২৮-২০২৯</option>
+        <option value="Y2029_2030">২০২৯-২০৩০</option>
+      </select>
+    </div>
+
+    {/* Current Amount */}
+    <div>
+      <label className="block mb-2 text-sm font-semibold text-gray-700">চলতি ট্যাক্স <span className="text-red-500">*</span></label>
+      <input
+        type="number"
+        placeholder="৳"
+        value={form.currentAmount}
+        onChange={e => setForm({ ...form, currentAmount: e.target.value })}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:outline-none"
+        required
+      />
+    </div>
+
+    {/* Due Amount */}
+    <div>
+      <label className="block mb-2 text-sm font-semibold text-gray-700">বকেয়া</label>
+      <input
+        type="number"
+        placeholder="৳"
+        value={form.dueAmount}
+        onChange={e => setForm({ ...form, dueAmount: e.target.value })}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-yellow-400 focus:outline-none"
+      />
+    </div>
+
+    {/* Total Amount */}
+    <div>
+      <label className="block mb-2 text-sm font-semibold text-gray-700">মোট টাকা</label>
+      <input
+        type="number"
+        value={form.amount}
+        readOnly disabled
+        className="w-full p-3 rounded-lg border border-gray-200 bg-gray-100 text-gray-500"
+      />
+    </div>
+
+    {/* Payment Date */}
+    <div>
+      <label className="block mb-2 text-sm font-semibold text-gray-700">পেমেন্ট তারিখ <span className="text-red-500">*</span></label>
+      <DatePicker
+        selected={form.paymentDate ? new Date(form.paymentDate) : null}
+        onChange={(date) =>
+          setForm({ ...form, paymentDate: date?.toISOString().split("T")[0] || '' })
+        }
+        dateFormat="yyyy-MM-dd"
+        placeholderText="তারিখ নির্বাচন করুন"
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+        required
+      />
+    </div>
+
+    {/* Comments */}
+    <div className="md:col-span-2">
+      <label className="block mb-2 text-sm font-semibold text-gray-700">মন্তব্য</label>
+      <input
+        type="text"
+        value={form.comments}
+        onChange={e => setForm({ ...form, comments: e.target.value })}
+        className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-400 focus:outline-none"
+      />
+    </div>
+  </div>
+
+  {/* Submit Button */}
+  <button
+    type="submit"
+    disabled={loading}
+    className={`w-full py-3 rounded-xl font-bold text-white text-lg flex justify-center items-center transition-all ${
+      loading
+        ? "bg-gray-400 cursor-not-allowed"
+        : "bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700"
+    }`}
+  >
+    {loading ? (
+      <>
+        <svg
+          className="animate-spin h-5 w-5 mr-2 text-white"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
         >
-          {loading && (
-            <svg
-              className="animate-spin h-5 w-5 text-white"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              ></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-              ></path>
-            </svg>
-          )}
-          {editingId ? '✅ আপডেট করুন' : '✅ সংরক্ষণ করুন'}
-        </button>
-      </form>
+          <circle
+            className="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="4"
+          ></circle>
+          <path
+            className="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+          ></path>
+        </svg>
+        সংরক্ষণ হচ্ছে...
+      </>
+    ) : (
+      editingId ? '✅ আপডেট করুন' : '✅ সংরক্ষণ করুন'
+    )}
+  </button>
+</form>
+
 
       {/* Collections Table */}
       <div className="bg-white border border-gray-300 p-4 rounded-xl shadow-md overflow-x-auto">
@@ -699,14 +691,14 @@ const holdingInfo = collection.holdingInformation;
           </tr>
         </thead>
         <tbody>
-          {filteredCollections.length === 0 ? (
+          {currentItems.length === 0 ? (
             <tr>
               <td colSpan={6} className="text-center p-4 text-gray-600">
                 কোনো কালেকশন পাওয়া যায়নি।
               </td>
             </tr>
           ) : (
-            filteredCollections.map((c) => (
+            currentItems.map((c) => (
               <tr key={c.id} className="hover:bg-green-50 transition">
                 <td className="border border-gray-300 p-2">
                   {c.holdingInformation?.headName || '---'}
@@ -748,6 +740,19 @@ const holdingInfo = collection.holdingInformation;
           )}
         </tbody>
       </table>
+      <div className="flex justify-center mt-4 space-x-2">
+  {Array.from({ length: Math.ceil(filteredCollections.length / itemsPerPage) }, (_, i) => (
+    <button
+      key={i + 1}
+      onClick={() => setCurrentPage(i + 1)}
+      className={`px-4 py-2 rounded-lg text-green font-semibold ${
+        currentPage === i + 1 ? 'bg-blue-500 text-white' : 'bg-gray-100'
+      } hover:bg-red-700 transition`}
+    >
+      {i + 1}
+    </button>
+  ))}
+</div>
     </>
         )}
       </div>
