@@ -33,6 +33,9 @@ const Editor = dynamic(
 );
 
 export default function CertificatesPage() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
   const [loading, setLoading] = useState(false);
   const [filteredCollections, setFilteredCollections] = useState([]);
   const [search, setSearch] = useState("");
@@ -41,7 +44,6 @@ export default function CertificatesPage() {
   const [settings, setSettings] = useState(null);
   const [now, setNow] = useState(null);
   const [isEditingType, setIsEditingType] = useState(false); // নতুন state
-
 
   const fetchOfficeSettings = async () => {
     const res = await fetch("/api/office_settings");
@@ -99,27 +101,19 @@ export default function CertificatesPage() {
       <p> উল্লিখিত ব্যক্তি আমার সন্তান। তাকে বাংলাদেশ সেনা/পুলিশ/নৌ/বিমান/আনসার বাহিনীতে নিয়োগের জন্য স্ব-জ্ঞানে সম্মতি প্রদান করিলাম এবং আপনার সম্মুখে স্বাক্ষর প্রদান করিলাম। এই নিয়োগের ব্যাপারে আমার কিংবা আমার পরিবারের কোনো আপত্তি নাই।
       </p>
     `;
-    }
-
-    else if (type === 10) {
+    } else if (type === 10) {
       defaultNote = `
       <p> সংশ্লিষ্ট ওয়ার্ড সদস্যের প্রত্যয়ন সূত্রে জানতে পারি, তিনি উল্লিখিত ঠিকানার একজন স্থায়ী বাসিন্দা এবং জন্মসূত্রে বাংলাদেশী নাগরিক। তিনি রাষ্ট্র ও সমাজবিরোধী কোনো কার্যকলাপে জড়িত নন এবং তিনি একজন ভূমিহীন। <br> আমি তাঁর সর্বাঙ্গীন মঙ্গল ও উন্নতি কামনা করি।</p>
     `;
-    }
-
-
-    else if (type === 11) {
+    } else if (type === 11) {
       defaultNote = `
       <p> সংশ্লিষ্ট ওয়ার্ড সদস্যের প্রত্যয়ন সূত্রে জানতে পারি, তিনি উল্লিখিত ঠিকানার একজন স্থায়ী বাসিন্দা এবং জন্মসূত্রে বাংলাদেশী নাগরিক। তিনি রাষ্ট্র ও সমাজবিরোধী কোনো কার্যকলাপে জড়িত নন এবং তিনি একজন বেকার। <br> আমি তাঁর সর্বাঙ্গীন মঙ্গল ও উন্নতি কামনা করি।</p>
     `;
-    }
-
-    else if (type === 12) {
+    } else if (type === 12) {
       defaultNote = `
       <p> সংশ্লিষ্ট ওয়ার্ড সদস্যের প্রত্যয়ন সূত্রে জানতে পারি, তিনি উল্লিখিত ঠিকানার একজন স্থায়ী বাসিন্দা এবং জন্মসূত্রে বাংলাদেশী নাগরিক। তিনি রাষ্ট্র ও সমাজবিরোধী কোনো কার্যকলাপে জড়িত নন এবং তিনি সনাতন হিন্দু/বৌদ্ধ / খ্রিস্টান সম্প্রদায়ের অন্তর্ভুক্ত। <br> আমি তাঁর সর্বাঙ্গীন মঙ্গল ও উন্নতি কামনা করি।</p>
     `;
     }
-
 
     setForm((prevForm) => ({
       ...prevForm,
@@ -211,7 +205,7 @@ export default function CertificatesPage() {
     setNow(new Date().toLocaleDateString());
   }, []);
 
-    useEffect(() => {
+  useEffect(() => {
     const s = search.toLowerCase();
     const filtered = certificates.filter(
       (c) =>
@@ -220,8 +214,6 @@ export default function CertificatesPage() {
     );
     setFilteredCollections(filtered);
   }, [search, certificates]);
-
-
 
   const signer2 = employees[1] || {
     name: " ",
@@ -289,7 +281,7 @@ export default function CertificatesPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true); // ✅ লোডিং শুরু
-    setIsEditingType(false)
+    setIsEditingType(false);
 
     // Required validation
     if (!form.applicantName || form.applicantName.trim() === "") {
@@ -356,42 +348,42 @@ export default function CertificatesPage() {
       if (data.success) {
         toast.success("Deleted Successfully");
         setForm({
-    id: null,
-    type: "",
-    applicantName: "",
-    fatherName: "",
-    motherName: "",
-    spouse: "",
-    birthDate: "",
-    address: "",
-    issuedDate: today,
+          id: null,
+          type: "",
+          applicantName: "",
+          fatherName: "",
+          motherName: "",
+          spouse: "",
+          birthDate: "",
+          address: "",
+          issuedDate: today,
 
-    businessStartDate: today,
-    mobile: "",
-    tin: "",
-    passport: "",
-    nature: "",
-    email: "",
-    nid: "",
-    birth_no: "",
-    ward: "",
-    mouza: "",
-    post_office: "",
-    holding_no: "",
-    notes: "",
-    letter_count: "",
-    trade_name: "",
-    trade_address: "",
+          businessStartDate: today,
+          mobile: "",
+          tin: "",
+          passport: "",
+          nature: "",
+          email: "",
+          nid: "",
+          birth_no: "",
+          ward: "",
+          mouza: "",
+          post_office: "",
+          holding_no: "",
+          notes: "",
+          letter_count: "",
+          trade_name: "",
+          trade_address: "",
 
-    trade_fee: "",
-    trade_capital_tax: "",
-    trade_due: "",
-    trade_vat: "",
-    trade_total_tax: "",
-    trade_type: "",
-    fiscalYear: "Y2025_2026", // default
-    fiscalYearEnd: "Y2025_2026", // default
-  })
+          trade_fee: "",
+          trade_capital_tax: "",
+          trade_due: "",
+          trade_vat: "",
+          trade_total_tax: "",
+          trade_type: "",
+          fiscalYear: "Y2025_2026", // default
+          fiscalYearEnd: "Y2025_2026", // default
+        });
         fetchCertificates(); // ✅ ডেটা রিফ্রেশ
       } else {
         toast.error("Failed to delete");
@@ -463,63 +455,68 @@ export default function CertificatesPage() {
     return `${day}-${month}-${year}`;
   };
 
+  const indexOfLastItem = currentPage * itemsPerPage;
+const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+const currentItems = filteredCollections.slice(indexOfFirstItem, indexOfLastItem);
+const totalPages = Math.ceil(filteredCollections.length / itemsPerPage);
+
+
   const handlePrint = async (cert) => {
-
     setLoading(true); // ⬅️ লোডিং শুরু
-  try {
-    const origin = window.location.origin;
-    const dob = formatDobDate(cert.birthDate?.substring(0, 10));
-    const [day, month, year] = dob.split("-");
-
-    const bnDob = `${enToBnNumber(day)}-${enToBnNumber(month)}-${enToBnNumber(
-      year
-    )}`;
-    const nid = enToBnNumber(cert.nid);
-    const birth_no = enToBnNumber(cert.birth_no);
-    const applicantInfoRows = generateApplicantInfoRows(
-      cert,
-      bnDob,
-      nid,
-      birth_no
-    );
-    const issue_date_format = formatDate(cert.issuedDate || new Date());
-    const [issue_day, issue_month, issue_year] = issue_date_format.split("-");
-    const bnIssueDate = `${enToBnNumber(issue_day)}-${enToBnNumber(
-      issue_month
-    )}-${enToBnNumber(issue_year)}`;
-
-    const govtImg = `${origin}/images/govt.png`;
-    const unionImg = settings?.imageUrl || `${origin}/images/union.png`;
-
-    const qrImg = `${origin}/images/qr.png`;
-    const qrUrl = `${origin}/verify/certificate?id=${cert.id}`;
-    const qrImg_with_link = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(
-      qrUrl
-    )}&size=100x100`;
-    //const qrImg_with_link = `https://api.qrserver.com/v1/create-qr-code/?data=https://google.com&size=150x150`;
-
-    // ✅ প্রিলোড ইমেজ
     try {
-      await Promise.all([preloadImage(govtImg), preloadImage(unionImg)]);
-    } catch (err) {
-      console.error("Error preloading images:", err);
-    }
+      const origin = window.location.origin;
+      const dob = formatDobDate(cert.birthDate?.substring(0, 10));
+      const [day, month, year] = dob.split("-");
 
-    const cert_type = cert.type;
+      const bnDob = `${enToBnNumber(day)}-${enToBnNumber(month)}-${enToBnNumber(
+        year
+      )}`;
+      const nid = enToBnNumber(cert.nid);
+      const birth_no = enToBnNumber(cert.birth_no);
+      const applicantInfoRows = generateApplicantInfoRows(
+        cert,
+        bnDob,
+        nid,
+        birth_no
+      );
+      const issue_date_format = formatDate(cert.issuedDate || new Date());
+      const [issue_day, issue_month, issue_year] = issue_date_format.split("-");
+      const bnIssueDate = `${enToBnNumber(issue_day)}-${enToBnNumber(
+        issue_month
+      )}-${enToBnNumber(issue_year)}`;
 
-    const signatureHTML = generateSignatureHTML(
-      signer,
-      signer2,
-      designationText,
-      designationText2,
-      settings,
-      qrImg_with_link,
-      cert_type
-    );
+      const govtImg = `${origin}/images/govt.png`;
+      const unionImg = settings?.imageUrl || `${origin}/images/union.png`;
 
-    const headerHTML = getHeaderSection(settings, govtImg, unionImg);
+      const qrImg = `${origin}/images/qr.png`;
+      const qrUrl = `${origin}/verify/certificate?id=${cert.id}`;
+      const qrImg_with_link = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(
+        qrUrl
+      )}&size=100x100`;
+      //const qrImg_with_link = `https://api.qrserver.com/v1/create-qr-code/?data=https://google.com&size=150x150`;
 
-    const printContents = `
+      // ✅ প্রিলোড ইমেজ
+      try {
+        await Promise.all([preloadImage(govtImg), preloadImage(unionImg)]);
+      } catch (err) {
+        console.error("Error preloading images:", err);
+      }
+
+      const cert_type = cert.type;
+
+      const signatureHTML = generateSignatureHTML(
+        signer,
+        signer2,
+        designationText,
+        designationText2,
+        settings,
+        qrImg_with_link,
+        cert_type
+      );
+
+      const headerHTML = getHeaderSection(settings, govtImg, unionImg);
+
+      const printContents = `
     <!DOCTYPE html>
     <html lang="bn">
     <head>
@@ -541,8 +538,8 @@ export default function CertificatesPage() {
 
             <div class="top-section">
               <p>স্মারক নং: ${settings?.sarok_no}${enToBnNumber(
-      cert?.letter_count
-    )}</p>
+        cert?.letter_count
+      )}</p>
               <p>তারিখ: ${bnIssueDate}</p>
             </div>
 
@@ -577,21 +574,25 @@ export default function CertificatesPage() {
   <tr>
         <td style="width:30%;font-size:17px;">ওয়ার্ড</td>
         <td style="width:38%;text-align:left;font-size:17px;">: &nbsp;${
-              enToBnNumber(cert.ward) || "-"
-            }</td>         
+          enToBnNumber(cert.ward) || "-"
+        }</td>         
         <td style="width:14%;font-size:17px;">হোল্ডিং নং </td>
-        <td style="width:18%;text-align:left;font-size:17px;">: &nbsp; ${enToBnNumber(cert.holding_no) || "-"}</td>          
+        <td style="width:18%;text-align:left;font-size:17px;">: &nbsp; ${
+          enToBnNumber(cert.holding_no) || "-"
+        }</td>          
 
   </tr>
 
     <tr>
         <td style="width:30%;font-size:17px;">গ্রাম</td>
         <td style="width:38%;text-align:left;font-size:17px;">:&nbsp;${
-              cert.address || "-"
-            }</td>
+          cert.address || "-"
+        }</td>
         
         <td style="width:14%;font-size:17px;">মৌজা</td>
-        <td style="width:18%;text-align:left;font-size:17px;">: &nbsp;${enToBnNumber(cert.mouza) || "-"}</td>        
+        <td style="width:18%;text-align:left;font-size:17px;">: &nbsp;${
+          enToBnNumber(cert.mouza) || "-"
+        }</td>        
 
   </tr>
 
@@ -599,10 +600,12 @@ export default function CertificatesPage() {
   <tr>
         <td style="width:30%;font-size:17px;">ডাকঘর</td>
         <td style="width:38%;text-align:left;font-size:17px;">:&nbsp;${
-              enToBnNumber(cert.post_office) || "-"
-            }</td>        
+          enToBnNumber(cert.post_office) || "-"
+        }</td>        
          
-        <td colspan=2 style="width:32%;text-align:left;font-size:16px;">উপজেলা: ${settings?.upazila},
+        <td colspan=2 style="width:32%;text-align:left;font-size:16px;">উপজেলা: ${
+          settings?.upazila
+        },
         জেলা: &nbsp;${settings?.district}</td>        
 
   </tr>
@@ -665,17 +668,13 @@ ${
     </html>
   `;
 
-    openPrintWindow(printContents);
-
-}
-
-catch (error) {
-    console.error("Printing failed:", error);
-    toast.error("Printing failed");
-  } finally {
-    setLoading(false); // ⬅️ লোডিং বন্ধ
-  }
-
+      openPrintWindow(printContents);
+    } catch (error) {
+      console.error("Printing failed:", error);
+      toast.error("Printing failed");
+    } finally {
+      setLoading(false); // ⬅️ লোডিং বন্ধ
+    }
   };
 
   const handlePrintNameRelated = async (cert, settings) => {
@@ -932,7 +931,9 @@ catch (error) {
   <tr>
     <td style="width: 25%;font-weight:bold;">মাতার নাম</td>
     <td style="width:25%;">: ${cert.motherName}</td>
-    <td style="width:50%;"><b>পিতার নাম:</b> &nbsp;&nbsp; ${cert.fatherName}</td>
+    <td style="width:50%;"><b>পিতার নাম:</b> &nbsp;&nbsp; ${
+      cert.fatherName
+    }</td>
   </tr>
 
    
@@ -942,7 +943,9 @@ catch (error) {
    <tr>
     <td style="width: 25%;;font-weight:bold;">স্বত্বাধিকারীর ঠিকানা </td>
     <td style="width:25%;font-size:13px;">: ${cert.address}   </td>
-    <td style="width:50%"> <b>ব্যবসার প্রকৃতি:</b>&nbsp;&nbsp; ${cert.nature}&nbsp; &nbsp; <b>ব্যবসার ধরণ:</b> ${cert.trade_type} </td>
+    <td style="width:50%"> <b>ব্যবসার প্রকৃতি:</b>&nbsp;&nbsp; ${
+      cert.nature
+    }&nbsp; &nbsp; <b>ব্যবসার ধরণ:</b> ${cert.trade_type} </td>
   </tr>
 
   
@@ -955,7 +958,9 @@ catch (error) {
   <tr>
     <td style="width: 25%;font-size:14px;;font-weight:bold;">প্রতিষ্ঠানের ঠিকানা</td>
     <td  style="width:25%;    font-size:14px;">: ${cert.trade_address} </td>
-    <td style="width:50%; ">  <b>স্বামী/স্ত্রীর নাম:</b> &nbsp;&nbsp; ${cert.spouse}</td>
+    <td style="width:50%; ">  <b>স্বামী/স্ত্রীর নাম:</b> &nbsp;&nbsp; ${
+      cert.spouse
+    }</td>
   </tr>
 
    <tr>
@@ -966,17 +971,19 @@ catch (error) {
       cert.passport
     )} </td>
 
-    <td style="width:50%;"><b>টি আই এন</b> &nbsp;&nbsp; ${enToBnNumber(cert.tin)} </td>
+    <td style="width:50%;"><b>টি আই এন</b> &nbsp;&nbsp; ${enToBnNumber(
+      cert.tin
+    )} </td>
      
   </tr>
 
   <tr>
     <td style="width:25%;;font-weight:bold;">মোবাইল</td>
-    <td style="width:25%;">: ${enToBnNumber(
-      cert.mobile
-    )}</span>
+    <td style="width:25%;">: ${enToBnNumber(cert.mobile)}</span>
    </td>
-   <td style="width:50%;"><b> ই-মেইল: </b>&nbsp;&nbsp;  <span style="font-size:11px;">${cert.email} </td>
+   <td style="width:50%;"><b> ই-মেইল: </b>&nbsp;&nbsp;  <span style="font-size:11px;">${
+     cert.email
+   } </td>
    
   </tr>
 
@@ -1249,12 +1256,12 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
               value={form.type}
               onChange={(e) => setForm({ ...form, type: e.target.value })}
               className="border p-2 rounded w-full"
-               disabled={isEditingType}
+              disabled={isEditingType}
             >
               <option value="">-- সনদের ধরন নির্বাচন করুন --</option>
               <option value="নাগরিকত্ব সনদ">নাগরিকত্ব সনদ</option>
               <option value="জাতীয়তা সনদ">জাতীয়তা সনদ</option>
-               
+
               <option value="বার্ষিক আয়ের সনদ">বার্ষিক আয়ের সনদ</option>
               <option value="ট্রেড লাইসেন্স">ট্রেড লাইসেন্স</option>
               <option value="নাম সংক্রান্ত প্রত্যয়ন পত্র">
@@ -1874,7 +1881,6 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
             Load Default(ভূমিহীন সনদ)
           </button>
 
-
           <button
             type="button"
             onClick={() => handleLoadDefaultNote(11)}
@@ -1883,15 +1889,13 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
             Load Default(বেকারত্ব সনদ)
           </button>
 
-           <button
+          <button
             type="button"
             onClick={() => handleLoadDefaultNote(12)}
             className="bg-[blue] text-white mx-4 my-2 px-3 py-1 text-sm rounded-2xl shadow hover:bg-green-600"
           >
             Load Default(সম্প্রদায় সনদ)
           </button>
-
-
 
           {/* <Editor
             apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
@@ -1927,13 +1931,12 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
           /> */}
 
           <textarea
-  value={form.notes}
-  onChange={(e) => setForm({ ...form, notes: e.target.value })}
-  rows={5}
-  placeholder=" "
-  className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-300 focus:border-green-400 transition duration-150 ease-in-out"
-/>
-
+            value={form.notes}
+            onChange={(e) => setForm({ ...form, notes: e.target.value })}
+            rows={5}
+            placeholder=" "
+            className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-300 focus:border-green-400 transition duration-150 ease-in-out"
+          />
         </div>
 
         <button
@@ -1957,108 +1960,123 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
       </form>
 
       <div className="relative bg-white border p-4 rounded-xl shadow">
-  {/* ✅ Loading Overlay */}
-  {loading ? (
-    <div className="absolute inset-0 bg-white bg-opacity-70 z-50 flex flex-col items-center justify-center">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-      <p className="text-red-600 text-sm mt-2">লোড হচ্ছে...</p>
-    </div>
-  ) : (
-    <>
-      <input
-        type="text"
-        placeholder="🔍NID or Birth  নাম্বার দিয়ে খুঁজুন..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="w-full md:w-96 mb-4 px-4 py-2 border-2 border-[darkcyan] rounded-2xl bg-green-50 placeholder-green-700 text-green-900 focus:outline-none focus:ring-4 focus:ring-green-300 hover:bg-green-100 transition-all duration-200"
-      />
-      <h2 className="text-2xl font-semibold mb-3 text-[darkcyan]">সকল সনদ</h2>
-      <table className="w-full text-sm border">
-        <thead className="bg-blue-100">
-          <tr>
-            <th className="border p-3">সনদের ধরন</th>
-            <th className="border p-3">সিরিয়াল</th>
-            <th className="border p-3">নাম</th>
-            <th className="border p-3">পিতার নাম</th>
-             
-            <th className="border p-3">এনআইডি</th>
-            <th className="border p-3">জন্ম নিবন্ধন</th>
-            <th className="border p-3">ঠিকানা</th>
-            
-            <th className="border p-3">অ্যাকশন</th>
-          </tr>
-        </thead>
-        <tbody>
-  {filteredCollections.length === 0 && (
-    <tr>
-      <td colSpan={9} className="text-center p-4">
-        কোনো সনদ পাওয়া যায়নি।
-      </td>
-    </tr>
-  )}
-  {filteredCollections.map((cert, index) => {
-    let rowClass = index % 2 === 0 ? "bg-blue-50" : "bg-blue-100";
-    if (cert.type === "নাগরিকত্ব সনদ") {
-      rowClass = "bg-[darkcyan] text-white";
-    }
+        {/* ✅ Loading Overlay */}
+        {loading ? (
+          <div className="absolute inset-0 bg-white bg-opacity-70 z-50 flex flex-col items-center justify-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <p className="text-red-600 text-sm mt-2">লোড হচ্ছে...</p>
+          </div>
+        ) : (
+          <>
+            <input
+              type="text"
+              placeholder="🔍NID or Birth  নাম্বার দিয়ে খুঁজুন..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full md:w-96 mb-4 px-4 py-2 border-2 border-[darkcyan] rounded-2xl bg-green-50 placeholder-green-700 text-green-900 focus:outline-none focus:ring-4 focus:ring-green-300 hover:bg-green-100 transition-all duration-200"
+            />
+            <h2 className="text-2xl font-semibold mb-3 text-[darkcyan]">
+              সকল সনদ
+            </h2>
+            <table className="w-full text-sm border">
+              <thead className="bg-blue-100">
+                <tr>
+                  <th className="border p-3">সনদের ধরন</th>
+                  <th className="border p-3">সিরিয়াল</th>
+                  <th className="border p-3">নাম</th>
+                  <th className="border p-3">পিতার নাম</th>
 
-    return (
-      <tr key={cert.id} className={rowClass}>
-        <td className="border p-3">{cert.type}</td>
-        <td className="border p-3">{cert.letter_count}</td>
-        <td className="border p-3">{cert.applicantName}</td>
-        <td className="border p-3">{cert.fatherName || ""}</td>
-        <td className="border p-3">{cert.nid}</td>
-        <td className="border p-3">{cert.birth_no}</td>
-        <td className="border p-3">{cert.address || ""}</td>
-        <td className="border p-4 space-x-1 text-2xl">
-          <button
-            onClick={() => handleEdit(cert)}
-            className="text-blue-600"
-          >
-            ✏️
-          </button>
-          <button
-            onClick={() => handleDelete(cert.id)}
-            className=" text-2xl"
-          >
-            🗑
-          </button>
-          {cert.type !== "ট্রেড লাইসেন্স" && (
-            <button
-              onClick={() => handlePrint(cert)}
-              className="text-green-600"
-            >
-              🖨️
-            </button>
-          )}
-          {cert.type === "নাম সংক্রান্ত প্রত্যয়ন পত্র" && (
-            <button
-              onClick={() => handlePrintNameRelated(cert, settings)}
-              className="text-green-600"
-            >
-              নাম সংক্রান্ত
-            </button>
-          )}
-          {cert.type === "ট্রেড লাইসেন্স" && (
-            <button
-              onClick={() => handlePrint_trade(cert)}
-              className="text-green-600 text-2xl"
-            >
-              Trade(P)
-            </button>
-          )}
-        </td>
-      </tr>
-    );
-  })}
-</tbody>
+                  <th className="border p-3">এনআইডি</th>
+                  <th className="border p-3">জন্ম নিবন্ধন</th>
+                  <th className="border p-3">ঠিকানা</th>
 
-      </table>
-    </>
-  )}
+                  <th className="border p-3">অ্যাকশন</th>
+                </tr>
+              </thead>
+              <tbody>
+                {currentItems.length === 0 && (
+                  <tr>
+                    <td colSpan={9} className="text-center p-4">
+                      কোনো সনদ পাওয়া যায়নি।
+                    </td>
+                  </tr>
+                )}
+                {currentItems.map((cert, index) => {
+                  let rowClass = index % 2 === 0 ? "bg-blue-50" : "bg-blue-100";
+                  if (cert.type === "নাগরিকত্ব সনদ") {
+                    rowClass = "bg-[darkcyan] text-white";
+                  }
+
+                  return (
+                    <tr key={cert.id} className={rowClass}>
+                      <td className="border p-3">{cert.type}</td>
+                      <td className="border p-3">{cert.letter_count}</td>
+                      <td className="border p-3">{cert.applicantName}</td>
+                      <td className="border p-3">{cert.fatherName || ""}</td>
+                      <td className="border p-3">{cert.nid}</td>
+                      <td className="border p-3">{cert.birth_no}</td>
+                      <td className="border p-3">{cert.address || ""}</td>
+                      <td className="border p-4 space-x-1 text-2xl">
+                        <button
+                          onClick={() => handleEdit(cert)}
+                          className="text-blue-600"
+                        >
+                          ✏️
+                        </button>
+                        <button
+                          onClick={() => handleDelete(cert.id)}
+                          className=" text-2xl"
+                        >
+                          🗑
+                        </button>
+                        {cert.type !== "ট্রেড লাইসেন্স" && (
+                          <button
+                            onClick={() => handlePrint(cert)}
+                            className="text-green-600"
+                          >
+                            🖨️
+                          </button>
+                        )}
+                        {cert.type === "নাম সংক্রান্ত প্রত্যয়ন পত্র" && (
+                          <button
+                            onClick={() =>
+                              handlePrintNameRelated(cert, settings)
+                            }
+                            className="text-green-600"
+                          >
+                            নাম সংক্রান্ত
+                          </button>
+                        )}
+                        {cert.type === "ট্রেড লাইসেন্স" && (
+                          <button
+                            onClick={() => handlePrint_trade(cert)}
+                            className="text-green-600 text-2xl"
+                          >
+                            Trade(P)
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            <div className="mt-4 flex justify-center gap-2">
+  {Array.from({ length: totalPages }, (_, index) => (
+    <button
+      key={index}
+      onClick={() => setCurrentPage(index + 1)}
+      className={`px-3 py-1 border rounded ${
+        currentPage === index + 1 ? "bg-blue-500 text-white" : "bg-gray-100"
+      }`}
+    >
+      {index + 1}
+    </button>
+  ))}
 </div>
-
+          </>
+        )}
+      </div>
 
       <ToastContainer position="top-center" autoClose={2000} />
     </div>
