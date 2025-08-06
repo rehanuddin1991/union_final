@@ -864,6 +864,7 @@ catch (error) {
       </style>
     </head>
     <body>
+    <br><br> 
       <div class="outer-border">
         <div class="middle-border">
           <div class="inner-border">
@@ -889,12 +890,19 @@ catch (error) {
     ${cert.type || "সার্টিফিকেট"}  
   </h1>
 </div>
-<div style="margin-top:-10px;">
+       
+
+<div style="margin-top:-10px;display:flex;justify-content: left;      align-items: center;    gap: 1.4rem;        flex-wrap: wrap;  ">
 <h5>ট্রেড লাইসেন্স নম্বর: ${cert.autoGenNum}</h5>
+<h4>অর্থবছর: ${convertToBanglaNumber(
+      fiscal_start_year
+    )}-${convertToBanglaNumber(fiscal_end_year)}</h4>
+<h4>ব্যবসা শুরু তারিখ: ${bnStartDate}</h4>
+ 
 
 </div>
 
-<div style="margin-top:-7px;" >
+<div style="margin-top:-27px;" >
 <h5> স্থানীয় সরকার (ইউনিয়ন পরিষদ) আইন, ২০০৯ (২০০৯ সনের ৬১ নং
 আইন) এর ধারা ৫৫ তে প্রদত্ত ক্ষমতাবলে সরকার প্রণীত আদর্শ কর
 তফসিল, ২০১৬ এর ৬ ও ১৭ নং অনুচ্ছেদ অনুযায়ী ব্যবসা, বৃত্তি, পেশা
@@ -910,66 +918,66 @@ catch (error) {
             <table style="margin-top:-5px;">
              
             <tr>
-    <td style="width: 30%;font-weight:bold;">ব্যবসা প্রতিষ্ঠানের নাম</td>
-    <td style="margin-left:20px;font-weight:bold;">: ${cert.trade_name}</td>
+    <td style="width: 25%;font-weight:bold;">ব্যবসা প্রতিষ্ঠানের নাম</td>
+    <td style="width:25%;">: ${cert.trade_name}</td>
+    <td style="width:50%;"> &nbsp;</td>
   </tr>
 
    <tr>
-    <td style="width: 30%;">মালিক/পরিচালক/স্বত্বাধিকারীর নাম</td>
-    <td style="margin-left:20px;">: ${cert.applicantName}</td>
+    <td style="width: 25%;;font-weight:bold;">মালিক/স্বত্বাধিকারীর নাম</td>
+    <td style="width:25%;">: ${cert.applicantName}</td>
+    <td style="width:50%;"> &nbsp;</td>
   </tr>
 
   <tr>
-    <td style="width: 30%;">মাতার নাম</td>
-    <td style="margin-left:20px;">: ${cert.motherName}</td>
+    <td style="width: 25%;font-weight:bold;">মাতার নাম</td>
+    <td style="width:25%;">: ${cert.motherName}</td>
+    <td style="width:50%;"><b>পিতার নাম:</b> &nbsp;&nbsp; ${cert.fatherName}</td>
   </tr>
 
    
 
+   
+
+   <tr>
+    <td style="width: 25%;;font-weight:bold;">স্বত্বাধিকারীর ঠিকানা </td>
+    <td style="width:25%;font-size:13px;">: ${cert.address}   </td>
+    <td style="width:50%"> <b>ব্যবসার প্রকৃতি:</b>&nbsp;&nbsp; ${cert.nature}&nbsp; &nbsp; <b>ব্যবসার ধরণ:</b> ${cert.trade_type} </td>
+  </tr>
+
+  
+
+
+  
+
+    
+
   <tr>
-    <td style="width: 30%;">পিতার নাম</td>
-    <td style="margin-left:20px;">: ${cert.fatherName}</td>
+    <td style="width: 25%;font-size:14px;;font-weight:bold;">প্রতিষ্ঠানের ঠিকানা</td>
+    <td  style="width:25%;    font-size:14px;">: ${cert.trade_address} </td>
+    <td style="width:50%; ">  <b>স্বামী/স্ত্রীর নাম:</b> &nbsp;&nbsp; ${cert.spouse}</td>
   </tr>
 
    <tr>
-    <td style="width: 30%;">স্বামী/স্ত্রীর নাম (প্রযোজ্য ক্ষেত্রে)</td>
-    <td style="margin-left:20px;">: ${cert.spouse}</td>
-  </tr>
-
-  <tr>
-    <td style="width: 30%;">ব্যবসার প্রকৃতি (একক/যৌথ/অন্যান্য)</td>
-    <td style="margin-left:20px;">: ${cert.nature}</td>
-  </tr>
-
-
-   <tr>
-    <td style="width: 30%;">ব্যবসার ধরণ</td>
-    <td style="margin-left:20px;">: ${cert.trade_type}</td>
-  </tr>
-
-
-  <tr>
-    <td style="width: 30%;">প্রতিষ্ঠানের ঠিকানা</td>
-    <td style="margin-left:20px;">: ${cert.trade_address}</td>
-  </tr>
-
-   <tr>
-    <td style="width: 30%;">জন্মনিবন্ধন/এনআইডি/পাসপোর্ট</td>
-    <td style="margin-left:20px;">: ${enToBnNumber(
+    <td style="width: 25%;font-size:14px;;font-weight:bold;">জন্মনিবন্ধন/এনআইডি/পাসপোর্ট</td>
+    <td style="width:25%;font-size:14px;">: ${enToBnNumber(
       cert.nid
     )} &nbsp; ${enToBnNumber(cert.birth_no)} &nbsp; ${enToBnNumber(
       cert.passport
-    )}</td>
-    <td  >টি আই এন &nbsp; ${enToBnNumber(cert.tin)}</td>
+    )} </td>
+
+    <td style="width:50%;"><b>টি আই এন</b> &nbsp;&nbsp; ${enToBnNumber(cert.tin)} </td>
+     
   </tr>
 
   <tr>
-    <td style="width: 30%;">মোবাইল</td>
-    <td style="margin-left:20px;">: ${enToBnNumber(
+    <td style="width:25%;;font-weight:bold;">মোবাইল</td>
+    <td style="width:25%;">: ${enToBnNumber(
       cert.mobile
-    )} 
+    )}</span>
    </td>
-    <td   >ই-মেইল: &nbsp; <span style="font-size:9px;">${cert.email}</span></td>
+   <td style="width:50%;"><b> ই-মেইল: </b>&nbsp;&nbsp;  <span style="font-size:11px;">${cert.email} </td>
+   
   </tr>
 
     
@@ -977,19 +985,9 @@ catch (error) {
 
    
 
-  <tr>
-    <td style="width: 30%;">মালিক/পরিচালক/স্বত্বাধিকারীর ঠিকানা</td>
-    <td style="margin-left:20px;">:   ${cert.address}</td>
-  </tr>
+ 
 
-  <tr>
-    <td style="width: 30%;">অর্থবছর</td>
-    <td style="margin-left:20px;">: ${convertToBanglaNumber(
-      fiscal_start_year
-    )}-${convertToBanglaNumber(fiscal_end_year)}     </td>
-    <td style="width: 30%;">ব্যবসা শুরু তারিখ: &nbsp; ${bnStartDate}</td>
-    
-  </tr>
+ 
 
    
 
@@ -1009,7 +1007,7 @@ catch (error) {
   <table class="tax-table" style="margin-top:-9px;">
     <tbody>
       <tr class="header-row">
-        <td colspan="2" class="header-cell">
+        <td colspan="4" style='text-align:center;color:indigo;' class="header-cell">
           ট্যাক্স বিবরণী
         </td>
       </tr>
@@ -1019,9 +1017,6 @@ catch (error) {
         <td class="input-cell">
           <input type="text"  value=${enToBnNumber(cert.trade_fee) || "০"} />
         </td>
-      </tr>
-
-      <tr class="row">
         <td class="label-cell">মুলধন কর</td>
         <td class="input-cell">
           <input type="text" value=${
@@ -1030,19 +1025,20 @@ catch (error) {
         </td>
       </tr>
 
+       
+
       <tr class="row">
         <td class="label-cell">বকেয়া</td>
         <td class="input-cell">
           <input type="text"  value=${enToBnNumber(cert.trade_due) || "০"} />
         </td>
-      </tr>
-
-      <tr class="row">
-        <td class="label-cell">ভ্যাট (%)</td>
+         <td class="label-cell">ভ্যাট (%)</td>
         <td class="input-cell">
           <input type="text"   value=${enToBnNumber(cert.trade_vat) || "০"}  />
         </td>
       </tr>
+
+     
 
       <tr class="row">
         <td class="label-cell">সর্বমোট কর</td>
@@ -1051,6 +1047,7 @@ catch (error) {
       bnToEnNumber(cert.trade_total_tax)
     )} টাকা মাত্র)</span>
         </td>
+        <td colspan=2>&nbsp;</td>
       </tr>
     </tbody>
   </table>
@@ -1058,18 +1055,18 @@ catch (error) {
 
 
 
-<div style="margin-top:1px;">
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; উল্লেখিত পেশা ও ব্যবসা বাণিজ্য পরিচালনার নিমিত্ত  আর্থিক বছর 
+<div style="margin-top:1px;font-size:13px;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; উল্লিখিত ব্যবসা পরিচালনার নিমিত্ত  
 ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
       fiscal_end
-    )} সালের জন্য লাইসেন্স প্রদান করা হলো। অত্র লাইসেন্স ${convertToBanglaNumber(
+    )} সালের জন্য লাইসেন্স প্রদান করা হলো, লাইসেন্সটি ${convertToBanglaNumber(
       endYear
     )} সালের ৩০শে জুন পর্যন্ত কার্যকর থাকবে।
 
 </div>
  
 
-
+<br>
           
 
               ${signatureHTML}

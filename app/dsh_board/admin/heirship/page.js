@@ -319,22 +319,22 @@ const formatDate = (date) => {
               <p><b>প্রত্যয়ন করা যাচ্ছে যে,</b></p>
 <table border="0" style="border-collapse: collapse; border: 0;margin-top:-10px; width: 100%;">
   <tr>
-    <td style="width: 30%; font-weight: bold; border: 0; padding: 4px;">নাম</td>
-    <td style="width: 30%;border: 0; padding: 4px;">: ${cert.name}
-    </td>  <td style="width: 40%; font-weight: bold; border: 0; padding: 4px;">জাতীয় পরিচয়পত্র/জন্ম নিবন্ধন: ${cert.nidOrBirth}</td>
+    <td style="width: 25%; font-weight: bold; border: 0; padding: 4px;">নাম:</td>
+    <td style="width: 25%;border: 0; padding: 4px;"> ${cert.name}
+    </td>  <td style="width: 50%; font-weight: bold; border: 0; padding: 4px;">জাতীয় পরিচয়পত্র/জন্ম নিবন্ধন: ${cert.nidOrBirth}</td>
   </tr>
   <tr>
-    <td style="width: 30%; font-weight: bold; border: 0; padding: 4px;">পিতার নাম</td>
-    <td style="width: 30%;border: 0; padding: 4px;">: ${cert.fatherName}</td>
-     <td style="width: 40%; font-weight: bold; border: 0; padding: 4px;">মাতার নাম: &nbsp; ${cert.motherName}</td>
+    <td style="width: 25%; font-weight: bold; border: 0; padding: 4px;">পিতার নাম:</td>
+    <td style="width: 25%;border: 0; padding: 4px;"> ${cert.fatherName}</td>
+     <td style="width: 50%; font-weight: bold; border: 0; padding: 4px;">মাতার নাম: &nbsp; ${cert.motherName}</td>
     
   </tr>
    
    
   <tr ‍style="font-size:11px;">
-    <td style="width: 30%; font-weight: bold; border: 0; padding: 4px;">বর্তমান ঠিকানা</td>
-    <td style="width: 30%;border: 0; padding: 4px;">: ${cert.presentAddress}</td>
-    <td style="width: 40%;border: 0; padding: 4px;">স্থায়ী ঠিকানা: &nbsp;${cert.permanentAddress}</td>
+    <td style="width: 25%; font-weight: bold; border: 0; padding: 4px;">বর্তমান ঠিকানা:</td>
+    <td style="width: 25%;border: 0; padding: 4px;"> ${cert.presentAddress}</td>
+    <td style="width: 50%;border: 0; padding: 4px;">স্থায়ী ঠিকানা: &nbsp;${cert.permanentAddress}</td>
   </tr>
    
 </table>

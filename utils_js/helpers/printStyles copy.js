@@ -1,97 +1,63 @@
 export const commonPrintStyles = `
   @page {
     size: A4;
-    margin: 20mm 5mm 5mm 5mm; /* top, right, bottom, left */
+      margin: 20mm 5mm 0mm 5mm ; /* top, right, bottom, left */
+
   }
 
   @font-face {
-    font-family: 'Nikosh';
-    src: url('/fonts/Nikosh.ttf') format('truetype');
-  }
-
+  font-family: 'Nikosh';
+  src: url('/fonts/Nikosh.ttf') format('truetype');
+}
   @media print {
-    body {
-      background: white !important;
-      margin: 0 !important;
-      padding: 0 !important;
-    }
+  
 
-    .signature-area {
-      page-break-inside: avoid !important;
-    }
-
-    .signature-box {
-      page-break-inside: avoid !important;
-    }
-
-    .outer-border {
-      border: 5px solid green !important;
-      padding: 4px !important;
-      background: transparent !important;
-      max-width: 720px !important;
-      margin: 0 auto !important;
-      box-sizing: border-box !important;
-    }
-
-    .middle-border {
-      border: 5px solid navy !important;
-      padding: 4px !important;
-      background: transparent !important;
-      box-sizing: border-box !important;
-    }
-
-    .inner-border {
-      border: 5px solid darkcyan !important;
-      padding: 15px !important;
-      background: white !important;
-      border-radius: 3px !important;
-      box-sizing: border-box !important;
-      position: relative !important;
-      overflow: hidden !important;
-      z-index: 1 !important;
-    }
+  .signature-area {
+    page-break-inside: avoid;
   }
+    .signature-box{ page-break-inside: avoid;}
+    
+}
 
   body {
     font-family: 'Nikosh', 'SolaimanLipi', 'Kalpurush', 'Noto Serif Bengali', serif;
+
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
     margin: 0;
     padding: 0;
     line-height: 1.3;
     background: #f9f9f9;
-    font-size: 18px;
+    font-size:18px;
   }
 
   .outer-border {
-    border: 5px solid green;
-    padding: 4px;
-    background: transparent;
-    max-width: 720px;
-    margin: 0 auto;
-    box-sizing: border-box;
+    margin: 10px;
+    padding: 7px;
+    background:green;
+    
   }
 
   .middle-border {
-    border: 5px solid navy;
-    padding: 4px;
-    background: transparent;
-    box-sizing: border-box;
+  background: #000080;
+    padding: 12px;
+    
   }
 
   .inner-border {
-    border: 3px solid orange;
     padding: 15px;
-    background: white;
+    border: 1px solid #000;
     border-radius: 3px;
+    background: white;
     position: relative;
     box-sizing: border-box;
+    min-height: auto;
     overflow: hidden;
     z-index: 1;
   }
 
   .watermark {
-    background-image: url('__UNION_IMG__');
+    background-image: url('__UNION_IMG__'); /* পরে রিপ্লেস হবে */
     background-repeat: no-repeat;
     background-position: center;
     background-size: 60%;
@@ -114,19 +80,22 @@ export const commonPrintStyles = `
   }
 
   .header-logo {
+    
     width: 100px;
     height: auto;
   }
+ 
 
   .header-title {
-    font-family: "Nikosh", "SolaimanLipi", "Roboto", "Arial", sans-serif;
-    font-size: 19px;
-    font-weight: 600;
-    text-align: center;
-    flex: 1;
-    color: #1a1a1a;
-    letter-spacing: 0.5px;
-  }
+  font-family: "Nikosh","SolaimanLipi",  "Roboto", "Arial", sans-serif;
+  font-size: 19px;          /* অফিসিয়াল লুকের জন্য সামান্য বড় */
+  font-weight: 600;         /* Semi-bold, অফিসিয়াল ফিল */
+  text-align: center;
+  flex: 1;
+  color: #1a1a1a;           /* ডার্ক অফিসিয়াল টেক্সট কালার */
+  letter-spacing: 0.5px;    /* অক্ষরের মাঝে হালকা ফাঁক */
+          /* প্রিন্টের জন্য ভালো লাইন হাইট */
+}
 
   hr {
     border: 1px solid #000;
@@ -165,37 +134,39 @@ export const commonPrintStyles = `
     z-index: 1;
   }
 
-  .hidden-signature {
-    visibility: hidden;
-    height: 1px;
-  }
+   .hidden-signature {
+  visibility: hidden;
+  height: 1px;
+}
+     .signature-area {
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 30px;
+  z-index: 1;
 
-  .signature-area {
-    margin-top: 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 30px;
-    z-index: 1;
-    page-break-inside: avoid !important;
+  /* ✅ Prevent page break */
+   page-break-inside: avoid !important;
     break-inside: avoid !important;
-  }
+}
+ .signature-box.empty {
+  min-height: 120px; /* একই উচ্চতা রাখবে */
+  width: 200px;
+  visibility: hidden; /* লুকানো থাকবে */
+}
 
-  .signature-box.empty {
-    min-height: 120px;
-    width: 200px;
-    visibility: hidden;
-  }
 
   .signature-box {
-    min-height: 120px;
-    margin-top: 10px;
+   min-height: 120px;
+  margin-top:10px;
     text-align: center;
     line-height: 0.4;
-    font-size: 14px;
-    font-weight: bold;
-    break-inside: avoid !important;
+    font-size:14px;
+    font-weight:bold;
+     break-inside: avoid !important;
     page-break-inside: avoid !important;
+     
   }
 
   .qr-code {
@@ -204,10 +175,10 @@ export const commonPrintStyles = `
   }
 `;
 
-
+// ✅ শুধুমাত্র 2nd style এর জন্য অতিরিক্ত CSS
 export const taxTableStyles = `
 @page {
-    size: A4;
+    size: Legal;
     margin: 0;
   }
 
@@ -219,7 +190,7 @@ export const taxTableStyles = `
 
   .tax-table {
     width: 100%;
-    max-width: 36rem;
+    max-width: 30rem;
     border: 1px solid #86efac;
     border-radius: 0.4rem;
     box-shadow: 0 4px 6px rgba(16, 185, 129, 0.1);
