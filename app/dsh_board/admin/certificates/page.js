@@ -1999,7 +1999,7 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
   {filteredCollections.map((cert, index) => {
     let rowClass = index % 2 === 0 ? "bg-blue-50" : "bg-blue-100";
     if (cert.type === "নাগরিকত্ব সনদ") {
-      rowClass = "bg-green-600 text-white";
+      rowClass = "bg-[darkcyan] text-white";
     }
 
     return (
@@ -2007,10 +2007,10 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
         <td className="border p-3">{cert.type}</td>
         <td className="border p-3">{cert.letter_count}</td>
         <td className="border p-3">{cert.applicantName}</td>
-        <td className="border p-3">{cert.fatherName || "-"}</td>
+        <td className="border p-3">{cert.fatherName || ""}</td>
         <td className="border p-3">{cert.nid}</td>
         <td className="border p-3">{cert.birth_no}</td>
-        <td className="border p-3">{cert.address || "-"}</td>
+        <td className="border p-3">{cert.address || ""}</td>
         <td className="border p-4 space-x-1 text-2xl">
           <button
             onClick={() => handleEdit(cert)}
