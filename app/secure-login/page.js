@@ -38,7 +38,7 @@ export default function Login() {
     } catch (err) {
       alert("Something went wrong!");
     } finally {
-      setLoading(false); // ✅ Stop loading
+      //setLoading(false); // ✅ Stop loading
     }
   };
 
