@@ -149,7 +149,7 @@ export async function DELETE(req) {
 
     await prisma.holding_Information.update({
       where: { id },
-      data: { is_deleted: true,deletedBy:userId },
+      data: { is_deleted: true,deletedBy:userId,serial:id.toString() },
     })
 
     return Response.json({ success: true })

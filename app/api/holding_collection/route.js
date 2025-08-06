@@ -96,6 +96,7 @@ export async function DELETE(req) {
       data: {
         is_deleted: true,
         deletedBy: userId,
+        serial:id.toString(),
        
       },
     });
