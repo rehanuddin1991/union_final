@@ -1,4 +1,5 @@
 'use client'
+import { Pencil } from "lucide-react"; // Lucide icon ব্যবহার করলে
 
 import { useEffect, useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
@@ -29,6 +30,14 @@ import {
 
 export default function HeirshipPage() {
     const today = new Date().toISOString().split("T")[0];
+    const [isDisabled, setIsDisabled] = useState(true);
+
+    function parseDateSafe(dateString) {
+  if (!dateString) return null;
+  const date = new Date(dateString);
+  return isNaN(date.getTime()) ? null : date; // ভ্যালিড হলে Date, নাহলে null
+}
+
 
   const [form, setForm] = useState({
     name: '',
@@ -254,7 +263,7 @@ const formatDate = (date) => {
     await Promise.all([preloadImage(govtImg), preloadImage(unionImg)]).catch(console.error);
     const type2="নাগরিকত্ব সনদ";
 
-    const signatureHTML = generateSignatureHTML(
+    let signatureHTML = generateSignatureHTML(
       signer,
       signer2,
       designationText,
@@ -263,6 +272,12 @@ const formatDate = (date) => {
       qrImg_with_link,
       type2,
     );
+    
+   signatureHTML = signatureHTML.replace(
+  /<img[^>]*>/gi,
+  '<h2 style="    ">&nbsp;</h2>'
+);
+
 
     const headerHTML = getHeaderSection(settings, govtImg, unionImg);
 
@@ -325,33 +340,33 @@ const formatDate = (date) => {
               <p><b>প্রত্যয়ন করা যাচ্ছে যে,</b></p>
 <table border="0" style="border-collapse: collapse; border: 0;margin-top:-10px; width: 100%;">
   <tr>
-    <td style="width: 25%; font-weight: bold; border: 0; padding: 4px;">নাম:</td>
-    <td style="width: 25%;border: 0; padding: 4px;"> ${cert.name}
-    </td>  <td style="width: 50%; font-weight: bold; border: 0; padding: 4px;">জাতীয় পরিচয়পত্র/জন্ম নিবন্ধন: ${cert.nidOrBirth}</td>
+    <td style="width: 20%; font-weight: bold; border: 0; ">নাম:</td>
+    <td style="width: 30%;border: 0; "> ${cert.name}
+    </td>  <td style="  font-weight: bold; border: 0; font-size:13px;">জাতীয় পরিচয়পত্র/জন্ম নিবন্ধন: ${cert.nidOrBirth}</td>
   </tr>
   <tr>
-    <td style="width: 25%; font-weight: bold; border: 0; padding: 4px;">পিতার নাম:</td>
-    <td style="width: 25%;border: 0; padding: 4px;"> ${cert.fatherName}</td>
-     <td style="width: 50%; font-weight: bold; border: 0; padding: 4px;">মাতার নাম: &nbsp; ${cert.motherName}</td>
+    <td style="width: 20%; font-weight: bold; border: 0; ">পিতার নাম:</td>
+    <td style="width: 30%;border: 0; "> ${cert.fatherName}</td>
+     <td style="width: 50%; font-weight: bold; border: 0; ">মাতার নাম: &nbsp; ${cert.motherName}</td>
     
   </tr>
    
    
   <tr ‍style="font-size:11px;">
-    <td style="width: 25%; font-weight: bold; border: 0; padding: 4px;">বর্তমান ঠিকানা:</td>
-    <td style="width: 25%;border: 0; padding: 4px;"> ${cert.presentAddress}</td>
-    <td style="width: 50%;border: 0; padding: 4px;">স্থায়ী ঠিকানা: &nbsp;${cert.permanentAddress}</td>
+    <td style="width: 20%; font-weight: bold; border: 0; ">বর্তমান ঠিকানা:</td>
+    <td style="width: 30%;border: 0; font-size:11px;"> ${cert.presentAddress}</td>
+    <td style=" border: 0; font-size:11px;"><b>স্থায়ী ঠিকানা:</b> &nbsp;${cert.permanentAddress}</td>
   </tr>
 
   <tr ‍style="font-size:11px;">
-    <td colspan=3 style="width: 100%; font-weight: bold; border: 0; padding: 4px;">উল্লিখিত ব্যক্তি অত্র ইউনিয়নের একজন স্থায়ী বাসিন্দা।</td>
+    <td colspan=3 style="width: 100%; font-weight: bold; border: 0; ">উল্লিখিত ব্যক্তি অত্র ইউনিয়নের একজন স্থায়ী বাসিন্দা।</td>
    
   </tr>
 
   <tr ‍style="font-size:11px;">
-    <td style="width: 25%; font-weight: bold; border: 0; padding: 4px;">আবেদনকারীর নাম</td>
-    <td style="width: 25%;border: 0; padding: 4px;"> ${cert.applicantName}</td>
-    <td style="width: 50%;border: 0; padding: 4px;">আবেদনকারীর ঠিকানা: &nbsp;${cert.applicantAddress}</td>
+    <td style="width: 20%; font-weight: bold; border: 0; ">আবেদনকারীর নাম</td>
+    <td style="width: 30%;border: 0; "> ${cert.applicantName}</td>
+    <td style=" border: 0;font-size:11px; ">আবেদনকারীর ঠিকানা: &nbsp;${cert.applicantAddress}</td>
   </tr>
    
 </table>
@@ -424,303 +439,172 @@ const formatDate = (date) => {
     <div className="max-w-6xl mx-auto p-4 space-y-6">
       <h1 className="text-2xl font-bold mb-4">ওয়ারিশন সনদ ফর্ম</h1>
 
-      <form onSubmit={handleSubmit} className="space-y-6 border p-6 rounded-lg bg-white shadow">
-        {/* Personal Info */}
+     <form onSubmit={handleSubmit} className="space-y-8 p-8 rounded-2xl bg-white shadow-xl border border-gray-200">
+  {/* সনদের নাম্বার */}
+  <div>
+    <label className=" relative  block font-semibold text-sm  mb-2 text-red-500">
+      সনদের নাম্বার (শুধু প্রথমটির জন্য অবশ্যই ইংরেজি নাম্বার) (ইনপুট দেয়ার জন্য পাশের বাটনে ক্লিক করুন)
+    </label>
+    <input
+      type="text"
+       disabled={isDisabled}
+      value={form.letter_count ?? ""}
+      onChange={(e) => {
+        const value = e.target.value;
+        if (/^\d*$/.test(value)) {
+          setForm({ ...form, letter_count: value });
+        }
+      }}
+      placeholder="example: 357"
+      className="max-w-56 px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
+    />
 
-        <div>
-            <label className="font-semibold  text-red-500">
-              সনদের নাম্বার (শুধু প্রথমটির জন্য অবশ্যই ইংরেজি নাম্বার) (যদি
-              প্রথমটির জন্য ইনপুট দিতে ভুলে যান তবে ডেটা আপডেট না করে আবার ফরম
-              পূরণ করে সেভ দিন, আপডেটে এই ফিল্ড কাজ করবে না)
-            </label>
+     {/* Edit Icon */}
+      <button
+        type="button"
+        onClick={() => setIsDisabled(false)}
+        className="absolute ml-4 bg-[darkcyan] p-2 shadow-2xl rounded-2xl   text-[whitesmoke] hover:bg-[green] hover:text-[white]"
+      >
+        <Pencil size={22} />click here for serial entry
+      </button>
+
+
+  </div>
+
+  {/* Personal Info */}
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    {[
+      { id: 'name', label: 'নাম', value: form.name, required: true },
+      { id: 'fatherName', label: 'পিতার নাম', value: form.fatherName, required: true },
+      { id: 'motherName', label: 'মাতার নাম', value: form.motherName, required: true },
+      { id: 'nidOrBirth', label: 'এনআইডি/জন্ম নিবন্ধন', value: form.nidOrBirth, required: true },
+      { id: 'presentAddress', label: 'বর্তমান ঠিকানা', value: form.presentAddress },
+      { id: 'permanentAddress', label: 'স্থায়ী ঠিকানা', value: form.permanentAddress },
+      { id: 'applicantName', label: 'আবেদনকারীর নাম', value: form.applicantName, required: true },
+      { id: 'applicantAddress', label: 'আবেদনকারীর ঠিকানা', value: form.applicantAddress },
+    ].map(({ id, label, value, required }) => (
+      <div key={id}>
+        <label htmlFor={id} className="block mb-1 font-medium text-gray-700">
+          {label} {required && <span className="text-red-600">*</span>}
+        </label>
+        <input
+          id={id}
+          type="text"
+          placeholder={label}
+          value={value}
+          onChange={(e) => setForm({ ...form, [id]: e.target.value })}
+          className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
+          required={required}
+        />
+      </div>
+    ))}
+    <div>
+      <label htmlFor="issuedDate" className="block mb-1 font-medium text-gray-700">ইস্যুর তারিখ</label>
+      <DatePicker
+        id="issuedDate"
+        selected={form.issuedDate ? new Date(form.issuedDate) : null}
+        onChange={(date) =>
+          setForm({ ...form, issuedDate: date?.toISOString().split("T")[0] || '' })
+        }
+
+        
+        dateFormat="yyyy-MM-dd"
+        placeholderText="তারিখ নির্বাচন করুন"
+        className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
+      />
+    </div>
+  </div>
+
+  {/* Children Info */}
+  <div>
+    <h2 className="text-xl font-semibold mb-4 text-gray-700">সন্তানদের তথ্য</h2>
+    {children.map((child, idx) => (
+      <div key={idx} className="grid grid-cols-1 md:grid-cols-7 gap-4 mb-4 items-end p-4 border rounded-lg bg-gray-50">
+        {[
+          { key: 'name', label: 'নাম', required: true },
+          { key: 'fatherOrHusbandName', label: 'পিতা/স্বামীর নাম' },
+          { key: 'nidOrBirth', label: 'NID/জন্ম নিবন্ধন', required: true },
+          { key: 'village', label: 'গ্রাম' },
+          { key: 'relation', label: 'সম্পর্ক' },
+          { key: 'notes', label: 'মন্তব্য' },
+        ].map(({ key, label, required }) => (
+          <div key={key}>
+            <label className="block text-sm text-gray-600 mb-1">{label} {required && <span className="text-red-600">*</span>}</label>
             <input
               type="text"
-              value={form.letter_count ?? ""}
+              placeholder={label}
+              value={child[key]}
               onChange={(e) => {
-                const value = e.target.value;
-                // ✅ শুধুমাত্র ইংরেজি সংখ্যা (0-9) অনুমোদিত
-                if (/^\d*$/.test(value)) {
-                  setForm({ ...form, letter_count: value });
-                }
+                const updated = [...children];
+                updated[idx][key] = e.target.value;
+                setChildren(updated);
               }}
-              className="border p-2 rounded w-full"
-              placeholder="example: 357"
+              className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
+              required={required}
             />
           </div>
+        ))}
 
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label htmlFor="name" className="block mb-1 font-medium">নাম <span className="text-red-600">*</span></label>
-            <input
-              id="name"
-              type="text"
-              placeholder="নাম"
-              value={form.name}
-              onChange={e => setForm({ ...form, name: e.target.value })}
-              className="w-full border p-2 rounded"
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="fatherName" className="block mb-1 font-medium">পিতার নাম <span className="text-red-600">*</span></label>
-            <input
-              id="fatherName"
-              type="text"
-              placeholder="পিতার নাম"
-              value={form.fatherName}
-              onChange={e => setForm({ ...form, fatherName: e.target.value })}
-              className="w-full border p-2 rounded"
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="motherName" className="block mb-1 font-medium">মাতার নাম</label>
-            <input
-              id="motherName"
-              type="text"
-              placeholder="মাতার নাম"
-              value={form.motherName}
-              onChange={e => setForm({ ...form, motherName: e.target.value })}
-              className="w-full border p-2 rounded"
-            />
-          </div>
-          <div>
-            <label htmlFor="nidOrBirth" className="block mb-1 font-medium">এনআইডি/জন্ম নিবন্ধন<span className="text-red-600">*</span></label>
-            <input
-              id="nidOrBirth"
-              type="text"
-              placeholder="এনআইডি/জন্ম নিবন্ধন"
-              value={form.nidOrBirth}
-              onChange={e => setForm({ ...form, nidOrBirth: e.target.value })}
-              className="w-full border p-2 rounded"
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="presentAddress" className="block mb-1 font-medium">বর্তমান ঠিকানা</label>
-            <input
-              id="presentAddress"
-              type="text"
-              placeholder="বর্তমান ঠিকানা"
-              value={form.presentAddress}
-              onChange={e => setForm({ ...form, presentAddress: e.target.value })}
-              className="w-full border p-2 rounded"
-            />
-          </div>
-          <div>
-            <label htmlFor="permanentAddress" className="block mb-1 font-medium">স্থায়ী ঠিকানা</label>
-            <input
-              id="permanentAddress"
-              type="text"
-              placeholder="স্থায়ী ঠিকানা"
-              value={form.permanentAddress}
-              onChange={e => setForm({ ...form, permanentAddress: e.target.value })}
-              className="w-full border p-2 rounded"
-            />
-          </div>
-          <div>
-            <label htmlFor="applicantName" className="block mb-1 font-medium">আবেদনকারীর নাম</label>
-            <input
-              id="applicantName"
-              type="text"
-              placeholder="আবেদনকারীর নাম"
-              value={form.applicantName}
-              onChange={e => setForm({ ...form, applicantName: e.target.value })}
-              className="w-full border p-2 rounded"
-            />
-          </div>
-          <div>
-            <label htmlFor="applicantAddress" className="block mb-1 font-medium">আবেদনকারীর ঠিকানা</label>
-            <input
-              id="applicantAddress"
-              type="text"
-              placeholder="আবেদনকারীর ঠিকানা"
-              value={form.applicantAddress}
-              onChange={e => setForm({ ...form, applicantAddress: e.target.value })}
-              className="w-full border p-2 rounded"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="applicantAddress" className="block mb-1 font-medium">ইস্যুর তারিখ</label>
-              <DatePicker
-              id="issuedDate"
-              selected={form.issuedDate ? new Date(form.issuedDate) : null}
-              onChange={(date) =>
-                setForm({ ...form, issuedDate: date?.toISOString().split("T")[0] || '' })
-              }
-              dateFormat="yyyy-MM-dd"
-              placeholderText="তারিখ নির্বাচন করুন"
-              className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
-              required
-            />
-             
-          </div>
-
-
-         
-
-        </div>
-
-        {/* Children Section */}
         <div>
-          <h2 className="text-xl font-semibold mb-4">সন্তানদের তথ্য</h2>
-          {children.map((child, idx) => (
-            <div key={idx} className="grid grid-cols-1 md:grid-cols-7 gap-3 mb-4 items-center border rounded p-3 bg-gray-50">
-              <div>
-                <label htmlFor={`child-name-${idx}`} className="block mb-1 font-medium">নাম <span className="text-red-600">*</span></label>
-                <input
-                  id={`child-name-${idx}`}
-                  type="text"
-                  placeholder="নাম"
-                  value={child.name}
-                  onChange={e => {
-                    const c = [...children]
-                    c[idx].name = e.target.value
-                    setChildren(c)
-                  }}
-                  className="border p-2 rounded w-full"
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor={`child-fatherOrHusbandName-${idx}`} className="block mb-1 font-medium">পিতা/স্বামীর নাম</label>
-                <input
-                  id={`child-fatherOrHusbandName-${idx}`}
-                  type="text"
-                  placeholder="পিতা/স্বামীর নাম"
-                  value={child.fatherOrHusbandName}
-                  onChange={e => {
-                    const c = [...children]
-                    c[idx].fatherOrHusbandName = e.target.value
-                    setChildren(c)
-                  }}
-                  className="border p-2 rounded w-full"
-                />
-              </div>
-              <div>
-                <label htmlFor={`child-dob-${idx}`} className="block mb-1 font-medium">জন্ম তারিখ</label>
-                 <DatePicker
-  id={`child-dob-${idx}`}
-  selected={child.dob ? new Date(child.dob) : null}
+          <label className="block text-sm text-gray-600 mb-1">জন্ম তারিখ</label>
+
+          
+
+           <DatePicker
+  required
+  selected={parseDateSafe(child.dob)}
   onChange={(date) => {
-    const updatedChildren = [...children];
-    updatedChildren[idx].dob = date?.toISOString().split("T")[0] || '';
-    setChildren(updatedChildren);
+    const updated = [...children];
+    updated[idx].dob = date
+      ? new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+          .toISOString()
+          .split("T")[0]
+      : '';
+    setChildren(updated);
   }}
   dateFormat="yyyy-MM-dd"
   placeholderText="তারিখ নির্বাচন করুন"
-  className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
+  className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
 />
-              </div>
-
-                 <div>
-                <label htmlFor={`child-nidOrBirth-${idx}`} className="block mb-1 font-medium">nid/birth no</label>
-                <input
-                  id={`child-nidOrBirth-${idx}`}
-                  type="text"
-                  placeholder="গ্রাম"
-                  value={child.nidOrBirth}
-                  onChange={e => {
-                    const c = [...children]
-                    c[idx].nidOrBirth = e.target.value
-                    setChildren(c)
-                  }}
-                  className="border p-2 rounded w-full"
-                  required
-                />
-              </div>
-
-
-                 <div>
-                <label htmlFor={`child-village-${idx}`} className="block mb-1 font-medium">গ্রাম</label>
-                <input
-                  id={`child-village-${idx}`}
-                  type="text"
-                  placeholder="গ্রাম"
-                  value={child.village}
-                  onChange={e => {
-                    const c = [...children]
-                    c[idx].village = e.target.value
-                    setChildren(c)
-                  }}
-                  className="border p-2 rounded w-full"
-                />
-              </div>
-
-             
-
-
-              <div>
-                <label htmlFor={`child-relation-${idx}`} className="block mb-1 font-medium">সম্পর্ক</label>
-                <input
-                  id={`child-relation-${idx}`}
-                  type="text"
-                  placeholder="সম্পর্ক"
-                  value={child.relation}
-                  onChange={e => {
-                    const c = [...children]
-                    c[idx].relation = e.target.value
-                    setChildren(c)
-                  }}
-                  className="border p-2 rounded w-full"
-                />
-              </div>
-              
-              <div>
-                <label htmlFor={`child-notes-${idx}`} className="block mb-1 font-medium">মন্তব্য</label>
-                <input
-                  id={`child-notes-${idx}`}
-                  type="text"
-                  placeholder="মন্তব্য"
-                  value={child.notes}
-                  onChange={e => {
-                    const c = [...children]
-                    c[idx].notes = e.target.value
-                    setChildren(c)
-                  }}
-                  className="border p-2 rounded w-full"
-                />
-              </div>
-              <div className="flex items-center justify-center">
-                {children.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const c = [...children]
-                      c.splice(idx, 1)
-                      setChildren(c)
-                    }}
-                    className="text-red-600 px-2 py-1 rounded hover:bg-red-100 transition"
-                    aria-label="সন্তান মুছুন"
-                  >
-                    Delete
-                  </button>
-                )}
-              </div>
-            </div>
-          ))}
-
-          <button
-            type="button"
-            onClick={() => setChildren([...children, {
-              name: '', fatherOrHusbandName: '', village: '', relation: '',  notes: '', dob: '', nidOrBirth: ''
-            }])}
-            className="text-blue-600 border-[green] p-3 text-xl hover:underline"
-          > 
-            + Add
-          </button>
         </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className={`mt-6 px-4 py-2 rounded text-white w-full md:w-auto ${loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'}`}
-        >
-          {loading ? (editingId ? 'আপডেট হচ্ছে...' : 'সেভ হচ্ছে...') : (editingId ? 'আপডেট করুন' : 'সংরক্ষণ করুন')}
-        </button>
-      </form>
+        <div className="flex items-center justify-center">
+          {children.length > 1 && (
+            <button
+              type="button"
+              onClick={() => {
+                const updated = [...children];
+                updated.splice(idx, 1);
+                setChildren(updated);
+              }}
+              className="text-red-500 hover:text-red-700 text-sm px-3 py-1 border border-red-300 rounded-lg hover:bg-red-50 transition"
+            >
+              Delete
+            </button>
+          )}
+        </div>
+      </div>
+    ))}
+
+    <button
+      type="button"
+      onClick={() => setChildren([...children, { name: '', fatherOrHusbandName: '', village: '', relation: '', notes: '', dob: '', nidOrBirth: '' }])}
+      className="text-green-600 hover:text-green-800 text-sm font-semibold px-4 py-2 border border-green-300 rounded-lg bg-green-50 hover:bg-green-100 transition"
+    >
+      + Add Child
+    </button>
+  </div>
+
+  <div className="pt-6">
+    <button
+      type="submit"
+      disabled={loading}
+      className={`w-full md:w-auto px-6 py-3 rounded-lg text-white text-lg font-semibold shadow-md transition ${loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'}`}
+    >
+      {loading ? (editingId ? 'আপডেট হচ্ছে...' : 'সেভ হচ্ছে...') : (editingId ? 'আপডেট করুন' : 'সংরক্ষণ করুন')}
+    </button>
+  </div>
+</form>
 
       <hr className="my-8" />
 
