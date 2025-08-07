@@ -337,7 +337,7 @@ const formatDate = (date) => {
                 </h1>
               </div>
 
-              <p><b>প্রত্যয়ন করা যাচ্ছে যে,</b></p>
+              <p style="margin-top:-5px;"><b>প্রত্যয়ন করা যাচ্ছে যে,</b></p>
 <table border="0" style="border-collapse: collapse; border: 0;margin-top:-10px; width: 100%;">
   <tr>
     <td style="width: 20%; font-weight: bold; border: 0; ">নাম:</td>
@@ -358,7 +358,7 @@ const formatDate = (date) => {
     <td style=" border: 0; font-size:11px;"><b>স্থায়ী ঠিকানা:</b> &nbsp;${cert.permanentAddress}</td>
   </tr>
 
-  <tr ‍style="font-size:11px;">
+  <tr ‍style="font-size:10px;">
     <td colspan=3 style="width: 100%; font-weight: bold; border: 0; ">উল্লিখিত ব্যক্তি অত্র ইউনিয়নের একজন স্থায়ী বাসিন্দা।</td>
    
   </tr>
@@ -366,15 +366,19 @@ const formatDate = (date) => {
   <tr ‍style="font-size:11px;">
     <td style="width: 20%; font-weight: bold; border: 0; ">আবেদনকারীর নাম</td>
     <td style="width: 30%;border: 0; "> ${cert.applicantName}</td>
-    <td style=" border: 0;font-size:11px; ">আবেদনকারীর ঠিকানা: &nbsp;${cert.applicantAddress}</td>
+    <td style=" border: 0;font-size:11px; "><b>আবেদনকারীর ঠিকানা:</b> &nbsp;${cert.applicantAddress}</td>
   </tr>
    
 </table>
 
 
-              <h3 style="margin-top: 1px;">ওয়ারিশগণের তথ্য</h3>
-              <table style="font-size:14px;margin-top:-5px;">
+              
+              <table style="font-size:14px;margin-top:-8px;">
                 <thead>
+                <tr>
+                <th colspan=7>ওয়ারিশগণের তথ্য</th>
+
+                </tr>
                   <tr>
                     <th>ক্রম</th>
                     <th>নাম</th>
@@ -397,7 +401,7 @@ const formatDate = (date) => {
               </h6>
 
               </div>
-              <br>
+               
 
               ${signatureHTML}
 
@@ -523,13 +527,13 @@ const formatDate = (date) => {
         {[
           { key: 'name', label: 'নাম', required: true },
           { key: 'fatherOrHusbandName', label: 'পিতা/স্বামীর নাম' },
-          { key: 'nidOrBirth', label: 'NID/জন্ম নিবন্ধন', required: true },
+          { key: 'nidOrBirth', label: 'NID/Birth No', required: true },
           { key: 'village', label: 'গ্রাম' },
           { key: 'relation', label: 'সম্পর্ক' },
           { key: 'notes', label: 'মন্তব্য' },
         ].map(({ key, label, required }) => (
           <div key={key}>
-            <label className="block text-sm text-gray-600 mb-1">{label} {required && <span className="text-red-600">*</span>}</label>
+            <label className="block text-sm text-[blueviolet] mb-1">{label} {required && <span className="text-red-600">*</span>}</label>
             <input
               type="text"
               placeholder={label}
@@ -546,7 +550,7 @@ const formatDate = (date) => {
         ))}
 
         <div>
-          <label className="block text-sm text-gray-600 mb-1">জন্ম তারিখ</label>
+          <label className="block text-sm text-[blueviolet] mb-1">জন্ম তারিখ</label>
 
           
 
