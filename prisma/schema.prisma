@@ -351,6 +351,8 @@ model ChildRelation {
   relation           String
   age                String
   notes              String?
+  dob  DateTime @default(now())
+  nidOrBirth String? 
 }
 
 

@@ -48,9 +48,10 @@ export default function HeirshipPage() {
       name: '',
       fatherOrHusbandName: '',
       village: '',
+      dob: '',
+      nidOrBirth: '',
       relation: '',
-      age: '',
-      notes: ''
+            notes: ''
     }
   ])
 
@@ -151,8 +152,10 @@ const formatDate = (date) => {
         name: child.name || '',
         fatherOrHusbandName: child.fatherOrHusbandName || '',
         village: child.village || '',
+        dob: child.dob ? new Date(child.dob).toISOString() : null,
+  nidOrBirth: child.nidOrBirth || '',
         relation: child.relation || '',
-        age: child.age || '',
+       age:'0',
         notes: child.notes || '',
       }))
     }
@@ -191,7 +194,7 @@ const formatDate = (date) => {
       applicantAddress: '',
       issuedDate:today,
     })
-    setChildren([{ name: '', fatherOrHusbandName: '', village: '', relation: '', age: '', notes: '' }])
+    setChildren([{ name: '', fatherOrHusbandName: '', village: '', relation: '',  notes: '', dob: '', nidOrBirth: '' }])
     setEditingId(null)
   }
 
@@ -238,6 +241,7 @@ const formatDate = (date) => {
     const nid = enToBnNumber(cert.nidOrBirth);
 
     const issue_date_format = formatDate(cert.issuedDate || new Date());
+   
     const [issue_day, issue_month, issue_year] = issue_date_format.split("-");
     const bnIssueDate = `${enToBnNumber(issue_day)}-${enToBnNumber(issue_month)}-${enToBnNumber(issue_year)}`;
 
@@ -264,13 +268,15 @@ const formatDate = (date) => {
 
     // children table rows generate
     const childrenRows = cert.children && cert.children.length > 0
-      ? cert.children.map(child => `
+      ? cert.children.map( (child,index) => `
           <tr>
+            <td style="border:1px solid #000; padding:2px;font-size:14px;text-align:center;">${enToBnNumber(index+1)}</td>
             <td style="border:1px solid #000; padding:2px;font-size:14px;text-align:center;">${child.name || ''}</td>
             <td style="border:1px solid #000; padding:2px;font-size:14px;text-align:center;">${child.fatherOrHusbandName || ''}</td>
-            <td style="border:1px solid #000; padding:2px;font-size:14px;text-align:center;">${child.village || ''}</td>
+            <td style="border:1px solid #000; padding:2px;font-size:14px;text-align:center;">${child.nidOrBirth || ''}</td>
+            
+            <td style="border:1px solid #000; padding:2px;font-size:14px;text-align:center;">  ${ enToBnNumber( formatDate(child.dob || new Date()))}</td>
             <td style="border:1px solid #000; padding:2px;font-size:14px;text-align:center;">${child.relation || ''}</td>
-            <td style="border:1px solid #000; padding:2px;font-size:14px;text-align:center;">${child.age || ''}</td>
             <td style="border:1px solid #000; padding:2px;font-size:14px;text-align:center;">${child.notes || ''}</td>
           </tr>`).join('')
       : `<tr><td colspan="6" style="text-align:center; padding:10px;">কোনো সন্তানের তথ্য নেই</td></tr>`;
@@ -336,6 +342,17 @@ const formatDate = (date) => {
     <td style="width: 25%;border: 0; padding: 4px;"> ${cert.presentAddress}</td>
     <td style="width: 50%;border: 0; padding: 4px;">স্থায়ী ঠিকানা: &nbsp;${cert.permanentAddress}</td>
   </tr>
+
+  <tr ‍style="font-size:11px;">
+    <td colspan=3 style="width: 100%; font-weight: bold; border: 0; padding: 4px;">উল্লিখিত ব্যক্তি অত্র ইউনিয়নের একজন স্থায়ী বাসিন্দা।</td>
+   
+  </tr>
+
+  <tr ‍style="font-size:11px;">
+    <td style="width: 25%; font-weight: bold; border: 0; padding: 4px;">আবেদনকারীর নাম</td>
+    <td style="width: 25%;border: 0; padding: 4px;"> ${cert.applicantName}</td>
+    <td style="width: 50%;border: 0; padding: 4px;">আবেদনকারীর ঠিকানা: &nbsp;${cert.applicantAddress}</td>
+  </tr>
    
 </table>
 
@@ -344,11 +361,13 @@ const formatDate = (date) => {
               <table style="font-size:14px;margin-top:-5px;">
                 <thead>
                   <tr>
+                    <th>ক্রম</th>
                     <th>নাম</th>
                     <th>পিতা/স্বামী</th>
-                    <th>গ্রাম</th>
+                    <th>এনআইডি/জন্ম নিবন্ধন</th>
+                    
+                    <th>জন্ম তারিখ</th>
                     <th>সম্পর্ক</th>
-                    <th>বয়স</th>
                     <th>মন্তব্য</th>
                   </tr>
                 </thead>
@@ -581,6 +600,40 @@ const formatDate = (date) => {
                 />
               </div>
               <div>
+                <label htmlFor={`child-dob-${idx}`} className="block mb-1 font-medium">জন্ম তারিখ</label>
+                 <DatePicker
+  id={`child-dob-${idx}`}
+  selected={child.dob ? new Date(child.dob) : null}
+  onChange={(date) => {
+    const updatedChildren = [...children];
+    updatedChildren[idx].dob = date?.toISOString().split("T")[0] || '';
+    setChildren(updatedChildren);
+  }}
+  dateFormat="yyyy-MM-dd"
+  placeholderText="তারিখ নির্বাচন করুন"
+  className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
+/>
+              </div>
+
+                 <div>
+                <label htmlFor={`child-nidOrBirth-${idx}`} className="block mb-1 font-medium">nid/birth no</label>
+                <input
+                  id={`child-nidOrBirth-${idx}`}
+                  type="text"
+                  placeholder="গ্রাম"
+                  value={child.nidOrBirth}
+                  onChange={e => {
+                    const c = [...children]
+                    c[idx].nidOrBirth = e.target.value
+                    setChildren(c)
+                  }}
+                  className="border p-2 rounded w-full"
+                  required
+                />
+              </div>
+
+
+                 <div>
                 <label htmlFor={`child-village-${idx}`} className="block mb-1 font-medium">গ্রাম</label>
                 <input
                   id={`child-village-${idx}`}
@@ -595,6 +648,10 @@ const formatDate = (date) => {
                   className="border p-2 rounded w-full"
                 />
               </div>
+
+             
+
+
               <div>
                 <label htmlFor={`child-relation-${idx}`} className="block mb-1 font-medium">সম্পর্ক</label>
                 <input
@@ -610,21 +667,7 @@ const formatDate = (date) => {
                   className="border p-2 rounded w-full"
                 />
               </div>
-              <div>
-                <label htmlFor={`child-age-${idx}`} className="block mb-1 font-medium">বয়স</label>
-                <input
-                  id={`child-age-${idx}`}
-                  type="text"
-                  placeholder="বয়স"
-                  value={child.age}
-                  onChange={e => {
-                    const c = [...children]
-                    c[idx].age = e.target.value
-                    setChildren(c)
-                  }}
-                  className="border p-2 rounded w-full"
-                />
-              </div>
+              
               <div>
                 <label htmlFor={`child-notes-${idx}`} className="block mb-1 font-medium">মন্তব্য</label>
                 <input
@@ -662,7 +705,7 @@ const formatDate = (date) => {
           <button
             type="button"
             onClick={() => setChildren([...children, {
-              name: '', fatherOrHusbandName: '', village: '', relation: '', age: '', notes: ''
+              name: '', fatherOrHusbandName: '', village: '', relation: '',  notes: '', dob: '', nidOrBirth: ''
             }])}
             className="text-blue-600 border-[green] p-3 text-xl hover:underline"
           > 
