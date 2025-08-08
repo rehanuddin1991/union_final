@@ -298,12 +298,12 @@ const currentItems = filteredCollections.slice(indexOfFirstItem, indexOfLastItem
 
   <tr>
     <td>পুরুষ সদস্য</td>
-    <td>: ${cert.maleMembers || ""} &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; পুরুষ শিশু: &nbsp;${cert.maleBaby || ""}</td>
+    <td>: ${enToBnNumber(cert.maleMembers) || ""} &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; পুরুষ শিশু: &nbsp;${enToBnNumber(cert.maleBaby) || ""}</td>
   </tr>
 
   <tr>
     <td>মহিলা সদস্য</td>
-    <td>: ${cert.femaleMembers || ""}&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; মহিলা শিশু: &nbsp;${cert.femaleBaby || ""}</td>
+    <td>: ${enToBnNumber(cert.femaleMembers) || ""}&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; মহিলা শিশু: &nbsp;${enToBnNumber(cert.femaleBaby) || ""}</td>
   </tr>
 
    

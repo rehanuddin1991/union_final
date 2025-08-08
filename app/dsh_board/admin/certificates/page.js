@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
+import { Pencil } from "lucide-react"; // Lucide icon ব্যবহার করলে
 //import { Editor } from '@tinymce/tinymce-react'
 import { toast, ToastContainer } from "react-toastify";
 import DatePicker from "react-datepicker";
@@ -34,6 +35,7 @@ const Editor = dynamic(
 
 export default function CertificatesPage() {
   const [currentPage, setCurrentPage] = useState(1);
+  const [isDisabled, setIsDisabled] = useState(true);
   const itemsPerPage = 10;
 
   const [loading, setLoading] = useState(false);
@@ -1766,12 +1768,14 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
           )}
 
           <div>
-            <label className="font-semibold  text-red-500">
+            <label className=" relative font-semibold  text-red-500">
               সনদের নাম্বার (শুধু প্রথমটির জন্য অবশ্যই ইংরেজি নাম্বার) (যদি
               প্রথমটির জন্য ইনপুট দিতে ভুলে যান তবে ডেটা আপডেট না করে আবার ফরম
-              পূরণ করে সেভ দিন, আপডেটে এই ফিল্ড কাজ করবে না)
+              পূরণ করে সেভ দিন, আপডেটে এই ফিল্ড কাজ করবে না) <br></br>
+              <span className="text-[indigo]"> প্রথমবার ইনপুট দিতে পাশের বাটনে ক্লিক করুন ও  ইংরেজিতে সিরিয়াল লিখুন</span>
             </label>
             <input
+             disabled={isDisabled}
               type="text"
               value={form.letter_count ?? ""}
               onChange={(e) => {
@@ -1784,7 +1788,18 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
               className="border p-2 rounded w-full"
               placeholder="example: 357"
             />
+
+             {/* Edit Icon */}
+                  <button
+                    type="button"
+                    onClick={() => setIsDisabled(false)}
+                    className="absolute ml-4 bg-[crimson] p-2 shadow-2xl rounded-2xl   text-[whitesmoke] hover:bg-[green] hover:text-[white]"
+                  >
+                    <Pencil size={19} />click here for serial entry
+                  </button>
+                 
           </div>
+          
 
           <div>
             <label className="font-semibold text-indigo-700">
@@ -1798,6 +1813,8 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
             />
           </div>
         </div>
+         <br></br>
+          <br></br>
 
         <div className="mt-4">
           <label className="font-semibold text-indigo-700">নোটস</label>

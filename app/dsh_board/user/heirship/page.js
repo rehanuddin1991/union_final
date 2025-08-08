@@ -663,21 +663,21 @@ const formatDate = (date) => {
                     <button
                       onClick={() => handleEdit(d)}
                       disabled={loading}
-                      className="text-blue-600 hover:underline"
+                      className="text-blue-600 text-2xl hover:underline"
                     >
                       ✏️
                     </button>
                     <button
                       onClick={() => handleDelete(d.id)}
                       disabled={loading}
-                      className="text-red-600 hover:underline"
+                      className="text-red-600 text-2xl hover:underline"
                     >
                       🗑
                     </button>
 
                      <button
                     onClick={() => handlePrint(d)}
-                    className="text-green-600"
+                    className="text-green-600 text-2xl"
                   >
                     🖨️
                   </button>
