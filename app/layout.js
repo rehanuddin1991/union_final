@@ -49,7 +49,7 @@ export default function RootLayout({ children }) {
       <span className="text-cyan-700 font-semibold mx-1">Rehan Uddin</span>
       <span className="text-sm text-gray-600">|</span>
       <span className="text-blue-700 font-semibold mx-1">Upazila ICT Officer,</span>
-      <span className="text-sm text-gray-600">|</span>
+       
       <span className="text-indigo-700 font-semibold mx-1">DoICT, Ramgarh, Khagrachari</span>
     </p>
     <p className="text-xl text-gray-500 mt-2">All rights reserved. Crafted with ❤️ for digital governance.</p>

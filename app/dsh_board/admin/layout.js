@@ -14,7 +14,7 @@ export default function AdminLayout({ children }) {
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-gradient-to-br from-gray-100 to-gray-200">
+    <div className="  flex flex-col md:flex-row min-h-screen bg-gradient-to-br from-gray-100 to-gray-200">
       {/* ✅ Mobile Top Bar */}
       <div className="md:hidden flex justify-between items-center bg-blue-900 text-white p-4 shadow-lg">
         <h2 className="text-xl font-bold">🎓Smart Union</h2>
@@ -32,8 +32,11 @@ export default function AdminLayout({ children }) {
     ${isMenuOpen ? "block" : "hidden"} 
     md:block 
     fixed top-0 left-0 
-    h-full w-64 
+     
+    w-72
     z-50 
+        h-screen overflow-y-auto
+
     bg-gradient-to-b from-blue-900 to-blue-700 
     bg-blue-900
     text-white p-6 

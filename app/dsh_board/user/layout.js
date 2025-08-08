@@ -32,8 +32,11 @@ export default function AdminLayout({ children }) {
     ${isMenuOpen ? "block" : "hidden"} 
     md:block 
     fixed top-0 left-0 
-    h-full w-64 
+     
+    w-72
     z-50 
+        h-screen overflow-y-auto
+
     bg-gradient-to-b from-blue-900 to-blue-700 
     bg-blue-900
     text-white p-6 
