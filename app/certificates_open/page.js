@@ -162,7 +162,7 @@ const handleSubmit = async (e) => {
     is_deleted: true,
     is_approved:false,
     entry_page:"open",
-    notes:"<p> সংশ্লিষ্ট ওয়ার্ড সদস্যের প্রত্যয়ন সূত্রে জানতে পারি, তিনি উল্লিখিত ঠিকানার একজন স্থায়ী বাসিন্দা এবং জন্মসূত্রে বাংলাদেশী নাগরিক। তিনি রাষ্ট্র ও সমাজবিরোধী কোনো কার্যকলাপে জড়িত নন। আমি তাঁর সর্বাঙ্গীন মঙ্গল ও উন্নতি কামনা করি।</p>"
+    notes:"<p> সংশ্লিষ্ট ওয়ার্ড সদস্যের প্রত্যয়ন সূত্রে জানতে পারি, তিনি উল্লিখিত ঠিকানার একজন স্থায়ী বাসিন্দা এবং জন্মসূত্রে বাংলাদেশী নাগরিক। তিনি রাষ্ট্র ও সমাজবিরোধী কোনো কার্যকলাপে জড়িত নন। <br> আমি তাঁর সর্বাঙ্গীন মঙ্গল ও উন্নতি কামনা করি।</p>"
   };
 
   const method = form.id ? "PATCH" : "POST";
@@ -209,35 +209,41 @@ const handleSubmit = async (e) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="font-semibold text-indigo-700">সনদের ধরন</label>
-            
-
-             <select
+            <select
               required
               value={form.type}
               onChange={(e) => setForm({ ...form, type: e.target.value })}
               className="border p-2 rounded w-full"
+              
             >
               <option value="">-- সনদের ধরন নির্বাচন করুন --</option>
               <option value="নাগরিকত্ব সনদ">নাগরিকত্ব সনদ</option>
               <option value="জাতীয়তা সনদ">জাতীয়তা সনদ</option>
-              <option value="ওয়ারিশ সনদ">ওয়ারিশ সনদ</option>
-              <option value="বার্ষিক আয়ের সনদ">বার্ষিক আয়ের সনদ</option>
-              <option value="ট্রেড লাইসেন্স">ট্রেড লাইসেন্স</option>
+
+              
+               
               <option value="নাম সংক্রান্ত প্রত্যয়ন পত্র">
                 নাম সংক্রান্ত প্রত্যয়ন পত্র
               </option>
               <option value="বিবিধ সনদ">বিবিধ সনদ</option>
               <option value="চারিত্রিক সনদ">চারিত্রিক সনদ</option>
               <option value="অবিবাহিত সনদ">অবিবাহিত সনদ</option>
-              <option value="স্বামী পরিত্যক্তা সনদ">স্বামী পরিত্যক্তা সনদ</option>
+              <option value="ভূমিহীন সনদ">ভূমিহীন সনদ</option>
+              <option value="বেকারত্ব সনদ">বেকারত্ব সনদ</option>
+              <option value="স্বামী পরিত্যক্তা সনদ">
+                স্বামী পরিত্যক্তা সনদ
+              </option>
               <option value="বিধবা সনদ">বিধবা সনদ</option>
+              <option value="সম্প্রদায় সনদ">সম্প্রদায় সনদ</option>
               <option value="বার্ষিক আয়ের সনদ">বার্ষিক আয়ের সনদ</option>
-              <option value="ভোটার স্থানান্তর সংক্রান্ত সনদ">ভোটার স্থানান্তর সংক্রান্ত সনদ</option>
+              <option value="ভোটার স্থানান্তর সংক্রান্ত সনদ">
+                ভোটার স্থানান্তর সংক্রান্ত সনদ
+              </option>
               <option value="অভিভাবক সম্মতিপত্র">অভিভাবক সম্মতিপত্র</option>
-              <option value="দ্বিতীয়/পুনঃ বিবাহ না হওয়ার সনদপত্র">দ্বিতীয়/পুনঃ বিবাহ না হওয়ার সনদপত্র</option>
+              <option value="দ্বিতীয়/পুনঃ বিবাহ না হওয়ার সনদপত্র">
+                দ্বিতীয়/পুনঃ বিবাহ না হওয়ার সনদপত্র
+              </option>
             </select>
-
-
           </div>
 
           <div>
@@ -297,44 +303,56 @@ const handleSubmit = async (e) => {
             <label className="font-semibold text-indigo-700">জন্ম তারিখ<span className="text-red-600 text-xl ">*</span></label>
              
  <br></br>
-            <DatePicker
-                      id="birthDate"
-                      selected={form.birthDate ? new Date(form.birthDate) : null}
-                      onChange={(date) =>
-                        setForm({ ...form, birthDate: date?.toISOString().split("T")[0] || '' })
-                      }
-                      dateFormat="yyyy-MM-dd"
-                      placeholderText="জন্ম তারিখ নির্বাচন করুন"
-                     className="border p-2 rounded w-full min-w-64"
-                      required
-                    />
+             
+
+
+                    <DatePicker
+                                  id="birthDate"
+                                  selected={form.birthDate ? new Date(form.birthDate) : null}
+                                  onChange={(date) =>
+                                    setForm({
+                                      ...form,
+                                      birthDate: date
+                                        ? new Date(
+                                            date.getTime() - date.getTimezoneOffset() * 60000
+                                          )
+                                            .toISOString()
+                                            .split("T")[0]
+                                        : "",
+                                    })
+                                  }
+                                  dateFormat="yyyy-MM-dd"
+                                  placeholderText="জন্ম তারিখ নির্বাচন করুন"
+                                  className="border p-2 rounded w-full min-w-64"
+                                  required
+                                />
 
 
           </div>
            
 
           <div>
-            <label className="font-semibold text-[crimson]">
-              জাতীয় পরিচয়পত্র নম্বর (NID  না থাকলে জন্ম নিবন্ধন দিন)
+            <label className="font-semibold text-indigo-700">
+              জাতীয় পরিচয়পত্র নম্বর
             </label>
             <input
               type="text"
               value={form.nid ?? ""}
               onChange={(e) => {
                 const value = e.target.value;
-                // ✅ কেবল বাংলা সংখ্যা (০-৯) অনুমোদিত
-                if (/^[০-৯]*$/.test(value)) {
+                // ✅ শুধু ইংরেজি সংখ্যা (0-9) ইনপুট অনুমোদিত
+                if (/^[0-9]*$/.test(value)) {
                   setForm({ ...form, nid: value });
                 }
               }}
               className="border p-2 rounded w-full"
-              placeholder="NID (শুধু বাংলা সংখ্যা)"
+              placeholder="NID (শুধু ইংরেজি সংখ্যা লিখুন)"
             />
           </div>
 
           <div>
-            <label className="font-semibold text-[crimson]">
-              জন্ম নিবন্ধন নম্বর (যদি NID না থাকে )
+            <label className="font-semibold text-indigo-700">
+              জন্ম নিবন্ধন নম্বর
             </label>
 
             <input
@@ -343,12 +361,12 @@ const handleSubmit = async (e) => {
               onChange={(e) => {
                 const value = e.target.value;
                 // ✅ কেবল বাংলা সংখ্যা (০-৯) অনুমোদিত
-                if (/^[০-৯]*$/.test(value)) {
+                if (/^[0-9]*$/.test(value)) {
                   setForm({ ...form, birth_no: value });
                 }
               }}
               className="border p-2 rounded w-full"
-              placeholder="শুধু বাংলা সংখ্যা"
+              placeholder="ইংরেজি সংখ্যায় লিখুন"
             />
           </div>
 
@@ -360,12 +378,12 @@ const handleSubmit = async (e) => {
               onChange={(e) => {
                 const value = e.target.value;
                 // ✅ কেবল বাংলা সংখ্যা (০-৯) অনুমোদিত
-                if (/^[০-৯]*$/.test(value)) {
+                if (/^[0-9]*$/.test(value)) {
                   setForm({ ...form, ward: value });
                 }
               }}
               className="border p-2 rounded w-full"
-              placeholder="শুধু বাংলা সংখ্যা"
+              placeholder="ইংরেজি সংখ্যায় লিখুন"
             />
           </div>
 
@@ -377,12 +395,12 @@ const handleSubmit = async (e) => {
               onChange={(e) => {
                 const value = e.target.value;
                 // ✅ কেবল বাংলা সংখ্যা (০-৯) অনুমোদিত
-                if (/^[০-৯]*$/.test(value)) {
+                if (/^[0-9]*$/.test(value)) {
                   setForm({ ...form, holding_no: value });
                 }
               }}
               className="border p-2 rounded w-full"
-              placeholder="শুধু বাংলা সংখ্যা"
+              placeholder="ইংরেজি সংখ্যায় লিখুন"
             />
           </div>
 
@@ -394,12 +412,13 @@ const handleSubmit = async (e) => {
               onChange={(e) => setForm({ ...form, mouza: e.target.value })}
               className="border p-2 rounded w-full"
               placeholder="মৌজা"
-              
             />
           </div>
 
           <div>
-            <label className="font-semibold text-indigo-700">পোস্ট অফিস<span className="text-red-600 text-xl ">*</span></label>
+            <label className="font-semibold text-indigo-700">
+              পোস্ট অফিস<span className="text-red-600 text-xl ">*</span>
+            </label>
             <input
               type="text"
               value={form.post_office}
@@ -413,7 +432,9 @@ const handleSubmit = async (e) => {
           </div>
 
           <div className="md:col-span-2">
-            <label className="font-semibold text-indigo-700">ঠিকানা(গ্রাম)<span className="text-red-600 text-xl ">*</span></label>
+            <label className="font-semibold text-indigo-700">
+              ঠিকানা(গ্রাম)<span className="text-red-600 text-xl ">*</span>
+            </label>
             <textarea
               value={form.address}
               onChange={(e) => setForm({ ...form, address: e.target.value })}
