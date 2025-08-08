@@ -65,6 +65,7 @@ export async function POST(req) {
       presentAddress,
       applicantName,
       applicantAddress,
+      notes,
       issuedDate,
       children = [],
     } = body;
@@ -104,6 +105,7 @@ export async function POST(req) {
         presentAddress,
         applicantName,
         applicantAddress,
+        notes,
             letter_count: letterCount.toString(), // ✅ fixed here
             insertedBy:userId,
 
@@ -164,6 +166,7 @@ export async function PATCH(req) {
       presentAddress,
       applicantName,
       applicantAddress,
+      notes,
       issuedDate,
       children = [],
     } = body;
@@ -186,6 +189,7 @@ export async function PATCH(req) {
         presentAddress,
         applicantName,
         applicantAddress,
+        notes,
         issuedDate: issuedDateIso, // ✅ Fixed here
         updatedBy: userId, // ✅ Fixed here
         children: {

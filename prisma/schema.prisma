@@ -335,6 +335,7 @@ model Inheritance {
   createdAt        DateTime        @default(now())
   is_deleted       Boolean         @default(false)
   letter_count String?
+  notes             String?    @db.Text
    insertedBy     Int  @default(0)
     updatedBy     Int  @default(0)
     deletedBy     Int  @default(0)

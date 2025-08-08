@@ -48,6 +48,7 @@ export default function HeirshipPage() {
     permanentAddress: '',
     applicantName: '',
     applicantAddress: '',
+    notes: 'তিনি অত্র ইউনিয়নের একজন স্থায়ী বাসিন্দা ছিলেন। মৃত্যুকালে তিনি নিম্নলিখিত ওয়ারিশগণ রাখিয়া গিয়েছেন।',
     letter_count: '',
     issuedDate: today,
   })
@@ -198,6 +199,7 @@ const formatDate = (date) => {
       nidOrBirth: '',
       presentAddress: '',
       permanentAddress: '',
+      notes: 'তিনি অত্র ইউনিয়নের একজন স্থায়ী বাসিন্দা ছিলেন। মৃত্যুকালে তিনি নিম্নলিখিত ওয়ারিশগণ রাখিয়া গিয়েছেন।',
       applicantName: '',
       letter_count:'',
       applicantAddress: '',
@@ -358,15 +360,16 @@ const formatDate = (date) => {
     <td style=" border: 0; font-size:11px;"><b>স্থায়ী ঠিকানা:</b> &nbsp;${cert.permanentAddress}</td>
   </tr>
 
-  <tr ‍style="font-size:10px;">
-    <td colspan=3 style="width: 100%; font-weight: bold; border: 0; ">উল্লিখিত ব্যক্তি অত্র ইউনিয়নের একজন স্থায়ী বাসিন্দা।</td>
-   
-  </tr>
+ 
 
   <tr ‍style="font-size:11px;">
     <td style="width: 20%; font-weight: bold; border: 0; ">আবেদনকারীর নাম</td>
     <td style="width: 30%;border: 0; "> ${cert.applicantName}</td>
     <td style=" border: 0;font-size:11px; "><b>আবেদনকারীর ঠিকানা:</b> &nbsp;${cert.applicantAddress}</td>
+  </tr>
+   <tr ‍style="font-size:10px;">
+    <td colspan=3 style="width: 100%; font-weight: bold; border: 0; ">${cert.notes}</td>
+   
   </tr>
    
 </table>
@@ -433,6 +436,7 @@ const formatDate = (date) => {
       permanentAddress: item.permanentAddress,
       applicantName: item.applicantName,
       applicantAddress: item.applicantAddress,
+      notes: item.notes || 'তিনি অত্র ইউনিয়নের একজন স্থায়ী বাসিন্দা ছিলেন। মৃত্যুকালে তিনি নিম্নলিখিত ওয়ারিশগণ রাখিয়া গিয়েছেন।',
       issuedDate: item.issuedDate,
     })
     setChildren(item.children)
@@ -517,6 +521,21 @@ const formatDate = (date) => {
         className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
       />
     </div>
+
+    <div className="md:col-span-2">
+  <label htmlFor="notes" className="block mb-1 font-medium text-gray-700">
+    মন্তব্য / নোট
+  </label>
+  <textarea
+    id="notes"
+    placeholder="যে কোনো মন্তব্য বা নোট লিখুন..."
+    value={form.notes}
+    onChange={(e) => setForm({ ...form, notes: e.target.value })}
+    rows={4}
+    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 transition resize-none"
+  ></textarea>
+</div>
+
   </div>
 
   {/* Children Info */}
