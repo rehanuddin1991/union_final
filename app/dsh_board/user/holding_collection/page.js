@@ -562,10 +562,25 @@ const currentItems = filteredCollections.slice(indexOfFirstItem, indexOfLastItem
     <div>
       <label className="block mb-2 text-sm font-semibold text-gray-700">চলতি ট্যাক্স <span className="text-red-500">*</span></label>
       <input
-        type="number"
+        type="text"
         placeholder="৳"
         value={form.currentAmount}
-        onChange={e => setForm({ ...form, currentAmount: e.target.value })}
+        
+
+        onChange={(e) => {
+                let value = e.target.value;
+
+                // ✅ বাংলা সংখ্যা (০-৯) কে ইংরেজি (0-9) তে রূপান্তর
+                value = value.replace(/[০-৯]/g, (digit) =>
+                  String("০১২৩৪৫৬৭৮৯".indexOf(digit))
+                );
+
+                
+                if (/^[0-9]*$/.test(value)  ) {
+                  setForm({ ...form, currentAmount: value });
+                }
+              }}
+
         className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:outline-none"
         required
       />
@@ -575,10 +590,24 @@ const currentItems = filteredCollections.slice(indexOfFirstItem, indexOfLastItem
     <div>
       <label className="block mb-2 text-sm font-semibold text-gray-700">বকেয়া</label>
       <input
-        type="number"
+        type="text"
         placeholder="৳"
         value={form.dueAmount}
-        onChange={e => setForm({ ...form, dueAmount: e.target.value })}
+         
+
+        onChange={(e) => {
+                let value = e.target.value;
+
+                // ✅ বাংলা সংখ্যা (০-৯) কে ইংরেজি (0-9) তে রূপান্তর
+                value = value.replace(/[০-৯]/g, (digit) =>
+                  String("০১২৩৪৫৬৭৮৯".indexOf(digit))
+                );
+
+                
+                if (/^[0-9]*$/.test(value)  ) {
+                  setForm({ ...form, dueAmount: value });
+                }
+              }}
         className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-yellow-400 focus:outline-none"
       />
     </div>

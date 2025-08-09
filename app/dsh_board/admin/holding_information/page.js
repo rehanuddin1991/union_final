@@ -457,7 +457,7 @@ const currentItems = filteredCollections.slice(indexOfFirstItem, indexOfLastItem
         <h2 className="text-2xl font-bold mb-6 text-darkcyan">
           {editingId ? "✏️ আপডেট হোল্ডিং" : "📝 নতুন হোল্ডিং"}{" "}
           <span className="text-red-600 text-base font-normal">
-            (সকল সংখ্যা ইংরেজিতে পূরণ করুন) একটি হোল্ডিং শুধু একবার এন্ট্রি হবে।
+              একটি হোল্ডিং শুধু একবার এন্ট্রি হবে।
           </span>
         </h2>
 
@@ -645,8 +645,17 @@ const currentItems = filteredCollections.slice(indexOfFirstItem, indexOfLastItem
               placeholder="হোল্ডিং নং"
               value={form.holdingNo}
               onChange={(e) => {
-                const value = e.target.value;
-                if (/^\d*$/.test(value)) setForm({ ...form, holdingNo: value });
+                let value = e.target.value;
+
+                // ✅ বাংলা সংখ্যা (০-৯) কে ইংরেজি (0-9) তে রূপান্তর
+                value = value.replace(/[০-৯]/g, (digit) =>
+                  String("০১২৩৪৫৬৭৮৯".indexOf(digit))
+                );
+
+                
+                if (/^[0-9]*$/.test(value)  ) {
+                  setForm({ ...form, holdingNo: value });
+                }
               }}
               className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
               required
@@ -665,9 +674,20 @@ const currentItems = filteredCollections.slice(indexOfFirstItem, indexOfLastItem
               id="nid"
               placeholder="NID"
               value={form.nid}
-              onChange={(e) => {
-                const value = e.target.value;
-                if (/^[0-9]*$/.test(value)) setForm({ ...form, nid: value });
+               
+
+               onChange={(e) => {
+                let value = e.target.value;
+
+                // ✅ বাংলা সংখ্যা (০-৯) কে ইংরেজি (0-9) তে রূপান্তর
+                value = value.replace(/[০-৯]/g, (digit) =>
+                  String("০১২৩৪৫৬৭৮৯".indexOf(digit))
+                );
+
+                // ✅ শুধু ইংরেজি সংখ্যা এবং সর্বোচ্চ 17 সংখ্যা অনুমোদিত
+                if (/^[0-9]*$/.test(value) && value.length <= 17) {
+                  setForm({ ...form, nid: value });
+                }
               }}
               className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
               required
@@ -686,9 +706,20 @@ const currentItems = filteredCollections.slice(indexOfFirstItem, indexOfLastItem
               id="mobile"
               placeholder="মোবাইল"
               value={form.mobile}
-             onChange={(e) => {
-                const value = e.target.value;
-                if (/^[0-9]*$/.test(value)) setForm({ ...form, mobile: value });
+              
+
+               onChange={(e) => {
+                let value = e.target.value;
+
+                // ✅ বাংলা সংখ্যা (০-৯) কে ইংরেজি (0-9) তে রূপান্তর
+                value = value.replace(/[০-৯]/g, (digit) =>
+                  String("০১২৩৪৫৬৭৮৯".indexOf(digit))
+                );
+
+                // ✅ শুধু ইংরেজি সংখ্যা এবং সর্বোচ্চ 17 সংখ্যা অনুমোদিত
+                if (/^[0-9]*$/.test(value) && value.length <= 11) {
+                  setForm({ ...form, mobile: value });
+                }
               }}
               className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             />
@@ -707,9 +738,22 @@ const currentItems = filteredCollections.slice(indexOfFirstItem, indexOfLastItem
               
               placeholder="পুরুষ সদস্য"
               value={form.maleMembers}
-              onChange={(e) =>
-                setForm({ ...form, maleMembers: e.target.value })
-              }
+               
+
+               onChange={(e) => {
+                let value = e.target.value;
+
+                // ✅ বাংলা সংখ্যা (০-৯) কে ইংরেজি (0-9) তে রূপান্তর
+                value = value.replace(/[০-৯]/g, (digit) =>
+                  String("০১২৩৪৫৬৭৮৯".indexOf(digit))
+                );
+
+                // ✅ শুধু ইংরেজি সংখ্যা এবং সর্বোচ্চ 17 সংখ্যা অনুমোদিত
+                if (/^[0-9]*$/.test(value)  ) {
+                  setForm({ ...form, maleMembers: value });
+                }
+              }}
+
               className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             />
           </div>
@@ -727,9 +771,22 @@ const currentItems = filteredCollections.slice(indexOfFirstItem, indexOfLastItem
               
               placeholder="মহিলা সদস্য"
               value={form.femaleMembers}
-              onChange={(e) =>
-                setForm({ ...form, femaleMembers: e.target.value })
-              }
+               
+
+               onChange={(e) => {
+                let value = e.target.value;
+
+                // ✅ বাংলা সংখ্যা (০-৯) কে ইংরেজি (0-9) তে রূপান্তর
+                value = value.replace(/[০-৯]/g, (digit) =>
+                  String("০১২৩৪৫৬৭৮৯".indexOf(digit))
+                );
+
+                // ✅ শুধু ইংরেজি সংখ্যা এবং সর্বোচ্চ 17 সংখ্যা অনুমোদিত
+                if (/^[0-9]*$/.test(value)  ) {
+                  setForm({ ...form, femaleMembers: value });
+                }
+              }}
+
               className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             />
           </div>
@@ -747,9 +804,19 @@ const currentItems = filteredCollections.slice(indexOfFirstItem, indexOfLastItem
               
               placeholder="অন্যান্য সদস্য"
               value={form.othersMembers}
-              onChange={(e) =>
-                setForm({ ...form, othersMembers: e.target.value })
-              }
+               onChange={(e) => {
+                let value = e.target.value;
+
+                // ✅ বাংলা সংখ্যা (০-৯) কে ইংরেজি (0-9) তে রূপান্তর
+                value = value.replace(/[০-৯]/g, (digit) =>
+                  String("০১২৩৪৫৬৭৮৯".indexOf(digit))
+                );
+
+                
+                if (/^[0-9]*$/.test(value)  ) {
+                  setForm({ ...form, othersMembers: value });
+                }
+              }}
               className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             />
           </div>
@@ -767,7 +834,22 @@ const currentItems = filteredCollections.slice(indexOfFirstItem, indexOfLastItem
               
               placeholder="পুরুষ শিশু"
               value={form.maleBaby}
-              onChange={(e) => setForm({ ...form, maleBaby: e.target.value })}
+               
+
+               onChange={(e) => {
+                let value = e.target.value;
+
+                // ✅ বাংলা সংখ্যা (০-৯) কে ইংরেজি (0-9) তে রূপান্তর
+                value = value.replace(/[০-৯]/g, (digit) =>
+                  String("০১২৩৪৫৬৭৮৯".indexOf(digit))
+                );
+
+                
+                if (/^[0-9]*$/.test(value)  ) {
+                  setForm({ ...form, maleBaby: value });
+                }
+              }}
+
               className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             />
           </div>
@@ -785,9 +867,21 @@ const currentItems = filteredCollections.slice(indexOfFirstItem, indexOfLastItem
               
               placeholder="মহিলা শিশু"
               value={form.femaleBaby}
-              onChange={(e) =>
-                setForm({ ...form, femaleBaby: e.target.value })
-              }
+              
+
+                onChange={(e) => {
+                let value = e.target.value;
+
+                // ✅ বাংলা সংখ্যা (০-৯) কে ইংরেজি (0-9) তে রূপান্তর
+                value = value.replace(/[০-৯]/g, (digit) =>
+                  String("০১২৩৪৫৬৭৮৯".indexOf(digit))
+                );
+
+                
+                if (/^[0-9]*$/.test(value)  ) {
+                  setForm({ ...form, femaleBaby: value });
+                }
+              }}
               className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             />
           </div>
@@ -805,9 +899,21 @@ const currentItems = filteredCollections.slice(indexOfFirstItem, indexOfLastItem
               
               placeholder="অন্যান্য শিশু"
               value={form.othersBaby}
-              onChange={(e) =>
-                setForm({ ...form, othersBaby: e.target.value })
-              }
+               
+
+                onChange={(e) => {
+                let value = e.target.value;
+
+                // ✅ বাংলা সংখ্যা (০-৯) কে ইংরেজি (0-9) তে রূপান্তর
+                value = value.replace(/[০-৯]/g, (digit) =>
+                  String("০১২৩৪৫৬৭৮৯".indexOf(digit))
+                );
+
+                
+                if (/^[0-9]*$/.test(value)  ) {
+                  setForm({ ...form, othersBaby: value });
+                }
+              }}
               className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             />
           </div>
@@ -860,9 +966,21 @@ const currentItems = filteredCollections.slice(indexOfFirstItem, indexOfLastItem
               
               placeholder="বহুতল কক্ষ"
               value={form.multiStoriedRoom}
-              onChange={(e) =>
-                setForm({ ...form, multiStoriedRoom: e.target.value })
-              }
+               
+
+                onChange={(e) => {
+                let value = e.target.value;
+
+                // ✅ বাংলা সংখ্যা (০-৯) কে ইংরেজি (0-9) তে রূপান্তর
+                value = value.replace(/[০-৯]/g, (digit) =>
+                  String("০১২৩৪৫৬৭৮৯".indexOf(digit))
+                );
+
+                
+                if (/^[0-9]*$/.test(value)  ) {
+                  setForm({ ...form, multiStoriedRoom: value });
+                }
+              }}
               className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             />
           </div>
@@ -880,9 +998,21 @@ const currentItems = filteredCollections.slice(indexOfFirstItem, indexOfLastItem
               
               placeholder="পাকা ঘরের কক্ষ"
               value={form.buildingRoom}
-              onChange={(e) =>
-                setForm({ ...form, buildingRoom: e.target.value })
-              }
+               
+
+               onChange={(e) => {
+                let value = e.target.value;
+
+                // ✅ বাংলা সংখ্যা (০-৯) কে ইংরেজি (0-9) তে রূপান্তর
+                value = value.replace(/[০-৯]/g, (digit) =>
+                  String("০১২৩৪৫৬৭৮৯".indexOf(digit))
+                );
+
+                
+                if (/^[0-9]*$/.test(value)  ) {
+                  setForm({ ...form, buildingRoom: value });
+                }
+              }}
               className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             />
           </div>
@@ -900,9 +1030,19 @@ const currentItems = filteredCollections.slice(indexOfFirstItem, indexOfLastItem
               
               placeholder="সেমি পাকা ঘরের কক্ষ"
               value={form.semiBuildingRoom}
-              onChange={(e) =>
-                setForm({ ...form, semiBuildingRoom: e.target.value })
-              }
+              onChange={(e) => {
+                let value = e.target.value;
+
+                // ✅ বাংলা সংখ্যা (০-৯) কে ইংরেজি (0-9) তে রূপান্তর
+                value = value.replace(/[০-৯]/g, (digit) =>
+                  String("০১২৩৪৫৬৭৮৯".indexOf(digit))
+                );
+
+                
+                if (/^[0-9]*$/.test(value)  ) {
+                  setForm({ ...form, semiBuildingRoom: value });
+                }
+              }}
               className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             />
           </div>
@@ -920,7 +1060,22 @@ const currentItems = filteredCollections.slice(indexOfFirstItem, indexOfLastItem
               type="text"
               placeholder="কাঁচা ঘরের কক্ষ"
               value={form.rawRoom}
-              onChange={(e) => setForm({ ...form, rawRoom: e.target.value })}
+               
+              onChange={(e) => {
+                let value = e.target.value;
+
+                // ✅ বাংলা সংখ্যা (০-৯) কে ইংরেজি (0-9) তে রূপান্তর
+                value = value.replace(/[০-৯]/g, (digit) =>
+                  String("০১২৩৪৫৬৭৮৯".indexOf(digit))
+                );
+
+                
+                if (/^[0-9]*$/.test(value)  ) {
+                  setForm({ ...form, rawRoom: value });
+                }
+              }}
+
+
               className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             />
           </div>
@@ -938,9 +1093,23 @@ const currentItems = filteredCollections.slice(indexOfFirstItem, indexOfLastItem
               
               placeholder="নিজস্ব ভাড়া (নিজে বসবাস)"
               value={form.ownHouseRent}
-              onChange={(e) =>
-                setForm({ ...form, ownHouseRent: e.target.value })
-              }
+               
+
+              onChange={(e) => {
+                let value = e.target.value;
+
+                // ✅ বাংলা সংখ্যা (০-৯) কে ইংরেজি (0-9) তে রূপান্তর
+                value = value.replace(/[০-৯]/g, (digit) =>
+                  String("০১২৩৪৫৬৭৮৯".indexOf(digit))
+                );
+
+                
+                if (/^[0-9]*$/.test(value)  ) {
+                  setForm({ ...form, ownHouseRent: value });
+                }
+              }}
+
+              
               className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             />
           </div>
@@ -958,9 +1127,23 @@ const currentItems = filteredCollections.slice(indexOfFirstItem, indexOfLastItem
               
               placeholder="অন্যান্য ভাড়া"
               value={form.othersRent}
-              onChange={(e) =>
-                setForm({ ...form, othersRent: e.target.value })
-              }
+               
+
+              onChange={(e) => {
+                let value = e.target.value;
+
+                // ✅ বাংলা সংখ্যা (০-৯) কে ইংরেজি (0-9) তে রূপান্তর
+                value = value.replace(/[০-৯]/g, (digit) =>
+                  String("০১২৩৪৫৬৭৮৯".indexOf(digit))
+                );
+
+                
+                if (/^[0-9]*$/.test(value)  ) {
+                  setForm({ ...form, othersRent: value });
+                }
+              }}
+
+              
               className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             />
           </div>
@@ -978,11 +1161,24 @@ const currentItems = filteredCollections.slice(indexOfFirstItem, indexOfLastItem
               
               placeholder="ধার্যকৃত কর"
               value={form.imposedTax}
+               
+
+
               onChange={(e) => {
-                const value = e.target.value;
-                if (/^[0-9]*$/.test(value))
+                let value = e.target.value;
+
+                // ✅ বাংলা সংখ্যা (০-৯) কে ইংরেজি (0-9) তে রূপান্তর
+                value = value.replace(/[০-৯]/g, (digit) =>
+                  String("০১২৩৪৫৬৭৮৯".indexOf(digit))
+                );
+
+                
+                if (/^[0-9]*$/.test(value)  ) {
                   setForm({ ...form, imposedTax: value });
+                }
               }}
+
+              
               className="w-full p-3 border border-indigo-700 rounded-lg shadow-2xl focus:outline-none focus:ring-2 focus:ring-darkcyan focus:border-darkcyan transition"
             />
           </div>
