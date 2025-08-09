@@ -57,7 +57,7 @@ export function getHeaderSectionTrade(settings, govtImg, unionImg) {
           ${settings?.union_name || ""}
         </h1>
         <h1 class="header-title">${settings?.upazila},&nbsp;${settings?.district}</h1>
-        <h1 class="header-title" style="font-size:16px;"> ${settings?.notes} </h1>
+        <h1 class="header-title" style="font-size:14px;"> ${settings?.notes} </h1>
       </div>
       <div style="width: 120px;
   height: 140px;

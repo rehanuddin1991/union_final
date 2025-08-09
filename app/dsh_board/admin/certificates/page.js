@@ -458,10 +458,12 @@ export default function CertificatesPage() {
   };
 
   const indexOfLastItem = currentPage * itemsPerPage;
-const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-const currentItems = filteredCollections.slice(indexOfFirstItem, indexOfLastItem);
-const totalPages = Math.ceil(filteredCollections.length / itemsPerPage);
-
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredCollections.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
+  const totalPages = Math.ceil(filteredCollections.length / itemsPerPage);
 
   const handlePrint = async (cert) => {
     setLoading(true); // ⬅️ লোডিং শুরু
@@ -594,7 +596,7 @@ const totalPages = Math.ceil(filteredCollections.length / itemsPerPage);
         <td style="width:14%;font-size:17px;">মৌজা</td>
         <td style="width:18%;text-align:left;font-size:17px;">: &nbsp;${
           enToBnNumber(cert.mouza) || "-"
-        }</td>        
+        } </td>        
 
   </tr>
 
@@ -642,7 +644,7 @@ ${
 
 ${
   cert.type === "নাগরিকত্ব সনদ"
-    ? ` <br><br> 
+    ? ` <br> 
    
 `
     : ""
@@ -650,7 +652,7 @@ ${
 
 ${
   cert.type === "জাতীয়তা সনদ"
-    ? ` <br><br> 
+    ? ` <br> 
    
 `
     : ""
@@ -945,7 +947,7 @@ ${
    <tr>
     <td style="width: 25%;;font-weight:bold;">স্বত্বাধিকারীর ঠিকানা </td>
     <td style="width:25%;font-size:13px;">: ${cert.address}   </td>
-    <td style="width:50%"> <b>ব্যবসার প্রকৃতি:</b>&nbsp;&nbsp; ${
+    <td style="width:50%;font-size:13px;"> <b>ব্যবসার প্রকৃতি:</b>&nbsp;&nbsp; ${
       cert.nature
     }&nbsp; &nbsp; <b>ব্যবসার ধরণ:</b> ${cert.trade_type} </td>
   </tr>
@@ -1243,7 +1245,7 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
     <div className="max-w-5xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-6">
         ইউনিয়ন পরিষদ সকল সনদ{" "}
-        <span className="text-red-600">(***সকল সংখ্যা ইংরেজিতে লিখবেন)</span>
+         
       </h1>
 
       <form
@@ -1264,7 +1266,6 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
               <option value="নাগরিকত্ব সনদ">নাগরিকত্ব সনদ</option>
               <option value="জাতীয়তা সনদ">জাতীয়তা সনদ</option>
 
-              
               <option value="ট্রেড লাইসেন্স">ট্রেড লাইসেন্স</option>
               <option value="নাম সংক্রান্ত প্রত্যয়ন পত্র">
                 নাম সংক্রান্ত প্রত্যয়ন পত্র
@@ -1383,9 +1384,15 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
               type="text"
               value={form.nid ?? ""}
               onChange={(e) => {
-                const value = e.target.value;
-                // ✅ শুধু ইংরেজি সংখ্যা (0-9) ইনপুট অনুমোদিত
-                if (/^[0-9]*$/.test(value)) {
+                let value = e.target.value;
+
+                // ✅ বাংলা সংখ্যা (০-৯) কে ইংরেজি (0-9) তে রূপান্তর
+                value = value.replace(/[০-৯]/g, (digit) =>
+                  String("০১২৩৪৫৬৭৮৯".indexOf(digit))
+                );
+
+                // ✅ শুধু ইংরেজি সংখ্যা এবং সর্বোচ্চ 17 সংখ্যা অনুমোদিত
+                if (/^[0-9]*$/.test(value) && value.length <= 17) {
                   setForm({ ...form, nid: value });
                 }
               }}
@@ -1403,8 +1410,14 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
               type="text"
               value={form.birth_no ?? ""}
               onChange={(e) => {
-                const value = e.target.value;
-                // ✅ কেবল বাংলা সংখ্যা (০-৯) অনুমোদিত
+                let value = e.target.value;
+
+                // ✅ বাংলা সংখ্যা (০-৯) কে ইংরেজি (0-9) তে রূপান্তর
+                value = value.replace(/[০-৯]/g, (digit) =>
+                  String("০১২৩৪৫৬৭৮৯".indexOf(digit))
+                );
+
+                // ✅ শুধু ইংরেজি সংখ্যা এবং সর্বোচ্চ 17 সংখ্যা অনুমোদিত
                 if (/^[0-9]*$/.test(value)) {
                   setForm({ ...form, birth_no: value });
                 }
@@ -1420,8 +1433,14 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
               type="text"
               value={form.ward ?? ""}
               onChange={(e) => {
-                const value = e.target.value;
-                // ✅ কেবল বাংলা সংখ্যা (০-৯) অনুমোদিত
+                let value = e.target.value;
+
+                // ✅ বাংলা সংখ্যা (০-৯) কে ইংরেজি (0-9) তে রূপান্তর
+                value = value.replace(/[০-৯]/g, (digit) =>
+                  String("০১২৩৪৫৬৭৮৯".indexOf(digit))
+                );
+
+                // ✅ শুধু ইংরেজি সংখ্যা এবং সর্বোচ্চ 17 সংখ্যা অনুমোদিত
                 if (/^[0-9]*$/.test(value)) {
                   setForm({ ...form, ward: value });
                 }
@@ -1437,8 +1456,14 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
               type="text"
               value={form.holding_no ?? ""}
               onChange={(e) => {
-                const value = e.target.value;
-                // ✅ কেবল বাংলা সংখ্যা (০-৯) অনুমোদিত
+                let value = e.target.value;
+
+                // ✅ বাংলা সংখ্যা (০-৯) কে ইংরেজি (0-9) তে রূপান্তর
+                value = value.replace(/[০-৯]/g, (digit) =>
+                  String("০১২৩৪৫৬৭৮৯".indexOf(digit))
+                );
+
+                // ✅ শুধু ইংরেজি সংখ্যা এবং সর্বোচ্চ 17 সংখ্যা অনুমোদিত
                 if (/^[0-9]*$/.test(value)) {
                   setForm({ ...form, holding_no: value });
                 }
@@ -1576,8 +1601,20 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
                 <input
                   type="text"
                   value={form.mobile}
-                  onChange={(e) => setForm({ ...form, mobile: e.target.value })}
                   className="border p-2 rounded w-full"
+                  onChange={(e) => {
+                    let value = e.target.value;
+
+                    // ✅ বাংলা সংখ্যা (০-৯) কে ইংরেজি (0-9) তে রূপান্তর
+                    value = value.replace(/[০-৯]/g, (digit) =>
+                      String("০১২৩৪৫৬৭৮৯".indexOf(digit))
+                    );
+
+                    // ✅ শুধু ইংরেজি সংখ্যা এবং সর্বোচ্চ 17 সংখ্যা অনুমোদিত
+                    if (/^[0-9]*$/.test(value) && value.length <= 11) {
+                      setForm({ ...form, mobile: value });
+                    }
+                  }}
                 />
               </div>
 
@@ -1641,8 +1678,14 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
                   type="text"
                   value={form.trade_fee ?? ""}
                   onChange={(e) => {
-                    const value = e.target.value;
-                    // ✅ কেবল বাংলা সংখ্যা (০-৯) অনুমোদিত
+                    let value = e.target.value;
+
+                    // ✅ বাংলা সংখ্যা (০-৯) কে ইংরেজি (0-9) তে রূপান্তর
+                    value = value.replace(/[০-৯]/g, (digit) =>
+                      String("০১২৩৪৫৬৭৮৯".indexOf(digit))
+                    );
+
+                    // ✅ শুধু ইংরেজি সংখ্যা এবং সর্বোচ্চ 17 সংখ্যা অনুমোদিত
                     if (/^[0-9]*$/.test(value)) {
                       setForm({ ...form, trade_fee: value });
                     }
@@ -1661,8 +1704,14 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
                   type="text"
                   value={form.trade_capital_tax ?? ""}
                   onChange={(e) => {
-                    const value = e.target.value;
-                    // ✅ কেবল বাংলা সংখ্যা (০-৯) অনুমোদিত
+                    let value = e.target.value;
+
+                    // ✅ বাংলা সংখ্যা (০-৯) কে ইংরেজি (0-9) তে রূপান্তর
+                    value = value.replace(/[০-৯]/g, (digit) =>
+                      String("০১২৩৪৫৬৭৮৯".indexOf(digit))
+                    );
+
+                    // ✅ শুধু ইংরেজি সংখ্যা এবং সর্বোচ্চ 17 সংখ্যা অনুমোদিত
                     if (/^[0-9]*$/.test(value)) {
                       setForm({ ...form, trade_capital_tax: value });
                     }
@@ -1679,7 +1728,14 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
                   type="text"
                   value={form.trade_due ?? ""}
                   onChange={(e) => {
-                    const value = e.target.value;
+                    let value = e.target.value;
+
+                    // ✅ বাংলা সংখ্যা (০-৯) কে ইংরেজি (0-9) তে রূপান্তর
+                    value = value.replace(/[০-৯]/g, (digit) =>
+                      String("০১২৩৪৫৬৭৮৯".indexOf(digit))
+                    );
+
+                    // ✅ শুধু ইংরেজি সংখ্যা এবং সর্বোচ্চ 17 সংখ্যা অনুমোদিত
                     if (/^[0-9]*$/.test(value)) {
                       setForm({ ...form, trade_due: value });
                     }
@@ -1696,7 +1752,14 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
                   type="text"
                   value={form.trade_vat ?? ""}
                   onChange={(e) => {
-                    const value = e.target.value;
+                    let value = e.target.value;
+
+                    // ✅ বাংলা সংখ্যা (০-৯) কে ইংরেজি (0-9) তে রূপান্তর
+                    value = value.replace(/[০-৯]/g, (digit) =>
+                      String("০১২৩৪৫৬৭৮৯".indexOf(digit))
+                    );
+
+                    // ✅ শুধু ইংরেজি সংখ্যা এবং সর্বোচ্চ 17 সংখ্যা অনুমোদিত
                     if (/^[0-9]*$/.test(value)) {
                       setForm({ ...form, trade_vat: value });
                     }
@@ -1715,7 +1778,14 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
                   type="text"
                   value={form.trade_total_tax ?? ""}
                   onChange={(e) => {
-                    const value = e.target.value;
+                    let value = e.target.value;
+
+                    // ✅ বাংলা সংখ্যা (০-৯) কে ইংরেজি (0-9) তে রূপান্তর
+                    value = value.replace(/[০-৯]/g, (digit) =>
+                      String("০১২৩৪৫৬৭৮৯".indexOf(digit))
+                    );
+
+                    // ✅ শুধু ইংরেজি সংখ্যা এবং সর্বোচ্চ 17 সংখ্যা অনুমোদিত
                     if (/^[0-9]*$/.test(value)) {
                       setForm({ ...form, trade_total_tax: value });
                     }
@@ -1772,10 +1842,14 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
               সনদের নাম্বার (শুধু প্রথমটির জন্য অবশ্যই ইংরেজি নাম্বার) (যদি
               প্রথমটির জন্য ইনপুট দিতে ভুলে যান তবে ডেটা আপডেট না করে আবার ফরম
               পূরণ করে সেভ দিন, আপডেটে এই ফিল্ড কাজ করবে না) <br></br>
-              <span className="text-[indigo]"> প্রথমবার ইনপুট দিতে পাশের বাটনে ক্লিক করুন ও  ইংরেজিতে সিরিয়াল লিখুন</span>
+              <span className="text-[indigo]">
+                {" "}
+                প্রথমবার ইনপুট দিতে পাশের বাটনে ক্লিক করুন ও ইংরেজিতে সিরিয়াল
+                লিখুন
+              </span>
             </label>
             <input
-             disabled={isDisabled}
+              disabled={isDisabled}
               type="text"
               value={form.letter_count ?? ""}
               onChange={(e) => {
@@ -1789,17 +1863,16 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
               placeholder="example: 357"
             />
 
-             {/* Edit Icon */}
-                  <button
-                    type="button"
-                    onClick={() => setIsDisabled(false)}
-                    className="absolute ml-4 bg-[crimson] p-2 shadow-2xl rounded-2xl   text-[whitesmoke] hover:bg-[green] hover:text-[white]"
-                  >
-                    <Pencil size={19} />click here for serial entry
-                  </button>
-                 
+            {/* Edit Icon */}
+            <button
+              type="button"
+              onClick={() => setIsDisabled(false)}
+              className="absolute ml-4 bg-[crimson] p-2 shadow-2xl rounded-2xl   text-[whitesmoke] hover:bg-[green] hover:text-[white]"
+            >
+              <Pencil size={19} />
+              click here for serial entry
+            </button>
           </div>
-          
 
           <div>
             <label className="font-semibold text-indigo-700">
@@ -1813,8 +1886,8 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
             />
           </div>
         </div>
-         <br></br>
-          <br></br>
+        <br></br>
+        <br></br>
 
         <div className="mt-4">
           <label className="font-semibold text-indigo-700">নোটস</label>
@@ -2079,18 +2152,20 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
               </tbody>
             </table>
             <div className="mt-4 flex justify-center gap-2">
-  {Array.from({ length: totalPages }, (_, index) => (
-    <button
-      key={index}
-      onClick={() => setCurrentPage(index + 1)}
-      className={`px-3 py-1 border rounded ${
-        currentPage === index + 1 ? "bg-blue-500 text-white" : "bg-gray-100"
-      }`}
-    >
-      {index + 1}
-    </button>
-  ))}
-</div>
+              {Array.from({ length: totalPages }, (_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentPage(index + 1)}
+                  className={`px-3 py-1 border rounded ${
+                    currentPage === index + 1
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-100"
+                  }`}
+                >
+                  {index + 1}
+                </button>
+              ))}
+            </div>
           </>
         )}
       </div>

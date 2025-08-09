@@ -338,13 +338,19 @@ const handleSubmit = async (e) => {
             <input
               type="text"
               value={form.nid ?? ""}
-              onChange={(e) => {
-                const value = e.target.value;
-                // ✅ শুধু ইংরেজি সংখ্যা (0-9) ইনপুট অনুমোদিত
-                if (/^[0-9]*$/.test(value)) {
-                  setForm({ ...form, nid: value });
-                }
-              }}
+             onChange={(e) => {
+      let value = e.target.value;
+
+      // ✅ বাংলা সংখ্যা (০-৯) কে ইংরেজি (0-9) তে রূপান্তর
+      value = value.replace(/[০-৯]/g, (digit) =>
+        String("০১২৩৪৫৬৭৮৯".indexOf(digit))
+      );
+
+      // ✅ শুধু ইংরেজি সংখ্যা এবং সর্বোচ্চ 17 সংখ্যা অনুমোদিত
+      if (/^[0-9]*$/.test(value) && value.length <= 17) {
+        setForm({ ...form, nid: value });
+      }
+    }}
               className="border p-2 rounded w-full"
               placeholder="NID (শুধু ইংরেজি সংখ্যা লিখুন)"
             />
@@ -358,13 +364,23 @@ const handleSubmit = async (e) => {
             <input
               type="text"
               value={form.birth_no ?? ""}
-              onChange={(e) => {
-                const value = e.target.value;
-                // ✅ কেবল বাংলা সংখ্যা (০-৯) অনুমোদিত
-                if (/^[0-9]*$/.test(value)) {
-                  setForm({ ...form, birth_no: value });
-                }
-              }}
+
+               onChange={(e) => {
+      let value = e.target.value;
+
+      // ✅ বাংলা সংখ্যা (০-৯) কে ইংরেজি (0-9) তে রূপান্তর
+      value = value.replace(/[০-৯]/g, (digit) =>
+        String("০১২৩৪৫৬৭৮৯".indexOf(digit))
+      );
+
+      // ✅ শুধু ইংরেজি সংখ্যা এবং সর্বোচ্চ 17 সংখ্যা অনুমোদিত
+      if (/^[0-9]*$/.test(value)  ) {
+        setForm({ ...form, birth_no: value });
+      }
+    }}
+
+
+               
               className="border p-2 rounded w-full"
               placeholder="ইংরেজি সংখ্যায় লিখুন"
             />
@@ -376,12 +392,18 @@ const handleSubmit = async (e) => {
               type="text"
               value={form.ward ?? ""}
               onChange={(e) => {
-                const value = e.target.value;
-                // ✅ কেবল বাংলা সংখ্যা (০-৯) অনুমোদিত
-                if (/^[0-9]*$/.test(value)) {
-                  setForm({ ...form, ward: value });
-                }
-              }}
+      let value = e.target.value;
+
+      // ✅ বাংলা সংখ্যা (০-৯) কে ইংরেজি (0-9) তে রূপান্তর
+      value = value.replace(/[০-৯]/g, (digit) =>
+        String("০১২৩৪৫৬৭৮৯".indexOf(digit))
+      );
+
+      // ✅ শুধু ইংরেজি সংখ্যা এবং সর্বোচ্চ 17 সংখ্যা অনুমোদিত
+      if (/^[0-9]*$/.test(value)  ) {
+        setForm({ ...form, ward: value });
+      }
+    }}
               className="border p-2 rounded w-full"
               placeholder="ইংরেজি সংখ্যায় লিখুন"
             />
@@ -392,13 +414,19 @@ const handleSubmit = async (e) => {
             <input
               type="text"
               value={form.holding_no ?? ""}
-              onChange={(e) => {
-                const value = e.target.value;
-                // ✅ কেবল বাংলা সংখ্যা (০-৯) অনুমোদিত
-                if (/^[0-9]*$/.test(value)) {
-                  setForm({ ...form, holding_no: value });
-                }
-              }}
+             onChange={(e) => {
+      let value = e.target.value;
+
+      // ✅ বাংলা সংখ্যা (০-৯) কে ইংরেজি (0-9) তে রূপান্তর
+      value = value.replace(/[০-৯]/g, (digit) =>
+        String("০১২৩৪৫৬৭৮৯".indexOf(digit))
+      );
+
+      // ✅ শুধু ইংরেজি সংখ্যা এবং সর্বোচ্চ 17 সংখ্যা অনুমোদিত
+      if (/^[0-9]*$/.test(value)  ) {
+        setForm({ ...form, holding_no: value });
+      }
+    }}
               className="border p-2 rounded w-full"
               placeholder="ইংরেজি সংখ্যায় লিখুন"
             />
