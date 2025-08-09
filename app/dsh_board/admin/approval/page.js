@@ -50,6 +50,26 @@ export default function CertificateApprovalPage() {
     }
   };
 
+
+  const handleDelete = async (id) => {
+  if (!confirm("আপনি কি এই সার্টিফিকেট ডিলিট করতে চান?")) return;
+  try {
+    const res = await fetch(`/api/certificates-open?id=${id}`, {
+      method: "DELETE",
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      toast.success("🗑️ ডিলিট সম্পন্ন হয়েছে");
+      fetchCertificates();
+    } else {
+      toast.error("❌ ডিলিট ব্যর্থ");
+    }
+  } catch {
+    toast.error("❌ এরর হয়েছে");
+  }
+};
+
   return (
     <div className="max-w-5xl mx-auto p-6">
       <h2 className="text-2xl font-bold mb-4 text-green-700">📋 অনুমোদনের অপেক্ষায় থাকা সার্টিফিকেট</h2>
@@ -87,12 +107,19 @@ export default function CertificateApprovalPage() {
                 <td className="border p-2">{cert.birth_no}</td>
                 <td className="border p-2">{cert.address}</td>
                
-                <td className="border p-2 text-center">
+                <td className="border p-4 text-center">
                   <button
                     onClick={() => handleApprove(cert.id)}
-                    className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md shadow-sm"
+                    className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 text-2xl rounded-md shadow-sm"
                   >
-                    ✅ অনুমোদন দিন
+                    ✅ Approve
+                  </button> &nbsp;&nbsp;
+
+                    <button
+                    onClick={() => handleDelete(cert.id)}
+                    className="bg-[crimson] hover:bg-red-700 text-2xl text-white px-3 py-1 rounded-md shadow-sm"
+                  >
+                    🗑 Delete
                   </button>
                 </td>
               </tr>

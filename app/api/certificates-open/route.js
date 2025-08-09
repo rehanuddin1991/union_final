@@ -44,6 +44,33 @@ export async function GET(req) {
     );
   }
 }
+
+export async function DELETE(req) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const id = parseInt(searchParams.get("id"));
+
+    if (!id) {
+      return Response.json({ success: false, error: "Invalid ID" }, { status: 400 });
+    }
+
+    const deleted = await prisma.certificate.update({
+      where: { id },
+      data: {
+        is_deleted: true,
+        is_approved: true, // ডিলিট করলে অনুমোদন মুছে যাবে
+      },
+    });
+
+    return Response.json({ success: true, deleted });
+  } catch (error) {
+    console.error("Soft Delete Error:", error);
+    return Response.json({ success: false, error: error.message }, { status: 500 });
+  }
+}
+
+
+
 export async function PATCH(req) {
   try {
     const { searchParams } = new URL(req.url);
