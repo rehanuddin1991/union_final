@@ -895,7 +895,7 @@ ${
 </div>
        
 
-<div style="margin-top:-10px;display:flex;justify-content: left;      align-items: center;    gap: 1.4rem;        flex-wrap: wrap;  ">
+<div style="margin-top:-10px;display:flex;justify-content: left;      align-items: center;    gap: 1rem;        flex-wrap: wrap;  ">
 <h5>ট্রেড লাইসেন্স নম্বর: ${cert.autoGenNum}</h5>
 <h4>অর্থবছর: ${convertToBanglaNumber(
       fiscal_start_year
