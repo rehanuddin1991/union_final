@@ -54,7 +54,45 @@ export default function CertificatesPage() {
       setSettings(data.settings[0]);
       //console.log("dddddd" + data.settings[0]);
     } else toast.error("অফিস সেটিংস লোড করতে ব্যর্থ হয়েছে");
+    
   };
+
+
+  const handleCopy = async (id, type) => {
+     
+    if (!form.type || form.type.trim() === "") {
+    toast.error("সনদের ধরণ নির্বাচন করুন! (পেজের শুরুতে আছে)");
+    return;
+  }
+  const copyType=form.type.trim();
+  //alert(copyType)
+
+  // ✅ যদি form.type আর type একই হয় তাহলে কপি হবে না
+  if (form.type === type) {
+    toast.error("একই ধরন কপি করা যাবে না! (ধরণ পরিবর্তন করুণ)");
+    return;
+  }
+  try {
+    const res = await fetch("/api/certificates-copy", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, copyType }), // type পাঠানো হচ্ছে
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      toast.success("Copied successfully!");
+      fetchCertificates(); // তালিকা রিফ্রেশ
+    } else {
+      toast.error(data.error || "Failed to copy");
+    }
+  } catch (error) {
+    console.error(error);
+    toast.error("Error copying data");
+  }
+};
+
+
 
   const handleLoadDefaultNote = (type) => {
     let defaultNote = "";
@@ -2108,7 +2146,7 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
                   </tr>
                 )}
                 {currentItems.map((cert, index) => {
-                  let rowClass = index % 2 === 0 ? "bg-blue-50" : "bg-blue-100";
+                  let rowClass = index % 2 === 0 ? "bg-[indigo] text-white" : "bg-[blueviolet] text-white";
                   if (cert.type === "নাগরিকত্ব সনদ") {
                     rowClass = "bg-[darkcyan] text-white";
                   }
@@ -2122,7 +2160,7 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
                       <td className="border p-3">{cert.nid}</td>
                       <td className="border p-3">{cert.birth_no}</td>
                       <td className="border p-3">{cert.address || ""}</td>
-                      <td className="border p-4 space-x-1 text-2xl">
+                      <td className="border p-4 space-y-1 space-x-3 text-3xl">
                         <button
                           onClick={() => handleEdit(cert)}
                           className="text-blue-600"
@@ -2131,9 +2169,16 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
                         </button>
                         <button
                           onClick={() => handleDelete(cert.id)}
-                          className=" text-2xl"
+                          className=" "
                         >
                           🗑
+                        </button>
+
+                        <button
+                          onClick={() => handleCopy(cert.id,cert.type)}
+                          className=" "
+                        >
+                          📋
                         </button>
                         {cert.type !== "ট্রেড লাইসেন্স" && (
                           <button
@@ -2156,9 +2201,9 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
                         {cert.type === "ট্রেড লাইসেন্স" && (
                           <button
                             onClick={() => handlePrint_trade(cert)}
-                            className="text-green-600 text-2xl"
+                            className="   "
                           >
-                            Trade(P)
+                            Trade(P)📜
                           </button>
                         )}
                       </td>
