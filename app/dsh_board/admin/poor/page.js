@@ -268,9 +268,11 @@ if (!form.name.trim()) {
           <thead className="bg-yellow-100">
             <tr>
               <th className="border p-2">নাম</th>
+               <th className="border p-2">পিতা</th>
               <th className="border p-2">মোবাইল</th>
-              <th className="border p-2">পিতা</th>
+             
               <th className="border p-2">ওয়ার্ড</th>
+              <th className="border p-2">মন্তব্য</th>
               <th className="border p-2">অ্যাকশন</th>
             </tr>
           </thead>
@@ -282,6 +284,7 @@ if (!form.name.trim()) {
         <td className="border p-2">{p.father || "-"}</td>
         <td className="border p-2">{p.mobile || "-"}</td>
         <td className="border p-2">{p.ward || "-"}</td>
+        <td className="border p-2">{p.comments || "-"}</td>
         <td className="border p-2">
           <button onClick={() => handleEdit(p)} className="text-blue-600 mr-2">✏️</button>
           <button onClick={() => handleDelete(p.id)} className="text-red-600">🗑</button>
