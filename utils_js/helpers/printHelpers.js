@@ -53,7 +53,7 @@ export function getHeaderSectionTrade(settings, govtImg, unionImg) {
       <img src="${govtImg}" class="header-logo" alt="Government Logo" />
       <div>
         <h3 class="header-title">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</h3>
-        <h1 class="header-title" style="color:#A52A2A; font-size:29px; font-weight:bold;">
+        <h1 class="header-title" style="color:#A52A2A; font-size:26px; font-weight:bold;">
           ${settings?.union_name || ""}
         </h1>
         <h1 class="header-title">${settings?.upazila},&nbsp;${settings?.district}</h1>
