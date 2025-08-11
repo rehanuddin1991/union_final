@@ -895,47 +895,48 @@ ${
 </div>
        
 
-<div style="margin-top:-10px;display:flex;justify-content: left;      align-items: center;    gap: 1rem;        flex-wrap: wrap;  ">
-<h5>ট্রেড লাইসেন্স নম্বর: ${cert.autoGenNum}</h5>
+<div style="font-size:13px; margin-top:-10px;display:flex;justify-content: left;      align-items: center;    gap: 1.2rem;        flex-wrap: wrap;  ">
+<h4>ট্রেড লাইসেন্স নম্বর: ${cert.autoGenNum}</h4>
 <h4>অর্থবছর: ${convertToBanglaNumber(
       fiscal_start_year
     )}-${convertToBanglaNumber(fiscal_end_year)}</h4>
 <h4>ব্যবসা শুরু তারিখ: ${bnStartDate}</h4>
+
  
 
 </div>
 
-<div style="margin-top:-37px;" >
-<h6> স্থানীয় সরকার (ইউনিয়ন পরিষদ) আইন, ২০০৯ (২০০৯ সনের ৬১ নং
+<div style="margin-top:-30px;font-size:13px;" >
+<h4> স্থানীয় সরকার (ইউনিয়ন পরিষদ) আইন, ২০০৯ (২০০৯ সনের ৬১ নং
 আইন) এর ধারা ৫৫ তে প্রদত্ত ক্ষমতাবলে সরকার প্রণীত আদর্শ কর
 তফসিল, ২০১৬ এর ৬ ও ১৭ নং অনুচ্ছেদ অনুযায়ী ব্যবসা, বৃত্তি, পেশা
 বা শিল্প প্রতিষ্ঠানের উপর আরোপিত কর আদায়ের লক্ষ্যে নির্ধারিত শর্তে
 নিম্নবর্ণিত ব্যক্তি/প্রতিষ্ঠানের অনুকূলে এই ট্রেড লাইসেন্সটি ইস্যু করা 
-হলো:</h6>
+হলো:</h4>
 </div>
 
 
 
             
 
-            <table style="margin-top:-5px;">
+            <table style="margin-top:-5px;font-size:14px;">
              
             <tr>
-    <td style="width: 25%;font-weight:bold;">ব্যবসা প্রতিষ্ঠানের নাম</td>
-    <td style="width:25%;">: ${cert.trade_name}</td>
-    <td style="width:50%;"> &nbsp;</td>
+    <td style="width: 20%;font-weight:bold;">ব্যবসা প্রতিষ্ঠানের নাম</td>
+    <td style="width:35%;">: ${cert.trade_name}</td>
+    <td style="width:45%;"> &nbsp;</td>
   </tr>
 
    <tr>
-    <td style="width: 25%;;font-weight:bold;">মালিক/স্বত্বাধিকারীর নাম</td>
-    <td style="width:25%;">: ${cert.applicantName}</td>
-    <td style="width:50%;"> &nbsp;</td>
+    <td style="width: 20%;;font-weight:bold;">মালিক/স্বত্বাধিকারীর নাম</td>
+    <td style="width:35%;">: ${cert.applicantName}</td>
+    <td style="width:45%;"> &nbsp;</td>
   </tr>
 
   <tr>
-    <td style="width: 25%;font-weight:bold;">মাতার নাম</td>
-    <td style="width:25%;">: ${cert.motherName}</td>
-    <td style="width:50%;"><b>পিতার নাম:</b> &nbsp;&nbsp; ${
+    <td style="width: 20%;font-weight:bold;">মাতার নাম</td>
+    <td style="width:35%;">: ${cert.motherName}</td>
+    <td style="width:45%;"><b>পিতার নাম:</b> &nbsp;  ${
       cert.fatherName
     }</td>
   </tr>
@@ -945,47 +946,51 @@ ${
    
 
    <tr>
-    <td style="width: 25%;;font-weight:bold;">স্বত্বাধিকারীর ঠিকানা </td>
-    <td style="width:25%;font-size:13px;">: ${cert.address}   </td>
-    <td style="width:50%;font-size:13px;"> <b>ব্যবসার প্রকৃতি:</b>&nbsp;&nbsp; ${
+    <td style="width: 20%;;font-weight:bold;">স্বত্বাধিকারীর ঠিকানা </td>
+    <td style="width:23%; ">: ${cert.address}   </td>
+    <td style="width:45%; "> <b>ব্যবসার প্রকৃতি:</b>&nbsp;  ${
       cert.nature
-    }&nbsp; &nbsp; <b>ব্যবসার ধরণ:</b> ${cert.trade_type} </td>
+    }&nbsp;  </td>
   </tr>
 
   
 
 
-  
-
-    
-
   <tr>
-    <td style="width: 25%;font-size:14px;;font-weight:bold;">প্রতিষ্ঠানের ঠিকানা</td>
-    <td  style="width:25%;    font-size:14px;">: ${cert.trade_address} </td>
-    <td style="width:50%; ">  <b>স্বামী/স্ত্রীর নাম:</b> &nbsp;&nbsp; ${
+    <td style="width: 20%;;font-weight:bold;">ব্যবসার ধরণ: </td>
+    <td style="width:23%; ">: ${cert.trade_type}   </td>
+    <td style="width:45%; "> <b>স্বামী/স্ত্রীর নাম:</b> &nbsp;  ${
       cert.spouse
     }</td>
   </tr>
 
-   <tr>
-    <td style="width: 25%;font-size:14px;;font-weight:bold;">জন্মনিবন্ধন/এনআইডি/পাসপোর্ট</td>
-    <td style="width:25%;font-size:14px;">: ${enToBnNumber(
-      cert.nid
-    )} &nbsp; ${enToBnNumber(cert.birth_no)} &nbsp; ${enToBnNumber(
-      cert.passport
-    )} </td>
+    
 
-    <td style="width:50%;"><b>টি আই এন</b> &nbsp;&nbsp; ${enToBnNumber(
+  <tr>
+    <td style="width: 20%;font-weight:bold;">প্রতিষ্ঠানের ঠিকানা</td>
+    <td  style="width:35%;    ">: ${cert.trade_address} </td>
+    <td style="width:45%; ">  &nbsp;</td>
+  </tr>
+
+   <tr>
+    <td style="width: 20%;;font-weight:bold;">জন্মনিবন্ধন/এনআইডি</td>
+    <td style="width:35%;">: ${enToBnNumber(
+      cert.nid
+    )} &nbsp; ${enToBnNumber(cert.birth_no)}  </td>
+
+    <td style="width:45%;"><b>পাসপোর্ট/টি আই এন:</b>&nbsp; ${enToBnNumber(
+      cert.passport
+    )}  &nbsp; ${enToBnNumber(
       cert.tin
     )} </td>
      
   </tr>
 
   <tr>
-    <td style="width:25%;;font-weight:bold;">মোবাইল</td>
-    <td style="width:25%;">: ${enToBnNumber(cert.mobile)}</span>
+    <td style="width:20%;;font-weight:bold;">মোবাইল</td>
+    <td style="width:35%;">: ${enToBnNumber(cert.mobile)}</span>
    </td>
-   <td style="width:50%;"><b> ই-মেইল: </b>&nbsp;&nbsp;  <span style="font-size:11px;">${
+   <td style="width:45%;"><b> ই-মেইল: </b>&nbsp;&nbsp;  <span style="font-size:12px;">${
      cert.email
    } </td>
    
@@ -1015,7 +1020,7 @@ ${
    
 </table>
 <div class="container2">
-  <table class="tax-table" style="margin-top:-9px;">
+  <table class="tax-table" style="margin-top:-9px;font-size:14px;">
     <tbody>
       <tr class="header-row">
         <td colspan="4" style='text-align:center;color:indigo;' class="header-cell">
@@ -1115,11 +1120,22 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
   </h1>
 </div>
 
+<div style="font-size:13px; margin-top:-10px;display:flex;justify-content: left;      align-items: center;    gap: 1.2rem;        flex-wrap: wrap;  ">
+<h4>ট্রেড লাইসেন্স নম্বর: ${cert.autoGenNum}</h4>
+<h4>অর্থবছর: ${convertToBanglaNumber(
+      fiscal_start_year
+    )}-${convertToBanglaNumber(fiscal_end_year)}</h4>
+<h4>ব্যবসা শুরু তারিখ: ${bnStartDate}</h4>
+
+ 
+
+</div>
+
 
 
             
 
-            <table>
+            <table style="font-size:14px;">
             <tr>
     <td style="width: 30%;">প্রতিষ্ঠানের নাম</td>
     <td style="margin-left:20px;">: ${cert.trade_name}</td>
@@ -1162,7 +1178,7 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
    
 </table>
 <div class="container2">
-  <table class="tax-table">
+  <table class="tax-table" style="font-size:14px;">
     <tbody>
       <tr class="header-row">
         <td colspan="2" class="header-cell">
