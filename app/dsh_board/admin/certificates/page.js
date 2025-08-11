@@ -68,10 +68,10 @@ export default function CertificatesPage() {
   //alert(copyType)
 
   // ✅ যদি form.type আর type একই হয় তাহলে কপি হবে না
-  if (form.type === type) {
-    toast.error("একই ধরন কপি করা যাবে না! (ধরণ পরিবর্তন করুণ)");
-    return;
-  }
+  // if (form.type === type) {
+  //   toast.error("একই ধরন কপি করা যাবে না! (ধরণ পরিবর্তন করুণ)");
+  //   return;
+  // }
   try {
     const res = await fetch("/api/certificates-copy", {
       method: "POST",
