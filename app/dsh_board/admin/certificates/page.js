@@ -2203,7 +2203,7 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
                             onClick={() => handlePrint_trade(cert)}
                             className="   "
                           >
-                            Trade(P)📜
+                            Trade(Print)
                           </button>
                         )}
                       </td>
