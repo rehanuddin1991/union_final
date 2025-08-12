@@ -1007,7 +1007,9 @@ ${
   <tr>
     <td style="width: 20%;font-weight:bold;">প্রতিষ্ঠানের ঠিকানা</td>
     <td  style="width:35%;    ">: ${cert.trade_address} </td>
-    <td style="width:45%; ">  &nbsp;</td>
+    <td style="width:45%; "> <b> ই-মেইল: </b>&nbsp;&nbsp;  <span style="font-size:12px;">${
+     cert.email
+   }</td>
   </tr>
 
    <tr>
@@ -1028,9 +1030,7 @@ ${
     <td style="width:20%;;font-weight:bold;">মোবাইল</td>
     <td style="width:35%;">: ${enToBnNumber(cert.mobile)}</span>
    </td>
-   <td style="width:45%;"><b> ই-মেইল: </b>&nbsp;&nbsp;  <span style="font-size:12px;">${
-     cert.email
-   } </td>
+   <td style="width:45%;">&nbsp; </td>
    
   </tr>
 
@@ -1067,13 +1067,13 @@ ${
       </tr>
 
       <tr class="row">
-        <td class="label-cell">ট্রেড লাইসেন্স ফি</td>
+        <td class="label-cell">&nbsp;ট্রেড লাইসেন্স ফি</td>
         <td class="input-cell">
-          <input type="text"  value=${enToBnNumber(cert.trade_fee) || "০"} />
+          <input type="text" style="width:140px;"  value=${enToBnNumber(cert.trade_fee) || "০"} />
         </td>
-        <td class="label-cell">মুলধন কর</td>
+        <td class="label-cell">&nbsp;মুলধন কর</td>
         <td class="input-cell">
-          <input type="text" value=${
+          <input type="text" style="width:140px;" value=${
             enToBnNumber(cert.trade_capital_tax) || "০"
           } />
         </td>
@@ -1082,20 +1082,20 @@ ${
        
 
       <tr class="row">
-        <td class="label-cell">বকেয়া</td>
+        <td class="label-cell">&nbsp;বকেয়া</td>
         <td class="input-cell">
-          <input type="text"  value=${enToBnNumber(cert.trade_due) || "০"} />
+          <input type="text" style="width:140px;" value=${enToBnNumber(cert.trade_due) || "০"} />
         </td>
-         <td class="label-cell">ভ্যাট (%)</td>
+         <td class="label-cell">&nbsp;ভ্যাট (%)</td>
         <td class="input-cell">
-          <input type="text"   value=${enToBnNumber(cert.trade_vat) || "০"}  />
+          <input type="text" style="width:140px;"  value=${enToBnNumber(cert.trade_vat) || "০"}  />
         </td>
       </tr>
 
      
 
       <tr class="row">
-        <td class="label-cell">সর্বমোট কর</td>
+        <td class="label-cell">&nbsp;সর্বমোট কর</td>
         <td class="input-cell">
          <span>${enToBnNumber(cert.trade_total_tax)} ( ${numberToBanglaWords(
       bnToEnNumber(cert.trade_total_tax)
