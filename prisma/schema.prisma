@@ -358,6 +358,29 @@ model ChildRelation {
 }
 
 
+model IncomeExpense {
+  id          Int       @id @default(autoincrement())
+  type        String    // INCOME বা EXPENSE
+  title       String    // শিরোনাম
+  amount      Float     // টাকা
+  date        DateTime  // তারিখ
+  notes       String?   @db.Text
+
+  is_deleted  Boolean   @default(false)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+ 
+  insertedBy  Int       @default(0)
+  updatedBy   Int       @default(0)
+  deletedBy   Int       @default(0)
+
+  @@map("income_expenses")
+}
+
+
+
 
 //npx prisma migrate dev --name add_spouse_field
 //npx prisma generate
