@@ -94,14 +94,14 @@ export default function AdminLayout({ children }) {
             href="/dsh_board/admin/income-expenses"
             className="block py-2 rounded-lg hover:bg-green-600 transition-all duration-300"
           >
-            📋 Income and Expense
+            💰💸Income and Expense
           </a>
 
           <a
             href="/dsh_board/admin/income-expenses/report"
             className="block py-2 rounded-lg hover:bg-green-600 transition-all duration-300"
           >
-            📋 Income and Expense Report
+            💰💸 Income and Expense Report
           </a>
 
           {/* <a href="/dsh_board/admin/holding_cards" className="block py-2 rounded-lg hover:bg-green-600 transition-all duration-300">
