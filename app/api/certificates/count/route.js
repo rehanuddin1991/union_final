@@ -16,6 +16,7 @@ export async function GET(req) {
       whereCondition = {
         is_deleted: true,
         entry_page: "open",
+        
         is_approved:false
       };
     } else {
