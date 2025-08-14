@@ -57,6 +57,7 @@ export async function POST(req) {
     const body = await req.json();
 
     const {
+      type,
       name,
       fatherName,
       motherName,
@@ -97,6 +98,7 @@ export async function POST(req) {
 
     const record = await prisma.inheritance.create({
       data: {
+        type,
         name,
         fatherName,
         motherName,
@@ -158,6 +160,7 @@ export async function PATCH(req) {
 
     const body = await req.json();
     const {
+      type,
       name,
       fatherName,
       motherName,
@@ -181,6 +184,7 @@ export async function PATCH(req) {
     const record = await prisma.inheritance.update({
       where: { id },
       data: {
+        type,
         name,
         fatherName,
         motherName,

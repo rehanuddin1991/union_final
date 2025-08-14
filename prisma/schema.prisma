@@ -325,6 +325,7 @@ enum ProjectStatus {
 model Inheritance {
   id               Int             @id @default(autoincrement())
   name             String
+  type             String?
   fatherName       String
   motherName       String
   nidOrBirth       String

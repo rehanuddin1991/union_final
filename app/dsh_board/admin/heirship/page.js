@@ -40,6 +40,7 @@ export default function HeirshipPage() {
 
 
   const [form, setForm] = useState({
+    type: 'উত্তরাধিকার/ওয়ারিশ সনদ',
     name: '',
     fatherName: '',
     motherName: '',
@@ -193,6 +194,7 @@ const formatDate = (date) => {
 
   const resetForm = () => {
     setForm({
+    type: 'উত্তরাধিকার/ওয়ারিশ সনদ',
       name: '',
       fatherName: '',
       motherName: '',
@@ -287,14 +289,14 @@ const formatDate = (date) => {
     const childrenRows = cert.children && cert.children.length > 0
       ? cert.children.map( (child,index) => `
           <tr>
-            <td style="border:1px solid #000; padding:2px;font-size:14px;text-align:center;">${enToBnNumber(index+1)}</td>
-            <td style="border:1px solid #000; padding:2px;font-size:14px;text-align:center;">${child.name || ''}</td>
-            <td style="border:1px solid #000; padding:2px;font-size:14px;text-align:center;">${child.fatherOrHusbandName || ''}</td>
-            <td style="border:1px solid #000; padding:2px;font-size:14px;text-align:center;">${child.nidOrBirth || ''}</td>
+            <td style="border:1px solid #000; padding:2px;font-size:13x;text-align:center;">${enToBnNumber(index+1)}</td>
+            <td style="border:1px solid #000; padding:2px;font-size:13x;text-align:center;">${child.name || ''}</td>
+            <td style="border:1px solid #000; padding:2px;font-size:13x;text-align:center;">${child.fatherOrHusbandName || ''}</td>
+            <td style="border:1px solid #000; padding:2px;font-size:13x;text-align:center;">${child.nidOrBirth || ''}</td>
             
-            <td style="border:1px solid #000; padding:2px;font-size:14px;text-align:center;">  ${ enToBnNumber( formatDate(child.dob || new Date()))}</td>
-            <td style="border:1px solid #000; padding:2px;font-size:14px;text-align:center;">${child.relation || ''}</td>
-            <td style="border:1px solid #000; padding:2px;font-size:14px;text-align:center;">${child.notes || ''}</td>
+            <td style="border:1px solid #000; padding:2px;font-size:13x;text-align:center;">  ${ enToBnNumber( formatDate(child.dob || new Date()))}</td>
+            <td style="border:1px solid #000; padding:2px;font-size:13x;text-align:center;">${child.relation || ''}</td>
+            <td style="border:1px solid #000; padding:2px;font-size:13x;text-align:center;">${child.notes || ''}</td>
           </tr>`).join('')
       : `<tr><td colspan="6" style="text-align:center; padding:10px;">কোনো সন্তানের তথ্য নেই</td></tr>`;
 
@@ -368,7 +370,7 @@ const formatDate = (date) => {
     <td style=" border: 0;font-size:11px; "><b>আবেদনকারীর ঠিকানা:</b> &nbsp;${cert.applicantAddress}</td>
   </tr>
    <tr ‍style="font-size:10px;">
-    <td colspan=3 style="width: 100%; font-weight: bold; border: 0; ">${cert.notes}</td>
+    <td colspan=3 style="width: 100%;   border: 0; ">${cert.notes}</td>
    
   </tr>
    
@@ -428,6 +430,7 @@ const formatDate = (date) => {
 
   const handleEdit = (item) => {
     setForm({
+      type: item.type,
       name: item.name,
       fatherName: item.fatherName,
       motherName: item.motherName,
@@ -481,6 +484,30 @@ const formatDate = (date) => {
 
   {/* Personal Info */}
   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+  <div>
+            <label className="font-semibold text-indigo-700">সনদের ধরন <span className="text-[crimson] text-xl">*</span> </label>
+            <select
+              required
+              value={form.type}
+              onChange={(e) => setForm({ ...form, type: e.target.value })}
+              className="border p-2 rounded w-full"
+                
+            >
+              <option value="">-- সনদের ধরন নির্বাচন করুন --</option>
+             
+              <option value="উত্তরাধিকার/ওয়ারিশ সনদ">উত্তরাধিকার/ওয়ারিশ সনদ</option>
+               <option value="ওয়ারিশ সনদ">ওয়ারিশ সনদ</option>
+              <option value="উত্তরাধিকার সনদ">উত্তরাধিকার সনদ</option>
+              <option value="পারিবারিক সনদ">পারিবারিক সনদ</option>
+               
+               
+               
+            </select>
+          </div>
+          <br></br>
+
+
     {[
       { id: 'name', label: 'নাম', value: form.name, required: true },
       { id: 'fatherName', label: 'পিতার নাম', value: form.fatherName, required: true },
