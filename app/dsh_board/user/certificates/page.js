@@ -667,14 +667,14 @@ export default function CertificatesPage() {
 
 
 
-<div style="text-align:justify; line-height:1.6">  
+<div style="text-align:justify; line-height:1.5">  
     ${cert.notes || "-"}
 </div>
 ${
   cert.type === "অভিভাবক সম্মতিপত্র"
-    ? ` <br><br>
+    ? ` 
   <div style="margin-left:500px;">   
-     অভিভাবকের স্বাক্ষর <br>
+     অভিভাবকের স্বাক্ষর <br><br><br> 
   </div>
 `
     : ""
