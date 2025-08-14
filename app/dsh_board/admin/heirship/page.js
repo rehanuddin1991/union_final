@@ -499,6 +499,7 @@ const formatDate = (date) => {
               <option value="উত্তরাধিকার/ওয়ারিশ সনদ">উত্তরাধিকার/ওয়ারিশ সনদ</option>
                <option value="ওয়ারিশ সনদ">ওয়ারিশ সনদ</option>
               <option value="উত্তরাধিকার সনদ">উত্তরাধিকার সনদ</option>
+              <option value="জাতীয় পরিচয় পত্র সংক্রান্ত ওয়ারিশ সনদ">জাতীয় পরিচয় পত্র সংক্রান্ত ওয়ারিশ সনদ</option>
               <option value="পারিবারিক সনদ">পারিবারিক সনদ</option>
                
                

@@ -38,6 +38,41 @@ export default function CertificatesPage() {
   const [isDisabled, setIsDisabled] = useState(true);
   const itemsPerPage = 10;
 
+   const [suggestions, setSuggestions] = useState({
+    mouza: [],
+    post_office: [],
+    address: [],
+  });
+
+   useEffect(() => {
+    setSuggestions({
+      mouza: JSON.parse(localStorage.getItem("mouzaHistory") || "[]"),
+      post_office: JSON.parse(localStorage.getItem("postOfficeHistory") || "[]"),
+      address: JSON.parse(localStorage.getItem("addressHistory") || "[]"),
+    });
+  }, []);
+
+   const saveHistory = (key, value) => {
+    if (!value.trim()) return;
+    const storageKey =
+      key === "mouza"
+        ? "mouzaHistory"
+        : key === "post_office"
+        ? "postOfficeHistory"
+        : "addressHistory";
+
+    let history = JSON.parse(localStorage.getItem(storageKey) || "[]");
+
+    if (!history.includes(value)) {
+      history.push(value);
+      localStorage.setItem(storageKey, JSON.stringify(history));
+    }
+  };
+
+    
+
+
+
   const [loading, setLoading] = useState(false);
   const [filteredCollections, setFilteredCollections] = useState([]);
   const [search, setSearch] = useState("");
@@ -322,6 +357,16 @@ export default function CertificatesPage() {
     e.preventDefault();
     setLoading(true); // ✅ লোডিং শুরু
     setIsEditingType(false);
+     saveHistory("mouza", form.mouza);
+  saveHistory("post_office", form.post_office);
+  saveHistory("address", form.address);
+
+  // suggestions state update
+  setSuggestions({
+    mouza: JSON.parse(localStorage.getItem("mouzaHistory") || "[]"),
+    post_office: JSON.parse(localStorage.getItem("postOfficeHistory") || "[]"),
+    address: JSON.parse(localStorage.getItem("addressHistory") || "[]"),
+  });
 
     // Required validation
     if (!form.applicantName || form.applicantName.trim() === "") {
@@ -618,10 +663,10 @@ export default function CertificatesPage() {
         <td style="width:38%;text-align:left;font-size:17px;">: &nbsp;${
           enToBnNumber(cert.ward) || "-"
         }</td>         
-        <td style="width:14%;font-size:17px;">হোল্ডিং নং </td>
-        <td style="width:18%;text-align:left;font-size:17px;">: &nbsp; ${
+        <td colspan=2 style="width:32%;font-size:15px;">হোল্ডিং নং:&nbsp; ${
           enToBnNumber(cert.holding_no) || "-"
-        }</td>          
+        } </td>
+        
 
   </tr>
 
@@ -631,11 +676,10 @@ export default function CertificatesPage() {
           cert.address || "-"
         }</td>
         
-        <td style="width:14%;font-size:17px;">মৌজা</td>
-        <td style="width:18%;text-align:left;font-size:17px;">: &nbsp;${
+        <td colspan=2 style="width:32%;font-size:15px;">মৌজা: &nbsp;${
           enToBnNumber(cert.mouza) || "-"
-        } </td>        
-
+        } </td>
+        
   </tr>
 
 
@@ -645,7 +689,7 @@ export default function CertificatesPage() {
           enToBnNumber(cert.post_office) || "-"
         }</td>        
          
-        <td colspan=2 style="width:32%;text-align:left;font-size:16px;">উপজেলা: ${
+        <td colspan=2 style="width:32%;text-align:left;font-size:15px;">উপজেলা: ${
           settings?.upazila
         },
         জেলা: &nbsp;${settings?.district}</td>        
@@ -1527,45 +1571,67 @@ ${convertToBanglaNumber(fiscal_start)}-${convertToBanglaNumber(
             />
           </div>
 
-          <div>
-            <label className="font-semibold text-indigo-700">মৌজা</label>
-            <input
-              type="text"
-              value={form.mouza}
-              onChange={(e) => setForm({ ...form, mouza: e.target.value })}
-              className="border p-2 rounded w-full"
-              placeholder="মৌজা"
-            />
-          </div>
+         <div>
+  <label className="font-semibold text-indigo-700">মৌজা</label>
+  <input
+    type="text"
+    value={form.mouza}
+    onChange={(e) => setForm({ ...form, mouza: e.target.value })}
+    className="border p-2 rounded w-full"
+    placeholder="মৌজা"
+    list="mouza-list"
+  />
+  <datalist id="mouza-list">
+    {suggestions.mouza.map((item, idx) => (
+      <option key={idx} value={item} />
+    ))}
+  </datalist>
+</div>
 
-          <div>
-            <label className="font-semibold text-indigo-700">
-              পোস্ট অফিস<span className="text-red-600 text-xl ">*</span>
-            </label>
-            <input
-              type="text"
-              value={form.post_office}
-              onChange={(e) =>
-                setForm({ ...form, post_office: e.target.value })
-              }
-              className="border p-2 rounded w-full"
-              placeholder="পোস্ট অফিস"
-              required
-            />
-          </div>
+<div>
+  <label className="font-semibold text-indigo-700">
+    পোস্ট অফিস<span className="text-red-600 text-xl ">*</span>
+  </label>
+  <input
+    type="text"
+    value={form.post_office}
+    onChange={(e) => setForm({ ...form, post_office: e.target.value })}
+    className="border p-2 rounded w-full"
+    placeholder="পোস্ট অফিস"
+    required
+    list="post-office-list"
+  />
+  <datalist id="post-office-list">
+    {suggestions.post_office.map((item, idx) => (
+      <option key={idx} value={item} />
+    ))}
+  </datalist>
+</div>
 
-          <div className="md:col-span-2">
-            <label className="font-semibold text-indigo-700">
-              ঠিকানা(গ্রাম)<span className="text-red-600 text-xl ">*</span>
-            </label>
-            <textarea
-              value={form.address}
-              onChange={(e) => setForm({ ...form, address: e.target.value })}
-              className="border p-2 rounded w-full"
-              placeholder="ঠিকানা"
-              rows={2}
-            />
-          </div>
+<div className="md:col-span-2">
+  <label className="font-semibold text-indigo-700">
+    ঠিকানা(গ্রাম)<span className="text-red-600 text-xl ">*</span>
+  </label>
+
+  <input
+  type="text"
+  value={form.address}
+  onChange={(e) => setForm({ ...form, address: e.target.value })}
+  className="border p-2 rounded w-full"
+  placeholder="ঠিকানা"
+  list="address-list"
+/>
+<datalist id="address-list">
+  {suggestions.address.map((item, idx) => (
+    <option key={idx} value={item} />
+  ))}
+</datalist>
+
+
+   
+  
+</div>
+
 
           {form.type === "ট্রেড লাইসেন্স" && (
             <>
