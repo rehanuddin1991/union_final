@@ -43,7 +43,7 @@ export default function IncomeExpenseReport() {
           className="border p-2 rounded"
         />
         <button onClick={fetchReport} className="bg-blue-500 text-white px-4 py-2 rounded">
-          রিপোর্ট দেখাও
+          রিপোর্ট
         </button>
       </div>
 
